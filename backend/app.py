@@ -305,6 +305,56 @@ def create_app(config=None):
         data = payload({"answers"})
         return jsonify(evaluate(available(sid)["questions"], data.get("answers")))
 
+    @app.get("/api/public/surveys/<sid>/progress")
+    @login_required
+    def get_progress(sid):
+        survey = available(sid)
+        progress = db.fill_progress.find_one({"survey_id": sid, "user_id": g.user_id})
+        if progress and db.responses.find_one({"survey_id": sid, "user_id": g.user_id,
+                                               **({"request_id": progress["request_id"]} if survey.get("allow_repeat") else {})}):
+            db.fill_progress.delete_one({"_id": progress["_id"], "revision": progress["revision"]})
+            progress = None
+        if progress:
+            require(progress["survey_revision"] == survey["revision"], "问卷版本已变化，原填写进度不可继续")
+        return jsonify(progress={k: progress[k] for k in ("answers", "revision", "anonymous", "request_id", "updated_at")} if progress else None)
+
+    @app.put("/api/public/surveys/<sid>/progress")
+    @login_required
+    def save_progress(sid):
+        data = payload({"answers", "revision", "anonymous", "request_id"})
+        survey = available(sid)
+        revision = data.get("revision")
+        require(type(revision) is int and 0 <= revision < 2147483647, "进度revision须为有效非负整数")
+        anonymous = data.get("anonymous", False)
+        require(type(anonymous) is bool and (not anonymous or survey.get("allow_anonymous")), "匿名设置不合法")
+        request_id = string(data.get("request_id"), "request_id", 8, 100)
+        state = evaluate(survey["questions"], data.get("answers"))
+        # Only a valid prefix is resumable. Never keep hidden or unanswered suffixes.
+        require(set(data["answers"]) == set(state["path"]), "进度包含未经过题目，请清理后续答案")
+        if db.responses.find_one({"survey_id": sid, "user_id": g.user_id,
+                                  **({"request_id": request_id} if survey.get("allow_repeat") else {})}):
+            raise DomainError("本次填写已提交，不能保存旧进度", 409, "already_submitted")
+        progress = {"survey_id": sid, "user_id": g.user_id, "survey_revision": survey["revision"],
+                    "revision": revision + 1, "answers": data["answers"], "anonymous": anonymous,
+                    "request_id": request_id, "updated_at": now()}
+        if revision == 0:
+            progress["_id"] = uuid4().hex
+            try:
+                db.fill_progress.insert_one(progress)
+            except DuplicateKeyError:
+                raise DomainError("其他窗口已保存进度，请刷新后继续", 409, "progress_conflict") from None
+        else:
+            result = db.fill_progress.update_one({"survey_id": sid, "user_id": g.user_id,
+                                                  "revision": revision, "request_id": request_id}, {"$set": progress})
+            if not result.matched_count:
+                raise DomainError("进度已变化，请刷新后继续", 409, "progress_conflict")
+        # A submit can race this separate-collection write; hide and remove obsolete progress.
+        if db.responses.find_one({"survey_id": sid, "user_id": g.user_id,
+                                  **({"request_id": request_id} if survey.get("allow_repeat") else {})}):
+            db.fill_progress.delete_one({"survey_id": sid, "user_id": g.user_id, "request_id": request_id})
+            raise DomainError("本次填写已提交，请刷新", 409, "already_submitted")
+        return jsonify(revision=revision+1, updated_at=progress["updated_at"])
+
     @app.post("/api/public/surveys/<sid>/responses")
     @login_required
     def submit(sid):
@@ -312,6 +362,7 @@ def create_app(config=None):
         request_id = string(data.get("request_id"), "request_id", 8, 100)
         previous = db.responses.find_one({"survey_id": sid, "user_id": g.user_id, "request_id": request_id})
         if previous:
+            db.fill_progress.delete_one({"survey_id": sid, "user_id": g.user_id, "request_id": request_id})
             return jsonify(id=previous["_id"], message="本次提交已保存", replayed=True), 200
         survey = available(sid)
         anonymous = data.get("anonymous", False)
@@ -332,8 +383,10 @@ def create_app(config=None):
         except DuplicateKeyError:
             previous = db.responses.find_one({"survey_id": sid, "user_id": g.user_id, "request_id": request_id})
             if previous:
+                db.fill_progress.delete_one({"survey_id": sid, "user_id": g.user_id, "request_id": request_id})
                 return jsonify(id=previous["_id"], message="本次提交已保存", replayed=True), 200
             raise DomainError("该问卷不允许重复填写", 409, "already_submitted") from None
+        db.fill_progress.delete_one({"survey_id": sid, "user_id": g.user_id, "request_id": request_id})
         return jsonify(id=response["_id"], message="提交成功", replayed=False), 201
 
     @app.get("/api/surveys/<sid>/statistics")

@@ -2,7 +2,7 @@
 
 数据管理系统课程大作业：使用 MongoDB 实现支持账号、问卷管理、题目校验、条件跳转、答卷提交和统计的问卷系统。
 
-当前状态：已实现初始需求对应的注册登录、本人问卷管理、题型和校验、可配置跳转、发布与截止/关闭、分享填写、匿名/重复控制及统计。24项真实MongoDB自动化测试通过，并完成浏览器流程。文件未明确的规则已在[需求核对](docs/需求与进度.md)说明，后续课堂补充可继续调整。
+当前状态：已实现初始需求对应的注册登录、本人问卷管理、题型和校验、可配置跳转、发布与截止/关闭、分享填写、匿名/重复控制及统计。29项真实MongoDB自动化测试通过，并完成浏览器流程。文件未明确的规则已在[需求核对](docs/需求与进度.md)说明，后续课堂补充可继续调整。
 
 ## 两阶段提交
 
@@ -44,6 +44,52 @@ $env:MONGO_DB = "mongodb_survey_course"
 `.env.example` 只展示配置变量，本应用不自动读取.env文件。可通过PORT修改端口。初始化会创建当前缺少的集合和索引，不清空现有数据，不自动覆盖已有validator。应用运行不需要任何AI API Key。
 
 ## 测试与设计资料
+
+### 技术组成与版本
+
+后端为 Python Flask + PyMongo，前端为原生 HTML/CSS/JavaScript，数据库为 MongoDB。已有验证环境为 Python 3.13.7、MongoDB 6.0.1、Flask 3.1.2、PyMongo 4.18.1；Python 依赖以 requirements.txt 为准。前端不需要 Node.js 构建。启动、端口和数据库配置见上文。
+
+### 数据库结构摘要
+
+本系统使用五个 MongoDB 集合，集合不等同于关系数据库表。
+
+| 集合 | Schema 主要字段 | 作用和组织方式 |
+|---|---|---|
+| users | _id、username、password_hash、created_at | 用户账号；密码保存带盐哈希 |
+| sessions | _id、user_id、expires_at | 可撤销会话；令牌摘要作为 ID，引用用户 |
+| surveys | _id、owner_id、title、description、status、allow_anonymous、allow_repeat、deadline、questions、revision、schema_version、created_at、updated_at、published_at | 问卷引用创建者；questions 数组嵌入题目、options、validation、jumps |
+| fill_progress | _id、survey_id、user_id、survey_revision、revision、answers、anonymous、request_id、updated_at | 每账号每问卷一份有效进度，保存已确认答案；不进入统计 |
+| responses | _id、survey_id、user_id、anonymous、submission_key、request_id、survey_revision、answers、path、created_at | 每次提交独立文档，引用问卷及用户；answers 嵌入题目 ID 与回答值 |
+
+ID 使用字符串，时间使用 BSON Date，版本为整数。题目随问卷读取所以嵌入，答卷持续增长所以单独保存；用稳定 ID 关联答案，避免依赖可变文案。完整字段、约束、索引与嵌套取舍见[数据库设计](docs/数据库与系统设计.md)、[Schema](database/schema.json)及初始化实现 backend/database.py。
+
+### API 摘要
+
+接口前缀为 /api，JSON 请求；除健康检查、注册、登录外均须 Bearer token，管理操作须属于本人。完整输入、输出、错误码见[API说明](docs/API说明.md)。
+
+| 方法 | 路径（省略 /api） | 用途 |
+|---|---|---|
+| POST | /auth/register、/auth/login、/auth/logout | 注册、登录、退出 |
+| GET | /auth/me | 当前用户 |
+| GET / POST | /surveys | 本人列表 / 创建草稿 |
+| GET / PATCH | /surveys/{sid} | 读取 / 编辑本人草稿 |
+| POST | /surveys/{sid}/questions | 添加题目 |
+| PUT / DELETE | /surveys/{sid}/questions/{qid} | 编辑 / 删除题目 |
+| POST | /surveys/{sid}/questions/{qid}/validate | 单题校验预览 |
+| POST | /surveys/{sid}/publish、/surveys/{sid}/close | 发布、关闭 |
+| GET | /public/surveys/{sid} | 登录后读取分享问卷 |
+| POST | /public/surveys/{sid}/evaluate | 按答案计算有效路径与下一题 |
+| GET / PUT | /public/surveys/{sid}/progress | 读取 / 乐观版本保存本人的填写进度 |
+| POST | /public/surveys/{sid}/responses | 校验路径并保存答卷 |
+| GET | /surveys/{sid}/statistics | 整卷统计 |
+| GET | /surveys/{sid}/questions/{qid}/statistics | 单题统计 |
+| GET | /surveys/{sid}/responses | 本人问卷脱敏答卷列表 |
+
+### 测试证据与课堂补充
+
+tests/ 保存自动化与浏览器测试，docs/测试说明.md 列出步骤、输入和期望，tests/results/latest.json 保存已有自动化实际结果，tests/results/浏览器检查.md 保存页面实际结果。详细证据不以“计划测试”代替“测试通过”。
+
+2026-10-16 助教补充强调后端、Schema、AI 引导与可扩展性，详见[补充核对与交付清单](docs/课堂补充核对-2026-10-16.md)。随后新增填写进度保存与恢复，29项真实MongoDB自动化测试通过，并实际验证浏览器刷新、分支切换和统计。
 
 ```powershell
 .\.venv\Scripts\python.exe tests/run_tests.py

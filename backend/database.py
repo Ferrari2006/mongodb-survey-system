@@ -4,6 +4,15 @@ from pymongo.errors import CollectionInvalid
 
 
 SCHEMAS = {
+    "fill_progress": {
+        "bsonType": "object",
+        "required": ["_id", "survey_id", "user_id", "survey_revision", "revision", "answers", "anonymous", "request_id", "updated_at"],
+        "properties": {"_id": {"bsonType": "string"}, "survey_id": {"bsonType": "string"},
+                       "user_id": {"bsonType": "string"}, "survey_revision": {"bsonType": "int"},
+                       "revision": {"bsonType": "int", "minimum": 1}, "answers": {"bsonType": "object"},
+                       "anonymous": {"bsonType": "bool"}, "request_id": {"bsonType": "string"},
+                       "updated_at": {"bsonType": "date"}}
+    },
     "users": {
         "bsonType": "object", "required": ["_id", "username", "password_hash", "created_at"],
         "properties": {"_id": {"bsonType": "string"}, "username": {"bsonType": "string"},
@@ -44,6 +53,7 @@ def initialize(db):
         except CollectionInvalid:
             pass
     db.users.create_index("username", unique=True, name="unique_username")
+    db.fill_progress.create_index([("survey_id", 1), ("user_id", 1)], unique=True, name="one_active_progress")
     db.sessions.create_index("expires_at", expireAfterSeconds=0, name="session_expiry")
     db.surveys.create_index([("owner_id", 1), ("updated_at", -1)], name="owner_updated")
     db.responses.create_index([("survey_id", 1), ("user_id", 1), ("submission_key", 1)], unique=True, name="unique_attempt")

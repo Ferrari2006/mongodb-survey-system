@@ -23,6 +23,8 @@
 | POST | /surveys/{sid}/close | revision | 200 closed |
 | GET | /public/surveys/{sid} | 无 | 200 可填写的题目与设置，不含owner_id |
 | POST | /public/surveys/{sid}/evaluate | answers | 200 complete、next_question_id、path、标准化answers |
+| GET | /public/surveys/{sid}/progress | 无 | 200 progress为null或本人answers、revision、anonymous、request_id、updated_at |
+| PUT | /public/surveys/{sid}/progress | answers、revision、request_id，可选anonymous | 200 新进度revision、updated_at；冲突409 |
 | POST | /public/surveys/{sid}/responses | answers、request_id、可选anonymous | 201新答卷或同次重试200，id、message、replayed |
 | GET | /surveys/{sid}/statistics | 无 | 200 response_count、counting_unit、questions |
 | GET | /surveys/{sid}/questions/{qid}/statistics | 无 | 200 单题统计 |
@@ -51,3 +53,7 @@ request_id为8～100字符，同次重试保持不变，再次填写使用新值
 关闭/截止与提交并发时，以surveys原子准入更新为界：关闭前已准入的请求允许随后保存，之后新请求拒绝。准入计数不是有效答卷数，统计只读responses。本地单节点不使用跨集合事务。
 
 统计单选/多选返回options（id、label、count），零次也显示；文本/数字返回values，数字另含average。answer_count只算实际非空回答。当前全部填空内容一次返回，适用于课程规模。
+
+## 填写进度
+
+GET/PUT progress均要求登录和问卷可填写；不接受user_id等归属字段。首次保存revision=0，之后使用返回版本；同一活动进度保持request_id不变。只接受经后端校验的连续有效路径前缀（空对象也合法），拒绝路径外或越过未答题的答案。前端下一题、返回修改及匿名切换成功时保存。尚在输入的未确认当前题不自动保存；未提交进度不在创建者答卷列表或统计中。成功提交清理本次进度，允许重复时新一轮用新request_id。已提交旧请求保存返回409；多窗口版本冲突返回409，须刷新恢复。关闭/截止后不可继续读取或保存进度。

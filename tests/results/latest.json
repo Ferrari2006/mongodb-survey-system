@@ -1,12 +1,12 @@
 {
-  "executed_at_utc": "2026-10-15T08:55:48.755980+00:00",
+  "executed_at_utc": "2026-10-15T18:00:03.157132+00:00",
   "python": "3.13.7",
   "dependencies": {
     "Flask": "3.1.2",
     "pymongo": "4.18.1"
   },
   "database": "real MongoDB; random survey_test_ database, cleaned after integration tests",
-  "tests_run": 24,
+  "tests_run": 29,
   "failures": 0,
   "errors": 0,
   "successful": true,
@@ -14,42 +14,67 @@
     {
       "test": "test_api.ApiTests.test_auth_password_and_logout",
       "outcome": "passed",
-      "seconds": 0.2961
+      "seconds": 0.3158
     },
     {
       "test": "test_api.ApiTests.test_create_edit_and_owner_isolation",
       "outcome": "passed",
-      "seconds": 0.2986
+      "seconds": 0.3105
     },
     {
       "test": "test_api.ApiTests.test_invalid_question_does_not_write",
       "outcome": "passed",
-      "seconds": 0.1455
+      "seconds": 0.1489
     },
     {
       "test": "test_api.ApiTests.test_malformed_requests_and_schema",
       "outcome": "passed",
-      "seconds": 0.1465
+      "seconds": 0.1541
     },
     {
       "test": "test_api.ApiTests.test_optimistic_concurrent_edit",
       "outcome": "passed",
-      "seconds": 0.1473
+      "seconds": 0.1585
     },
     {
       "test": "test_api.ApiTests.test_question_crud_and_preview",
       "outcome": "passed",
-      "seconds": 0.1505
+      "seconds": 0.1548
     },
     {
       "test": "test_api.ApiTests.test_unauthenticated_and_expired",
       "outcome": "passed",
-      "seconds": 0.1449
+      "seconds": 0.1489
+    },
+    {
+      "test": "test_progress.ProgressTests.test_concurrent_progress_and_survey_availability",
+      "outcome": "passed",
+      "seconds": 0.2014
+    },
+    {
+      "test": "test_progress.ProgressTests.test_repeat_attempts_keep_distinct_submissions",
+      "outcome": "passed",
+      "seconds": 0.1872
+    },
+    {
+      "test": "test_progress.ProgressTests.test_restore_prefix_isolation_and_no_statistics",
+      "outcome": "passed",
+      "seconds": 0.4191
+    },
+    {
+      "test": "test_progress.ProgressTests.test_validation_branch_changes_and_submit_cleanup",
+      "outcome": "passed",
+      "seconds": 0.2384
+    },
+    {
+      "test": "test_progress.ProgressTests.test_zero_numeric_jump",
+      "outcome": "passed",
+      "seconds": 0.1951
     },
     {
       "test": "test_stage1.JumpTests.test_missing_and_optional_answers",
       "outcome": "passed",
-      "seconds": 0.0001
+      "seconds": 0.0002
     },
     {
       "test": "test_stage1.JumpTests.test_multi_numeric_priority_and_default",
@@ -69,52 +94,52 @@
     {
       "test": "test_stage1.Stage1Tests.test_aggregation_exact_counts_and_average",
       "outcome": "passed",
-      "seconds": 0.1639
+      "seconds": 0.2117
     },
     {
       "test": "test_stage1.Stage1Tests.test_anonymous_visibility_and_permissions",
       "outcome": "passed",
-      "seconds": 0.3052
+      "seconds": 0.4188
     },
     {
       "test": "test_stage1.Stage1Tests.test_concurrent_nonrepeat_submission",
       "outcome": "passed",
-      "seconds": 0.154
+      "seconds": 0.2084
     },
     {
       "test": "test_stage1.Stage1Tests.test_deadline_and_invalid_publication",
       "outcome": "passed",
-      "seconds": 0.1535
+      "seconds": 0.2096
     },
     {
       "test": "test_stage1.Stage1Tests.test_empty_statistics_and_legacy_migration",
       "outcome": "passed",
-      "seconds": 0.1582
+      "seconds": 0.2063
     },
     {
       "test": "test_stage1.Stage1Tests.test_publish_share_close_and_freeze",
       "outcome": "passed",
-      "seconds": 0.2488
+      "seconds": 0.3491
     },
     {
       "test": "test_stage1.Stage1Tests.test_server_path_and_no_invalid_writes",
       "outcome": "passed",
-      "seconds": 0.1536
+      "seconds": 0.2115
     },
     {
       "test": "test_stage1.Stage1Tests.test_submission_repeat_and_idempotency",
       "outcome": "passed",
-      "seconds": 0.3379
+      "seconds": 0.4289
     },
     {
       "test": "test_validation.ValidationTests.test_invalid_question_definitions",
       "outcome": "passed",
-      "seconds": 0.0001
+      "seconds": 0.0002
     },
     {
       "test": "test_validation.ValidationTests.test_number_boundaries",
       "outcome": "passed",
-      "seconds": 0.0001
+      "seconds": 0.0004
     },
     {
       "test": "test_validation.ValidationTests.test_optional_empty",
@@ -124,7 +149,7 @@
     {
       "test": "test_validation.ValidationTests.test_selection_constraints",
       "outcome": "passed",
-      "seconds": 0.0001
+      "seconds": 0.0002
     },
     {
       "test": "test_validation.ValidationTests.test_text_limits",

@@ -1,4 +1,48 @@
 {
+  "fill_progress": {
+    "bsonType": "object",
+    "required": [
+      "_id",
+      "survey_id",
+      "user_id",
+      "survey_revision",
+      "revision",
+      "answers",
+      "anonymous",
+      "request_id",
+      "updated_at"
+    ],
+    "properties": {
+      "_id": {
+        "bsonType": "string"
+      },
+      "survey_id": {
+        "bsonType": "string"
+      },
+      "user_id": {
+        "bsonType": "string"
+      },
+      "survey_revision": {
+        "bsonType": "int"
+      },
+      "revision": {
+        "bsonType": "int",
+        "minimum": 1
+      },
+      "answers": {
+        "bsonType": "object"
+      },
+      "anonymous": {
+        "bsonType": "bool"
+      },
+      "request_id": {
+        "bsonType": "string"
+      },
+      "updated_at": {
+        "bsonType": "date"
+      }
+    }
+  },
   "users": {
     "bsonType": "object",
     "required": [
