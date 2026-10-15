@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>问卷工作台</title><link rel="stylesheet" href="/static/style.css"><script defer src="/static/app.js"></script></head>
+<body>
+<header><div><span class="brand">问卷工作台</span><span class="subtitle">MongoDB 课程项目</span></div><div id="identity"></div></header>
+<main>
+<aside class="notice">开发进度：账号、问卷草稿和题目校验已提供。发布、填写、跳转及统计将在业务规则确认后接入。</aside>
+<p id="message" role="status" aria-live="polite"></p>
+<section id="auth" class="card narrow">
+<h1>开始创建你的问卷</h1><p class="muted">登录后管理自己的问卷和题目。</p>
+<form id="auth-form"><label>用户名<input id="username" autocomplete="username" required minlength="3" maxlength="32" pattern="[A-Za-z0-9_]+" placeholder="3～32位字母、数字或下划线"></label>
+<label>密码<input id="password" type="password" autocomplete="current-password" required minlength="8" maxlength="128" placeholder="8～128位"></label>
+<div class="actions"><button type="submit">登录</button><button type="button" id="register" class="secondary">注册账号</button></div></form>
+</section>
+<section id="dashboard" hidden>
+<div class="section-head"><div><h1>我的问卷</h1><p class="muted">从一个问题开始，逐步完善问卷。</p></div><button id="new-survey">新建问卷</button></div>
+<div id="survey-list"></div><div class="actions"><button class="secondary" id="previous-page">上一页</button><span id="page-info"></span><button class="secondary" id="next-page">下一页</button></div>
+</section>
+<section id="editor" hidden>
+<button id="back" class="secondary">← 返回问卷列表</button>
+<div class="section-head"><h1 id="editor-heading">编辑问卷</h1><span class="badge">草稿</span></div>
+<form id="survey-form" class="card"><label>问卷标题<input id="survey-title" required maxlength="200"></label><label>问卷说明<textarea id="survey-description" maxlength="2000" rows="3"></textarea></label><button type="submit">保存基本信息</button></form>
+<h2>问卷题目</h2><div id="question-list"></div>
+<form id="question-form" class="card">
+<h2 id="question-heading">添加题目</h2>
+<div class="grid"><label>题目 ID<input id="question-id" required pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}" placeholder="例如 q1"></label><label>题型<select id="question-type"><option value="single">单选题</option><option value="multiple">多选题</option><option value="text">文本填空</option><option value="number">数字填空</option></select></label></div>
+<label>题目标题<input id="question-title" required maxlength="300"></label><label class="check"><input type="checkbox" id="question-required">必答题</label>
+<div id="options-panel"><label>选项（每行：ID | 文字）<textarea id="question-options" rows="4" placeholder="a | 选项A&#10;b | 选项B"></textarea></label><p class="muted">ID 用于保存答案，修改文字时保留原 ID。</p></div>
+<div id="bounds-panel" class="grid" hidden><label><span id="min-label">最小值</span><input id="question-min" type="number" step="any"></label><label><span id="max-label">最大值</span><input id="question-max" type="number" step="any"></label></div>
+<label class="check" id="integer-panel" hidden><input type="checkbox" id="question-integer">仅允许整数</label>
+<div class="actions"><button type="submit">保存题目</button><button type="button" class="secondary" id="reset-question">取消编辑 / 新增</button></div>
+</form>
+<section class="card"><h2>试验答案校验</h2><p class="muted">检查单题限制，不会保存答卷。多选答案使用逗号分隔的选项 ID。</p><form id="validation-form"><label>题目<select id="validation-question"></select></label><label>试填答案<input id="validation-value"></label><button>检查答案</button></form></section>
+</section>
+</main><footer>第一阶段开发中 · 账号和问卷均保存在 MongoDB</footer>
+</body></html>

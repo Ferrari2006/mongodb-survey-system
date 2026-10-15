@@ -1,0 +1,75 @@
+{
+  "executed_at_utc": "2026-10-15T06:18:00.494690+00:00",
+  "python": "3.13.7",
+  "dependencies": {
+    "Flask": "3.1.2",
+    "pymongo": "4.18.1"
+  },
+  "database": "real MongoDB; random survey_test_ database, cleaned after integration tests",
+  "tests_run": 12,
+  "failures": 0,
+  "errors": 0,
+  "successful": true,
+  "cases": [
+    {
+      "test": "test_api.ApiTests.test_auth_password_and_logout",
+      "outcome": "passed",
+      "seconds": 0.3242
+    },
+    {
+      "test": "test_api.ApiTests.test_create_edit_and_owner_isolation",
+      "outcome": "passed",
+      "seconds": 0.3189
+    },
+    {
+      "test": "test_api.ApiTests.test_invalid_question_does_not_write",
+      "outcome": "passed",
+      "seconds": 0.1697
+    },
+    {
+      "test": "test_api.ApiTests.test_malformed_requests_and_schema",
+      "outcome": "passed",
+      "seconds": 0.1649
+    },
+    {
+      "test": "test_api.ApiTests.test_optimistic_concurrent_edit",
+      "outcome": "passed",
+      "seconds": 0.1709
+    },
+    {
+      "test": "test_api.ApiTests.test_question_crud_and_preview",
+      "outcome": "passed",
+      "seconds": 0.1799
+    },
+    {
+      "test": "test_api.ApiTests.test_unauthenticated_and_expired",
+      "outcome": "passed",
+      "seconds": 0.1795
+    },
+    {
+      "test": "test_validation.ValidationTests.test_invalid_question_definitions",
+      "outcome": "passed",
+      "seconds": 0.0002
+    },
+    {
+      "test": "test_validation.ValidationTests.test_number_boundaries",
+      "outcome": "passed",
+      "seconds": 0.0001
+    },
+    {
+      "test": "test_validation.ValidationTests.test_optional_empty",
+      "outcome": "passed",
+      "seconds": 0.0001
+    },
+    {
+      "test": "test_validation.ValidationTests.test_selection_constraints",
+      "outcome": "passed",
+      "seconds": 0.0001
+    },
+    {
+      "test": "test_validation.ValidationTests.test_text_limits",
+      "outcome": "passed",
+      "seconds": 0.0001
+    }
+  ]
+}
