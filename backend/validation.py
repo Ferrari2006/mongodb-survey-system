@@ -34,8 +34,8 @@ def number(value):
 
 def question(data):
     require(isinstance(data, dict), "题目必须是对象")
-    allowed = {"id", "title", "type", "required", "options", "validation"}
-    require(not (set(data) - allowed), "题目包含未支持字段；跳转规则待需求确认后添加")
+    allowed = {"id", "title", "type", "required", "options", "validation", "jumps"}
+    require(not (set(data) - allowed), "题目包含未支持字段")
     kind = data.get("type")
     require(kind in ("single", "multiple", "text", "number"), "不支持的题型")
     required = data.get("required", False)
@@ -75,6 +75,9 @@ def question(data):
         require(all(number(rules[k]) for k in ("min", "max") if k in rules), "数字边界不合法")
         require(rules.get("min", -1e15) <= rules.get("max", 1e15), "数字最小值不能大于最大值")
     result["validation"] = rules
+    jumps = data.get("jumps", [])
+    require(isinstance(jumps, list) and len(jumps) <= 50, "跳转规则须为数组，最多50条")
+    result["jumps"] = jumps
     return result
 
 

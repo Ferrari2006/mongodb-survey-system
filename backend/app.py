@@ -17,6 +17,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from backend.database import initialize
 from backend.validation import DomainError, question, require, string
+from backend.logic import evaluate, validate_jumps
+from backend.statistics import statistics
 
 
 def now():
@@ -62,6 +64,8 @@ def create_app(config=None):
 
     def save(survey, revision):
         require(type(revision) is int, "必须提供整数revision")
+        require(survey["status"] == "draft", "发布后题目与配置固定，请创建新问卷")
+        validate_jumps(survey["questions"])
         survey["updated_at"] = now()
         survey["revision"] = revision + 1
         result = db.surveys.replace_one({"_id": survey["_id"], "owner_id": g.user_id,
@@ -69,6 +73,33 @@ def create_app(config=None):
         if not result.matched_count:
             raise DomainError("问卷已被修改，请刷新后重试", 409, "revision_conflict")
         return jsonify(survey)
+
+    def deadline(value):
+        if value is None or value == "":
+            return None
+        require(isinstance(value, str), "截止时间须为带时区的ISO日期")
+        try:
+            dt = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        except ValueError:
+            raise DomainError("截止时间格式不合法") from None
+        require(dt.tzinfo is not None and dt.utcoffset() is not None, "截止时间必须包含时区")
+        return dt.astimezone(timezone.utc)
+
+    def settings(data, survey):
+        for field in ("allow_anonymous", "allow_repeat"):
+            if field in data:
+                require(type(data[field]) is bool, "匿名和重复填写设置必须为布尔值")
+                survey[field] = data[field]
+        if "deadline" in data:
+            survey["deadline"] = deadline(data["deadline"])
+
+    def available(sid):
+        survey = db.surveys.find_one({"_id": sid, "status": "published"})
+        if not survey:
+            raise DomainError("问卷未发布、已关闭或不存在", 404, "not_available")
+        if survey.get("deadline") and survey["deadline"] <= now():
+            raise DomainError("问卷已截止", 410, "expired")
+        return survey
 
     @app.errorhandler(DomainError)
     def domain_error(exc):
@@ -95,6 +126,10 @@ def create_app(config=None):
     def index():
         return app.send_static_file("index.html")
 
+    @app.get("/survey/<sid>")
+    def survey_page(sid):
+        return app.send_static_file("index.html")
+
     @app.get("/favicon.ico")
     def favicon():
         return "", 204
@@ -102,7 +137,7 @@ def create_app(config=None):
     @app.get("/api/health")
     def health():
         db.command("ping")
-        return jsonify(status="ok", milestone="accounts-and-drafts")
+        return jsonify(status="ok", milestone="stage1")
 
     @app.post("/api/auth/register")
     def register():
@@ -159,12 +194,14 @@ def create_app(config=None):
     @app.post("/api/surveys")
     @login_required
     def create_survey():
-        data = payload({"title", "description"})
+        data = payload({"title", "description", "allow_anonymous", "allow_repeat", "deadline"})
         survey = {"_id": uuid4().hex, "owner_id": g.user_id,
                   "title": string(data.get("title"), "标题", 1, 200),
                   "description": string(data.get("description", ""), "说明", 0, 2000),
                   "status": "draft", "questions": [], "revision": 1, "schema_version": 1,
+                  "allow_anonymous": False, "allow_repeat": False, "deadline": None,
                   "created_at": now(), "updated_at": now()}
+        settings(data, survey)
         db.surveys.insert_one(survey)
         return jsonify(survey), 201
 
@@ -176,12 +213,13 @@ def create_app(config=None):
     @app.patch("/api/surveys/<sid>")
     @login_required
     def edit_survey(sid):
-        data = payload({"title", "description", "revision"})
+        data = payload({"title", "description", "revision", "allow_anonymous", "allow_repeat", "deadline"})
         survey = owned(sid)
         if "title" in data:
             survey["title"] = string(data["title"], "标题", 1, 200)
         if "description" in data:
             survey["description"] = string(data["description"], "说明", 0, 2000)
+        settings(data, survey)
         return save(survey, data.get("revision"))
 
     @app.post("/api/surveys/<sid>/questions")
@@ -190,6 +228,7 @@ def create_app(config=None):
         data = payload({"question", "revision"})
         survey = owned(sid)
         item = question(data.get("question"))
+        require(item["id"] != "END", "END是结束标识，不能用作题目ID")
         require(len(survey["questions"]) < 100, "每份问卷最多100题")
         require(item["id"] not in {q["id"] for q in survey["questions"]}, "题目ID不能重复")
         survey["questions"].append(item)
@@ -224,5 +263,110 @@ def create_app(config=None):
         item = next((q for q in survey["questions"] if q["id"] == qid), None)
         require(item is not None, "题目不存在")
         return jsonify(valid=True, value=validate_answer(item, data.get("value")))
+
+    @app.post("/api/surveys/<sid>/publish")
+    @login_required
+    def publish(sid):
+        data = payload({"revision"})
+        survey = owned(sid)
+        require(survey["status"] == "draft", "仅草稿可发布")
+        require(type(data.get("revision")) is int, "须提供revision")
+        require(bool(survey["questions"]), "空问卷不能发布")
+        validate_jumps(survey["questions"], publishing=True)
+        require(not survey.get("deadline") or survey["deadline"] > now(), "截止时间必须晚于当前时间")
+        result = db.surveys.update_one({"_id": sid, "owner_id": g.user_id, "status": "draft", "revision": data["revision"]},
+                                      {"$set": {"status": "published", "published_at": now(), "updated_at": now()}, "$inc": {"revision": 1}})
+        if not result.matched_count:
+            raise DomainError("问卷已被修改，请刷新", 409, "revision_conflict")
+        return jsonify(owned(sid))
+
+    @app.post("/api/surveys/<sid>/close")
+    @login_required
+    def close(sid):
+        data = payload({"revision"})
+        survey = owned(sid)
+        require(survey["status"] == "published", "仅已发布问卷可关闭")
+        require(type(data.get("revision")) is int, "须提供revision")
+        result = db.surveys.update_one({"_id": sid, "owner_id": g.user_id, "status": "published", "revision": data["revision"]},
+                                      {"$set": {"status": "closed", "updated_at": now()}, "$inc": {"revision": 1}})
+        if not result.matched_count:
+            raise DomainError("问卷已被修改，请刷新", 409, "revision_conflict")
+        return jsonify(owned(sid))
+
+    @app.get("/api/public/surveys/<sid>")
+    @login_required
+    def public_survey(sid):
+        survey = available(sid)
+        return jsonify({k: survey.get(k) for k in ("_id", "title", "description", "questions", "revision", "allow_anonymous", "allow_repeat", "deadline")})
+
+    @app.post("/api/public/surveys/<sid>/evaluate")
+    @login_required
+    def evaluate_path(sid):
+        data = payload({"answers"})
+        return jsonify(evaluate(available(sid)["questions"], data.get("answers")))
+
+    @app.post("/api/public/surveys/<sid>/responses")
+    @login_required
+    def submit(sid):
+        data = payload({"answers", "anonymous", "request_id"})
+        request_id = string(data.get("request_id"), "request_id", 8, 100)
+        previous = db.responses.find_one({"survey_id": sid, "user_id": g.user_id, "request_id": request_id})
+        if previous:
+            return jsonify(id=previous["_id"], message="本次提交已保存", replayed=True), 200
+        survey = available(sid)
+        anonymous = data.get("anonymous", False)
+        require(type(anonymous) is bool, "anonymous必须为布尔值")
+        require(not anonymous or survey.get("allow_anonymous", False), "问卷不允许匿名提交")
+        result = evaluate(survey["questions"], data.get("answers"), complete=True)
+        # This conditional write is the admission point. Requests admitted before close may finish afterwards.
+        admitted = db.surveys.update_one({"_id": sid, "status": "published", "revision": survey["revision"],
+                                          "$or": [{"deadline": None}, {"deadline": {"$gt": now()}}]},
+                                         {"$inc": {"admission_count": 1}})
+        if not admitted.matched_count:
+            raise DomainError("问卷已关闭或截止，请刷新", 409, "not_available")
+        response = {"_id": uuid4().hex, "survey_id": sid, "user_id": g.user_id, "anonymous": anonymous,
+                    "request_id": request_id, "submission_key": request_id if survey.get("allow_repeat") else "once",
+                    "answers": result["answers"], "path": result["path"], "survey_revision": survey["revision"], "created_at": now()}
+        try:
+            db.responses.insert_one(response)
+        except DuplicateKeyError:
+            previous = db.responses.find_one({"survey_id": sid, "user_id": g.user_id, "request_id": request_id})
+            if previous:
+                return jsonify(id=previous["_id"], message="本次提交已保存", replayed=True), 200
+            raise DomainError("该问卷不允许重复填写", 409, "already_submitted") from None
+        return jsonify(id=response["_id"], message="提交成功", replayed=False), 201
+
+    @app.get("/api/surveys/<sid>/statistics")
+    @login_required
+    def survey_statistics(sid):
+        return jsonify(statistics(db, owned(sid)))
+
+    @app.get("/api/surveys/<sid>/questions/<qid>/statistics")
+    @login_required
+    def question_statistics(sid, qid):
+        survey = owned(sid)
+        require(any(q["id"] == qid for q in survey["questions"]), "题目不存在")
+        return jsonify(statistics(db, survey, qid))
+
+    @app.get("/api/surveys/<sid>/responses")
+    @login_required
+    def list_responses(sid):
+        owned(sid)
+        try:
+            page = int(request.args.get("page", "1"))
+        except ValueError:
+            raise DomainError("page须为正整数") from None
+        require(1 <= page <= 10000, "page须在1～10000之间")
+        items = list(db.responses.find({"survey_id": sid}).sort("created_at", -1).skip((page-1)*20).limit(20))
+        for item in items:
+            uid = item.pop("user_id")
+            item.pop("submission_key", None)
+            item.pop("request_id", None)
+            if not item["anonymous"]:
+                user = db.users.find_one({"_id": uid}, {"username": 1})
+                item["respondent"] = user["username"] if user else "已注销用户"
+            else:
+                item["respondent"] = "匿名"
+        return jsonify(items=items, page=page, total=db.responses.count_documents({"survey_id": sid}))
 
     return app

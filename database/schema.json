@@ -1,0 +1,151 @@
+{
+  "users": {
+    "bsonType": "object",
+    "required": [
+      "_id",
+      "username",
+      "password_hash",
+      "created_at"
+    ],
+    "properties": {
+      "_id": {
+        "bsonType": "string"
+      },
+      "username": {
+        "bsonType": "string"
+      },
+      "password_hash": {
+        "bsonType": "string"
+      },
+      "created_at": {
+        "bsonType": "date"
+      }
+    }
+  },
+  "sessions": {
+    "bsonType": "object",
+    "required": [
+      "_id",
+      "user_id",
+      "expires_at"
+    ],
+    "properties": {
+      "_id": {
+        "bsonType": "string"
+      },
+      "user_id": {
+        "bsonType": "string"
+      },
+      "expires_at": {
+        "bsonType": "date"
+      }
+    }
+  },
+  "surveys": {
+    "bsonType": "object",
+    "required": [
+      "_id",
+      "owner_id",
+      "title",
+      "status",
+      "questions",
+      "revision",
+      "schema_version",
+      "created_at",
+      "updated_at"
+    ],
+    "properties": {
+      "_id": {
+        "bsonType": "string"
+      },
+      "owner_id": {
+        "bsonType": "string"
+      },
+      "title": {
+        "bsonType": "string"
+      },
+      "description": {
+        "bsonType": "string"
+      },
+      "status": {
+        "enum": [
+          "draft",
+          "published",
+          "closed"
+        ]
+      },
+      "questions": {
+        "bsonType": "array"
+      },
+      "allow_anonymous": {
+        "bsonType": "bool"
+      },
+      "allow_repeat": {
+        "bsonType": "bool"
+      },
+      "deadline": {
+        "bsonType": [
+          "date",
+          "null"
+        ]
+      },
+      "revision": {
+        "bsonType": "int",
+        "minimum": 1
+      },
+      "schema_version": {
+        "bsonType": "int",
+        "minimum": 1
+      },
+      "created_at": {
+        "bsonType": "date"
+      },
+      "updated_at": {
+        "bsonType": "date"
+      }
+    }
+  },
+  "responses": {
+    "bsonType": "object",
+    "required": [
+      "_id",
+      "survey_id",
+      "user_id",
+      "submission_key",
+      "request_id",
+      "anonymous",
+      "answers",
+      "path",
+      "created_at"
+    ],
+    "properties": {
+      "_id": {
+        "bsonType": "string"
+      },
+      "survey_id": {
+        "bsonType": "string"
+      },
+      "user_id": {
+        "bsonType": "string"
+      },
+      "submission_key": {
+        "bsonType": "string"
+      },
+      "request_id": {
+        "bsonType": "string"
+      },
+      "anonymous": {
+        "bsonType": "bool"
+      },
+      "answers": {
+        "bsonType": "array"
+      },
+      "path": {
+        "bsonType": "array"
+      },
+      "created_at": {
+        "bsonType": "date"
+      }
+    }
+  }
+}

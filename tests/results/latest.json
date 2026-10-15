@@ -1,12 +1,12 @@
 {
-  "executed_at_utc": "2026-10-15T06:18:00.494690+00:00",
+  "executed_at_utc": "2026-10-15T08:55:48.755980+00:00",
   "python": "3.13.7",
   "dependencies": {
     "Flask": "3.1.2",
     "pymongo": "4.18.1"
   },
   "database": "real MongoDB; random survey_test_ database, cleaned after integration tests",
-  "tests_run": 12,
+  "tests_run": 24,
   "failures": 0,
   "errors": 0,
   "successful": true,
@@ -14,42 +14,102 @@
     {
       "test": "test_api.ApiTests.test_auth_password_and_logout",
       "outcome": "passed",
-      "seconds": 0.3242
+      "seconds": 0.2961
     },
     {
       "test": "test_api.ApiTests.test_create_edit_and_owner_isolation",
       "outcome": "passed",
-      "seconds": 0.3189
+      "seconds": 0.2986
     },
     {
       "test": "test_api.ApiTests.test_invalid_question_does_not_write",
       "outcome": "passed",
-      "seconds": 0.1697
+      "seconds": 0.1455
     },
     {
       "test": "test_api.ApiTests.test_malformed_requests_and_schema",
       "outcome": "passed",
-      "seconds": 0.1649
+      "seconds": 0.1465
     },
     {
       "test": "test_api.ApiTests.test_optimistic_concurrent_edit",
       "outcome": "passed",
-      "seconds": 0.1709
+      "seconds": 0.1473
     },
     {
       "test": "test_api.ApiTests.test_question_crud_and_preview",
       "outcome": "passed",
-      "seconds": 0.1799
+      "seconds": 0.1505
     },
     {
       "test": "test_api.ApiTests.test_unauthenticated_and_expired",
       "outcome": "passed",
-      "seconds": 0.1795
+      "seconds": 0.1449
+    },
+    {
+      "test": "test_stage1.JumpTests.test_missing_and_optional_answers",
+      "outcome": "passed",
+      "seconds": 0.0001
+    },
+    {
+      "test": "test_stage1.JumpTests.test_multi_numeric_priority_and_default",
+      "outcome": "passed",
+      "seconds": 0.0003
+    },
+    {
+      "test": "test_stage1.JumpTests.test_reject_cycles_missing_target_bad_rule",
+      "outcome": "passed",
+      "seconds": 0.0001
+    },
+    {
+      "test": "test_stage1.JumpTests.test_single_branch_and_skipped_required",
+      "outcome": "passed",
+      "seconds": 0.0001
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_aggregation_exact_counts_and_average",
+      "outcome": "passed",
+      "seconds": 0.1639
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_anonymous_visibility_and_permissions",
+      "outcome": "passed",
+      "seconds": 0.3052
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_concurrent_nonrepeat_submission",
+      "outcome": "passed",
+      "seconds": 0.154
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_deadline_and_invalid_publication",
+      "outcome": "passed",
+      "seconds": 0.1535
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_empty_statistics_and_legacy_migration",
+      "outcome": "passed",
+      "seconds": 0.1582
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_publish_share_close_and_freeze",
+      "outcome": "passed",
+      "seconds": 0.2488
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_server_path_and_no_invalid_writes",
+      "outcome": "passed",
+      "seconds": 0.1536
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_submission_repeat_and_idempotency",
+      "outcome": "passed",
+      "seconds": 0.3379
     },
     {
       "test": "test_validation.ValidationTests.test_invalid_question_definitions",
       "outcome": "passed",
-      "seconds": 0.0002
+      "seconds": 0.0001
     },
     {
       "test": "test_validation.ValidationTests.test_number_boundaries",

@@ -4,7 +4,7 @@
 <body>
 <header><div><span class="brand">问卷工作台</span><span class="subtitle">MongoDB 课程项目</span></div><div id="identity"></div></header>
 <main>
-<aside class="notice">开发进度：账号、问卷草稿和题目校验已提供。发布、填写、跳转及统计将在业务规则确认后接入。</aside>
+<aside class="notice">创建并发布问卷，通过链接收集回答。填写者须登录；匿名提交时创建者无法查看账号。</aside>
 <p id="message" role="status" aria-live="polite"></p>
 <section id="auth" class="card narrow">
 <h1>开始创建你的问卷</h1><p class="muted">登录后管理自己的问卷和题目。</p>
@@ -19,7 +19,8 @@
 <section id="editor" hidden>
 <button id="back" class="secondary">← 返回问卷列表</button>
 <div class="section-head"><h1 id="editor-heading">编辑问卷</h1><span class="badge">草稿</span></div>
-<form id="survey-form" class="card"><label>问卷标题<input id="survey-title" required maxlength="200"></label><label>问卷说明<textarea id="survey-description" maxlength="2000" rows="3"></textarea></label><button type="submit">保存基本信息</button></form>
+<form id="survey-form" class="card"><label>问卷标题<input id="survey-title" required maxlength="200"></label><label>问卷说明<textarea id="survey-description" maxlength="2000" rows="3"></textarea></label><label class="check"><input id="allow-anonymous" type="checkbox">允许对创建者匿名提交（仍须登录）</label><label class="check"><input id="allow-repeat" type="checkbox">允许同一账号多次填写</label><label>截止时间（本地时间，可留空）<input id="deadline" type="datetime-local"></label><button type="submit">保存基本信息</button></form>
+<section class="card"><div class="actions"><button id="publish-survey">发布问卷</button><button id="close-survey" class="secondary">关闭问卷</button><button id="view-statistics" class="secondary">查看统计与答卷</button></div><p id="survey-state"></p><label>分享链接<input id="share-url" readonly></label><p class="muted">发布后题目和填写设置固定；需要修改时可创建新问卷。</p></section>
 <h2>问卷题目</h2><div id="question-list"></div>
 <form id="question-form" class="card">
 <h2 id="question-heading">添加题目</h2>
@@ -28,9 +29,12 @@
 <div id="options-panel"><label>选项（每行：ID | 文字）<textarea id="question-options" rows="4" placeholder="a | 选项A&#10;b | 选项B"></textarea></label><p class="muted">ID 用于保存答案，修改文字时保留原 ID。</p></div>
 <div id="bounds-panel" class="grid" hidden><label><span id="min-label">最小值</span><input id="question-min" type="number" step="any"></label><label><span id="max-label">最大值</span><input id="question-max" type="number" step="any"></label></div>
 <label class="check" id="integer-panel" hidden><input type="checkbox" id="question-integer">仅允许整数</label>
+<fieldset id="jump-editor"><legend>条件跳转（按顺序匹配，首条命中生效）</legend><p class="muted">目标填写后续题目ID或 END；未命中时按顺序进入下一题。多选条件填写逗号分隔的选项ID。</p><div class="grid"><label>条件<select id="jump-op"><option value="eq">等于（单选/数字）</option><option value="any">包含任一（多选）</option><option value="all">包含全部（多选）</option><option value="lt">小于（数字）</option><option value="lte">小于等于（数字）</option><option value="gt">大于（数字）</option><option value="gte">大于等于（数字）</option></select></label><label>比较值<input id="jump-value"></label></div><label>目标题目ID / END<input id="jump-target" placeholder="例如 q5 或 END"></label><button type="button" class="secondary" id="add-jump">加入规则</button><div id="jump-list"></div></fieldset>
 <div class="actions"><button type="submit">保存题目</button><button type="button" class="secondary" id="reset-question">取消编辑 / 新增</button></div>
 </form>
 <section class="card"><h2>试验答案校验</h2><p class="muted">检查单题限制，不会保存答卷。多选答案使用逗号分隔的选项 ID。</p><form id="validation-form"><label>题目<select id="validation-question"></select></label><label>试填答案<input id="validation-value"></label><button>检查答案</button></form></section>
 </section>
-</main><footer>第一阶段开发中 · 账号和问卷均保存在 MongoDB</footer>
+<section id="fill" hidden><div class="section-head"><h1 id="fill-title"></h1><button id="fill-home" class="secondary">返回工作台</button></div><p id="fill-description"></p><section class="card"><p id="fill-progress" class="muted"></p><h2 id="fill-question-title"></h2><form id="fill-form"><div id="fill-input"></div><div class="actions"><button type="button" id="fill-back" class="secondary">上一题</button><button type="submit" id="fill-next">下一题</button></div></form><div id="fill-submit" hidden><label class="check" id="anonymous-choice"><input id="fill-anonymous" type="checkbox">匿名提交（对创建者隐藏账号）</label><div class="actions"><button class="secondary" id="fill-review">返回修改最后一题</button><button id="submit-response">提交问卷</button></div></div></section></section>
+<section id="statistics" hidden><button id="stats-back" class="secondary">← 返回问卷</button><h1 id="stats-title"></h1><p id="stats-total"></p><label>查看题目<select id="stats-question"><option value="">全部题目</option></select></label><div id="stats-content"></div><h2>已提交答卷</h2><div id="response-list"></div><div class="actions"><button id="response-previous" class="secondary">上一页</button><span id="response-page"></span><button id="response-next" class="secondary">下一页</button></div></section>
+</main><footer>MongoDB 问卷系统 · 数据管理系统课程项目</footer>
 </body></html>
