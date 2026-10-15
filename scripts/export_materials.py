@@ -22,6 +22,9 @@ def main():
     output = '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>第一阶段完成报告</title><style>'+css+'</style></head><body>'+body+'</body></html>'
     destination = source.with_suffix(".html")
     destination.write_text(output, encoding="utf-8")
+    submission = ROOT / "第一阶段" / "提交材料"
+    submission.mkdir(parents=True, exist_ok=True)
+    (submission / "2026_ECNU_PJ1_1_温正泽.html").write_text(output, encoding="utf-8")
     print(destination)
 
 
