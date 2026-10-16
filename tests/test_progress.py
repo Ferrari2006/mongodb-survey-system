@@ -90,3 +90,16 @@ class ProgressTests(unittest.TestCase):
                               "jumps":[{"op":"eq","value":0,"target":"END"}]}),
               stage.question({"id":"q2","title":"后续必答","type":"text","required":True})]
         assert stage.evaluate(qs,{"q1":0},complete=True)["path"] == ["q1"]
+
+    def test_integer_range_must_contain_an_integer(self):
+        from backend.validation import DomainError, question, validate_answer
+        for low,high in ((0.2,0.8),(-0.8,-0.2)):
+            with self.assertRaises(DomainError):
+                question({"id":"n","title":"数字","type":"number",
+                          "validation":{"min":low,"max":high,"integer":True}})
+        item=question({"id":"n","title":"数字","type":"number",
+                       "validation":{"min":-0.2,"max":0.8,"integer":True}})
+        assert validate_answer(item,0) == 0
+        item=question({"id":"n","title":"数字","type":"number",
+                       "validation":{"min":0.2,"max":0.8,"integer":False}})
+        assert validate_answer(item,0.5) == 0.5

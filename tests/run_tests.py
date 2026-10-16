@@ -13,13 +13,19 @@ sys.path.insert(0, str(ROOT))
 
 
 class RecordedResult(unittest.TextTestResult):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.records = []
+        self.started = {}
+
     def startTest(self, test):
         super().startTest(test)
-        self.started = time.perf_counter()
+        self.started[test.id()] = time.perf_counter()
 
     def record(self, test, outcome):
-        records.append({"test": test.id(), "outcome": outcome,
-                        "seconds": round(time.perf_counter() - self.started, 4)})
+        started = self.started.get(test.id())
+        self.records.append({"test": test.id(), "outcome": outcome,
+                             "seconds": round(time.perf_counter() - started, 4) if started is not None else None})
 
     def addSuccess(self, test):
         super().addSuccess(test)
@@ -37,14 +43,13 @@ class RecordedResult(unittest.TextTestResult):
 if __name__ == "__main__":
     if not __debug__:
         raise SystemExit("Run without -O: these tests use Python assert.")
-    records = []
     suite = unittest.defaultTestLoader.discover(str(ROOT / "tests"), pattern="test_*.py")
     result = unittest.TextTestRunner(verbosity=2, resultclass=RecordedResult).run(suite)
     report = {"executed_at_utc": datetime.now(timezone.utc).isoformat(),
               "python": platform.python_version(), "dependencies": {name: version(name) for name in ("Flask", "pymongo")},
               "database": "real MongoDB; random survey_test_ database, cleaned after integration tests",
               "tests_run": result.testsRun, "failures": len(result.failures), "errors": len(result.errors),
-              "successful": result.wasSuccessful(), "cases": records}
+              "successful": result.wasSuccessful(), "cases": result.records}
     destination = ROOT / "tests" / "results" / "latest.json"
     destination.parent.mkdir(exist_ok=True)
     destination.write_text(json.dumps(report, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")

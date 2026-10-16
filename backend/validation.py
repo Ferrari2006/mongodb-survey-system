@@ -74,6 +74,9 @@ def question(data):
         require(type(rules.get("integer", False)) is bool, "整数限制必须是布尔值")
         require(all(number(rules[k]) for k in ("min", "max") if k in rules), "数字边界不合法")
         require(rules.get("min", -1e15) <= rules.get("max", 1e15), "数字最小值不能大于最大值")
+        if rules.get("integer"):
+            require(math.ceil(rules.get("min", -1e15)) <= math.floor(rules.get("max", 1e15)),
+                    "当前数字范围内没有整数，请调整范围或取消整数限制")
     result["validation"] = rules
     jumps = data.get("jumps", [])
     require(isinstance(jumps, list) and len(jumps) <= 50, "跳转规则须为数组，最多50条")

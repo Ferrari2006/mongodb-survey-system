@@ -13,6 +13,7 @@ async (page) => {
   await page.getByRole('checkbox',{name:'图书馆',exact:true}).check();
   await page.getByRole('button',{name:'下一题',exact:true}).click();
   await visible('满意度评分（0～10整数）（必答）');
+  await visible('请输入整数，最小 0，最大 10。');
   await page.reload();
   await visible('满意度评分（0～10整数）（必答）');
   await page.getByRole('spinbutton',{name:'填写答案',exact:true}).fill('0');
@@ -51,5 +52,7 @@ async (page) => {
   const stats = await page.locator('#stats-content').innerText();
   if (!stats.includes('不使用：1') || !stats.includes('平均值：暂无数据')) throw new Error('Hidden branch polluted statistics');
   if (!(await page.locator('#response-list').innerText()).includes('匿名')) throw new Error('Anonymous result missing');
+  const responseText=await page.locator('#response-list').innerText();
+  if (!responseText.includes('你是否使用校园服务？：不使用') || responseText.includes('question_id')) throw new Error('Answers must show titles and option labels');
   return {passed:true, checks:['refresh','zero','backtracking','branch cleanup','anonymous restore','submit cleanup','repeat fresh start','statistics']};
 }

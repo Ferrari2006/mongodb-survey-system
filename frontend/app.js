@@ -13,6 +13,18 @@ async function api(path, method="GET", body) {
 function action(fn) { return async event => { event?.preventDefault(); try { await fn(event); } catch(error) { message(error.message,true); } }; }
 function show(id) { for(const section of ["auth","dashboard","editor","fill","statistics"]) $(section).hidden=section!==id; }
 function node(tag,text,cls) { const e=document.createElement(tag); if(text!==undefined)e.textContent=text; if(cls)e.className=cls; return e; }
+function constraintText(q) {
+  const v=q.validation;
+  if(q.type==="single")return "请选择一个选项。";
+  if(q.type==="multiple")return v.min_choices===v.max_choices?`请选择恰好 ${v.min_choices} 项。`:`请选择 ${v.min_choices}～${v.max_choices} 项。`;
+  if(q.type==="text")return `填写 ${v.min_length}～${v.max_length} 个字符，首尾空白不计入。`;
+  return `${v.integer?"请输入整数":"可输入整数或小数"}${v.min!==undefined?`，最小 ${v.min}`:""}${v.max!==undefined?`，最大 ${v.max}`:""}。`;
+}
+function answerText(q,value) {
+  if(value===null||value===undefined)return "未回答";
+  if(q?.options){const labels=new Map(q.options.map(o=>[o.id,o.label]));return (Array.isArray(value)?value:[value]).map(v=>labels.get(v)||v).join("、");}
+  return String(value);
+}
 function button(text,fn) { const e=node("button",text,"secondary"); e.type="button"; e.onclick=action(fn); return e; }
 async function identify() {
   if(!token) { show("auth"); $("identity").replaceChildren(); return; }
@@ -88,7 +100,7 @@ async function advance(persist=false){const state=await api(`/public/surveys/${f
   const q=filling.questions.find(q=>q.id===current);$("fill-question-title").textContent=`${q.title}${q.required?"（必答）":"（选答）"}`;$("fill-input").replaceChildren();
   if(q.type==="single"||q.type==="multiple"){for(const o of q.options){const label=node("label",undefined,"check");const input=document.createElement("input");input.type=q.type==="single"?"radio":"checkbox";input.name="answer";input.value=o.id;label.append(input,document.createTextNode(o.label));$("fill-input").append(label);}}
   else {const input=document.createElement(q.type==="text"?"textarea":"input");input.id="answer-input";input.setAttribute("aria-label","填写答案");if(q.type==="number"){input.type="number";input.step="any";}$("fill-input").append(input);}
-  $("fill-input").append(node("p",`限制：${JSON.stringify(q.validation)}`,"muted"));
+  $("fill-input").append(node("p",constraintText(q)+(q.required?"":" 本题选答，可留空后点击下一题。"),"muted"));
 }
 function fillAction(fn){return action(async()=>{if(fillBusy)return;fillBusy=true;try{await fn();}finally{fillBusy=false;}});}
 $("fill-form").onsubmit=fillAction(async()=>{const q=filling.questions.find(q=>q.id===current);let value=null;if(q.type==="single")value=$("fill-input").querySelector("input:checked")?.value??null;else if(q.type==="multiple")value=Array.from($("fill-input").querySelectorAll("input:checked")).map(e=>e.value);else{const raw=$("answer-input").value;value=raw===""?null:q.type==="number"?Number(raw):raw;}const before=structuredClone(answers);answers[current]=value;try{await advance(true);message("进度已保存。");}catch(e){answers=before;throw e;}});
@@ -97,7 +109,7 @@ $("fill-anonymous").onchange=fillAction(async()=>{await persistProgress();messag
 $("fill-review").onclick=$("fill-back").onclick;
 $("submit-response").onclick=fillAction(async()=>{$("submit-response").disabled=true;try{await api(`/public/surveys/${filling._id}/responses`,"POST",{answers,anonymous:$("fill-anonymous").checked,request_id:requestId});$("fill-submit").hidden=true;$("fill-back").disabled=true;$("fill-review").disabled=true;$("fill-anonymous").disabled=true;$("fill-question-title").textContent="提交成功，感谢填写";message("答卷已保存。");}finally{$("submit-response").disabled=false;}});
 $("view-statistics").onclick=action(async()=>{show("statistics");$("stats-title").textContent=`${survey.title} · 统计`;$("stats-question").replaceChildren(node("option","全部题目"));$("stats-question").firstChild.value="";for(const q of survey.questions){const opt=node("option",q.title);opt.value=q.id;$("stats-question").append(opt);}responsePage=1;await loadStatistics();await loadResponses();});
-async function loadStatistics(){const qid=$("stats-question").value;const result=await api(`/surveys/${survey._id}${qid?"/questions/"+qid:""}/statistics`);$("stats-total").textContent=`共 ${result.response_count} 份有效答卷，按答卷份数计数。`;$("stats-content").replaceChildren();for(const q of result.questions){const card=node("article",undefined,"card");card.append(node("h2",q.title),node("p",`有效回答：${q.answer_count}`));if(q.options){for(const o of q.options)card.append(node("p",`${o.label}：${o.count}`));}else{if(q.type==="number")card.append(node("p",`平均值：${q.average??"暂无数据"}`));card.append(node("pre",JSON.stringify(q.values,null,2)));}$("stats-content").append(card);}}
-async function loadResponses(){const result=await api(`/surveys/${survey._id}/responses?page=${responsePage}`);$("response-list").replaceChildren();for(const r of result.items){const card=node("article",undefined,"card");card.append(node("p",`${r.respondent} · ${r.created_at}`),node("pre",JSON.stringify(r.answers,null,2)));$("response-list").append(card);}$("response-page").textContent=`第 ${responsePage} 页`;$("response-previous").disabled=responsePage===1;$("response-next").disabled=responsePage*20>=result.total;}
+async function loadStatistics(){const qid=$("stats-question").value;const result=await api(`/surveys/${survey._id}${qid?"/questions/"+qid:""}/statistics`);$("stats-total").textContent=`共 ${result.response_count} 份有效答卷，按答卷份数计数。`;$("stats-content").replaceChildren();for(const q of result.questions){const card=node("article",undefined,"card");card.append(node("h2",q.title),node("p",`有效回答：${q.answer_count}`));if(q.options){for(const o of q.options)card.append(node("p",`${o.label}：${o.count}`));}else{if(q.type==="number")card.append(node("p",`平均值：${q.average??"暂无数据"}`));if(!q.values.length)card.append(node("p","暂无填写内容","muted"));else{const entries=node("ol");for(const value of q.values)entries.append(node("li",String(value)));card.append(entries);}}$("stats-content").append(card);}}
+async function loadResponses(){const result=await api(`/surveys/${survey._id}/responses?page=${responsePage}`);$("response-list").replaceChildren();for(const r of result.items){const card=node("article",undefined,"card");card.append(node("p",`${r.respondent} · ${new Date(r.created_at).toLocaleString("zh-CN")}`));for(const answer of r.answers){const q=survey.questions.find(q=>q.id===answer.question_id);card.append(node("p",`${q?.title||answer.question_id}：${answerText(q,answer.value)}`));}$("response-list").append(card);}$("response-page").textContent=`第 ${responsePage} 页`;$("response-previous").disabled=responsePage===1;$("response-next").disabled=responsePage*20>=result.total;}
 $("stats-question").onchange=action(loadStatistics);$("stats-back").onclick=()=>render();$("response-previous").onclick=action(async()=>{responsePage--;await loadResponses();});$("response-next").onclick=action(async()=>{responsePage++;await loadResponses();});
 fields();identify();
