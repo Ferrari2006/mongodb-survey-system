@@ -50,7 +50,8 @@ async (page) => {
   await page.getByRole('button',{name:'查看统计与答卷',exact:true}).click();
   await visible('共 1 份有效答卷，按答卷份数计数。');
   const stats = await page.locator('#stats-content').innerText();
-  if (!stats.includes('不使用：1') || !stats.includes('平均值：暂无数据')) throw new Error('Hidden branch polluted statistics');
+  const noRow=page.locator('#stats-content article').first().getByRole('row').filter({has:page.getByRole('rowheader',{name:'不使用',exact:true})});
+  if (!(await noRow.innerText()).includes('100.0%') || !stats.includes('平均值：暂无数据')) throw new Error('Hidden branch polluted statistics');
   if (!(await page.locator('#response-list').innerText()).includes('匿名')) throw new Error('Anonymous result missing');
   const responseText=await page.locator('#response-list').innerText();
   if (!responseText.includes('你是否使用校园服务？：不使用') || responseText.includes('question_id')) throw new Error('Answers must show titles and option labels');

@@ -1,0 +1,51 @@
+// Run after browser_progress.js in its owner statistics view (one skipped-path response).
+async (page) => {
+  const origin=new URL(page.url()).origin;
+  const visible=text=>page.getByText(text,{exact:true}).waitFor({state:'visible'});
+  const stats=page.locator('#stats-content');
+  const before=stats.locator('table.option-stats').first();
+  if(await before.locator('meter').count()!==2)throw new Error('Missing selectable chart meters');
+  const zero=before.getByRole('row').filter({has:page.getByRole('rowheader',{name:'使用',exact:true})});
+  if(!await zero.innerText().then(t=>t.includes('0.0%')))throw new Error('Zero option missing');
+  await page.screenshot({path:'output/playwright/reference-stats-empty.png',fullPage:true});
+  await page.getByRole('button',{name:'← 返回问卷',exact:true}).click();
+  await page.getByRole('button',{name:'← 返回问卷列表',exact:true}).click();
+  await page.getByRole('button',{name:'新建问卷',exact:true}).click();
+  await page.locator('#survey-title').fill('跳转配置交互验证');
+  await page.getByRole('button',{name:'保存基本信息',exact:true}).click();
+  await visible('问卷已保存');
+  await page.locator('#question-id').fill('branch');
+  await page.locator('#question-title').fill('选择路线');
+  await page.locator('#question-options').fill('a | 完整填写\nb | 提前结束');
+  await page.locator('#jump-value').fill('b');
+  await page.locator('#jump-target').fill('END');
+  await page.getByRole('button',{name:'加入规则',exact:true}).click();
+  await page.locator('#jump-value').fill('a');
+  await page.locator('#jump-target').fill('detail');
+  await page.getByRole('button',{name:'加入规则',exact:true}).click();
+  const rules=page.locator('#jump-list .rule-row');
+  await rules.nth(1).getByRole('button',{name:'上移',exact:true}).click();
+  if(!(await rules.first().innerText()).includes('完整填写'))throw new Error('Rule order did not change');
+  await page.getByRole('button',{name:'保存题目',exact:true}).click();
+  await visible('1. 选择路线');
+  await page.locator('#question-type').selectOption('text');
+  if(await page.locator('#jump-editor').isVisible())throw new Error('Text jumps must stay unavailable');
+  await page.locator('#question-id').fill('detail');
+  await page.locator('#question-title').fill('补充说明');
+  await page.getByRole('button',{name:'保存题目',exact:true}).click();
+  await visible('2. 补充说明');
+  await page.locator('#question-list article').first().getByRole('button',{name:'编辑',exact:true}).click();
+  const targetLabels=await page.locator('#jump-targets option').allTextContents();
+  if(!targetLabels.includes('补充说明')||targetLabels.includes('选择路线'))throw new Error('Target suggestions must only include later questions');
+  if(await page.locator('#jump-values option').count()!==2)throw new Error('Option suggestions missing');
+  if(!(await rules.first().innerText()).includes('补充说明'))throw new Error('Target title not resolved');
+  await page.locator('#question-title').fill('选择路线（已编辑）');
+  await page.getByRole('button',{name:'保存题目',exact:true}).click();
+  await visible('1. 选择路线（已编辑）');
+  await page.locator('#question-list article').first().getByRole('button',{name:'编辑',exact:true}).click();
+  if(!(await rules.first().innerText()).includes('完整填写'))throw new Error('Rule priority lost on save');
+  await page.screenshot({path:'output/playwright/reference-builder.png',fullPage:true});
+  // The view is intentionally still a draft; no data from this check enters submitted-response statistics.
+  await page.goto(origin);
+  return {passed:true,checks:['zero option chart','rule reorder saved','future target','title resolution','text kind','option suggestions']};
+}

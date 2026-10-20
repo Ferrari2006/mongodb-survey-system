@@ -40,6 +40,9 @@ def main():
     submission = (ROOT / "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽.html").read_text(encoding="utf-8")
     if report != submission:
         errors.append("Submission HTML differs from report HTML")
+    if "![" in (ROOT / "reports/第一阶段完成报告.md").read_text(encoding="utf-8"):
+        if "data:image/png;base64," not in report:
+            errors.append("Report screenshot must be embedded in the printable HTML")
     link = "https://github.com/Ferrari2006/mongodb-survey-system"
     if report.find(link) < 0 or not 0 <= report.find(link) < report.find("<h1>"):
         errors.append("Repository link must appear before report title")

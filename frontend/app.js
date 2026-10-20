@@ -25,6 +25,9 @@ function answerText(q,value) {
   if(q?.options){const labels=new Map(q.options.map(o=>[o.id,o.label]));return (Array.isArray(value)?value:[value]).map(v=>labels.get(v)||v).join("、");}
   return String(value);
 }
+const jumpLabels={eq:"等于",any:"包含任一",all:"包含全部",lt:"小于",lte:"小于等于",gt:"大于",gte:"大于等于"};
+function optionDefinitions(){return $("question-options").value.split("\n").filter(s=>s.includes("|")).map(s=>{const i=s.indexOf("|");return {id:s.slice(0,i).trim(),label:s.slice(i+1).trim()};});}
+function jumpText(rule,q){const target=rule.target==="END"?"结束问卷":survey?.questions.find(item=>item.id===rule.target)?.title||`${rule.target}（待添加）`;return `当答案${jumpLabels[rule.op]||rule.op} ${answerText(q,rule.value)} → ${target}`;}
 function button(text,fn) { const e=node("button",text,"secondary"); e.type="button"; e.onclick=action(fn); return e; }
 async function identify() {
   if(!token) { show("auth"); $("identity").replaceChildren(); return; }
@@ -62,8 +65,9 @@ function render() {
   for(const [index,q] of survey.questions.entries()) {
     const row=node("article",undefined,"question-row");row.append(node("strong",`${index+1}. ${q.title}`),node("p",`${q.id} · ${labels[q.type]} · ${q.required?"必答":"选答"}`,"muted"));
     if(q.options)row.append(node("p",q.options.map(o=>`${o.id}: ${o.label}`).join("；")));
-    row.append(node("pre",JSON.stringify(q.validation)));
-    row.append(node("pre",JSON.stringify(q.jumps||[])));
+    row.append(node("p",constraintText(q),"muted"));
+    for(const rule of q.jumps||[])row.append(node("p",jumpText(rule,q)));
+    if(!q.jumps?.length)row.append(node("p","按顺序进入下一题","muted"));
     if(draft){const acts=node("div",undefined,"actions");acts.append(button("编辑",()=>edit(q)),button("删除",async()=>{if(!confirm(`删除题目“${q.title}”？`))return;survey=await api(`/surveys/${survey._id}/questions/${q.id}`,"DELETE",{revision:survey.revision});render();resetQuestion();}));row.append(acts);}$("question-list").append(row);
     const opt=node("option",q.title);opt.value=q.id;$("validation-question").append(opt);
   }
@@ -75,11 +79,23 @@ function fields() {
   const kind=$("question-type").value;$("options-panel").hidden=!["single","multiple"].includes(kind);$("bounds-panel").hidden=kind==="single";$("integer-panel").hidden=kind!=="number";
   $("min-label").textContent={multiple:"最少选择数量",text:"最少字符数",number:"最小值"}[kind]||"最小值";
   $("max-label").textContent={multiple:"最多选择数量（与最少相同可限制恰好数量）",text:"最多字符数",number:"最大值"}[kind]||"最大值";
+  const allowed={single:["eq"],multiple:["any","all"],number:["eq","lt","lte","gt","gte"],text:[]}[kind];
+  for(const opt of $("jump-op").options){opt.disabled=!allowed.includes(opt.value);opt.hidden=opt.disabled;}
+  if(!allowed.includes($("jump-op").value))$("jump-op").value=allowed[0]||"";
+  $("jump-editor").hidden=kind==="text";
+  jumpSuggestions();
 }
+function jumpSuggestions(){
+  $("jump-targets").replaceChildren();const end=node("option","结束问卷");end.value="END";$("jump-targets").append(end);
+  const index=survey?.questions.findIndex(q=>q.id===$("question-id").value)??-1;
+  for(const [i,q] of (survey?.questions||[]).entries())if(index>=0&&i>index){const opt=node("option",q.title);opt.value=q.id;$("jump-targets").append(opt);}
+  $("jump-values").replaceChildren();if($("question-type").value==="single")for(const o of optionDefinitions()){const opt=node("option",o.label);opt.value=o.id;$("jump-values").append(opt);}
+}
+$("question-options").oninput=jumpSuggestions;$("question-id").oninput=jumpSuggestions;
 function resetQuestion(){editing=null;jumps=[];renderJumps();$("question-form").reset();$("question-id").disabled=false;$("question-id").value=`q${crypto.randomUUID().slice(0,8)}`;$("question-heading").textContent="添加题目";fields();}
 function edit(q){editing=q.id;$("question-id").value=q.id;$("question-id").disabled=true;$("question-title").value=q.title;$("question-type").value=q.type;$("question-required").checked=q.required;$("question-options").value=(q.options||[]).map(o=>`${o.id} | ${o.label}`).join("\n");const keys=q.type==="multiple"?["min_choices","max_choices"]:q.type==="text"?["min_length","max_length"]:["min","max"];$("question-min").value=q.validation[keys[0]]??"";$("question-max").value=q.validation[keys[1]]??"";$("question-integer").checked=!!q.validation.integer;$("question-heading").textContent="编辑题目";fields();$("question-form").scrollIntoView({behavior:"smooth"});}
 $("question-type").onchange=fields;$("reset-question").onclick=resetQuestion;
-function renderJumps(){$("jump-list").replaceChildren();jumps.forEach((r,i)=>{const row=node("p",`${i+1}. ${r.op} ${JSON.stringify(r.value)} → ${r.target} `);row.append(button("移除",()=>{jumps.splice(i,1);renderJumps();}));$("jump-list").append(row);});}
+function renderJumps(){$("jump-list").replaceChildren();jumps.forEach((r,i)=>{const row=node("div",undefined,"rule-row");row.append(node("p",`${i+1}. ${jumpText(r,{options:optionDefinitions()})}`));const acts=node("div",undefined,"actions");if(i>0)acts.append(button("上移",()=>{[jumps[i-1],jumps[i]]=[jumps[i],jumps[i-1]];renderJumps();}));if(i<jumps.length-1)acts.append(button("下移",()=>{[jumps[i+1],jumps[i]]=[jumps[i],jumps[i+1]];renderJumps();}));acts.append(button("移除",()=>{jumps.splice(i,1);renderJumps();}));row.append(acts);$("jump-list").append(row);});}
 const originalEdit=edit;edit=q=>{originalEdit(q);jumps=structuredClone(q.jumps||[]);renderJumps();};
 $("add-jump").onclick=action(async()=>{let value=$("jump-value").value;const kind=$("question-type").value;if(kind==="text")throw new Error("文本填空不设置条件跳转");if(kind==="multiple")value=value.split(",").map(v=>v.trim());if(kind==="number"){if(!value.trim()||!Number.isFinite(Number(value)))throw new Error("比较值须为数字");value=Number(value);}jumps.push({op:$("jump-op").value,value,target:$("jump-target").value.trim()});renderJumps();});
 $("question-form").onsubmit=action(async()=>{
@@ -109,7 +125,14 @@ $("fill-anonymous").onchange=fillAction(async()=>{await persistProgress();messag
 $("fill-review").onclick=$("fill-back").onclick;
 $("submit-response").onclick=fillAction(async()=>{$("submit-response").disabled=true;try{await api(`/public/surveys/${filling._id}/responses`,"POST",{answers,anonymous:$("fill-anonymous").checked,request_id:requestId});$("fill-submit").hidden=true;$("fill-back").disabled=true;$("fill-review").disabled=true;$("fill-anonymous").disabled=true;$("fill-question-title").textContent="提交成功，感谢填写";message("答卷已保存。");}finally{$("submit-response").disabled=false;}});
 $("view-statistics").onclick=action(async()=>{show("statistics");$("stats-title").textContent=`${survey.title} · 统计`;$("stats-question").replaceChildren(node("option","全部题目"));$("stats-question").firstChild.value="";for(const q of survey.questions){const opt=node("option",q.title);opt.value=q.id;$("stats-question").append(opt);}responsePage=1;await loadStatistics();await loadResponses();});
-async function loadStatistics(){const qid=$("stats-question").value;const result=await api(`/surveys/${survey._id}${qid?"/questions/"+qid:""}/statistics`);$("stats-total").textContent=`共 ${result.response_count} 份有效答卷，按答卷份数计数。`;$("stats-content").replaceChildren();for(const q of result.questions){const card=node("article",undefined,"card");card.append(node("h2",q.title),node("p",`有效回答：${q.answer_count}`));if(q.options){for(const o of q.options)card.append(node("p",`${o.label}：${o.count}`));}else{if(q.type==="number")card.append(node("p",`平均值：${q.average??"暂无数据"}`));if(!q.values.length)card.append(node("p","暂无填写内容","muted"));else{const entries=node("ol");for(const value of q.values)entries.append(node("li",String(value)));card.append(entries);}}$("stats-content").append(card);}}
+async function loadStatistics(){const qid=$("stats-question").value;const result=await api(`/surveys/${survey._id}${qid?"/questions/"+qid:""}/statistics`);$("stats-total").textContent=`共 ${result.response_count} 份有效答卷，按答卷份数计数。`;$("stats-content").replaceChildren();for(const q of result.questions){const card=node("article",undefined,"card");card.append(node("h2",q.title),node("p",`有效回答：${q.answer_count}`));if(q.options){
+      card.append(node("p",q.type==="multiple"?"比例 = 选择该项的答卷数 ÷ 本题有效回答份数。多选比例之和可能超过100%。":"比例 = 选择该项的答卷数 ÷ 本题有效回答份数。", "muted"));
+      const table=node("table",undefined,"option-stats");const caption=node("caption",`${q.title} · 选项分布`);table.append(caption);
+      const head=node("thead"),hr=node("tr");for(const title of ["选项","次数 / 比例","分布"]) {const th=node("th",title);th.scope="col";hr.append(th);}head.append(hr);table.append(head);
+      const body=node("tbody");
+      for(const o of q.options){const row=node("tr");const label=node("th",o.label);label.scope="row";const text=node("td",`${o.count} · ${q.answer_count?(o.count/q.answer_count*100).toFixed(1)+"%":"—"}`);const visual=node("td");const bar=node("meter");bar.min=0;bar.max=Math.max(q.answer_count,1);bar.value=o.count;bar.setAttribute("aria-label",`${o.label}，${o.count}份，本题有效回答${q.answer_count}份`);bar.textContent=String(o.count);visual.append(bar);row.append(label,text,visual);body.append(row);}
+      table.append(body);card.append(table);
+    }else{if(q.type==="number")card.append(node("p",`平均值：${q.average??"暂无数据"}`));if(!q.values.length)card.append(node("p","暂无填写内容","muted"));else{const entries=node("ol");for(const value of q.values)entries.append(node("li",String(value)));card.append(entries);}}$("stats-content").append(card);}}
 async function loadResponses(){const result=await api(`/surveys/${survey._id}/responses?page=${responsePage}`);$("response-list").replaceChildren();for(const r of result.items){const card=node("article",undefined,"card");card.append(node("p",`${r.respondent} · ${new Date(r.created_at).toLocaleString("zh-CN")}`));for(const answer of r.answers){const q=survey.questions.find(q=>q.id===answer.question_id);card.append(node("p",`${q?.title||answer.question_id}：${answerText(q,answer.value)}`));}$("response-list").append(card);}$("response-page").textContent=`第 ${responsePage} 页`;$("response-previous").disabled=responsePage===1;$("response-next").disabled=responsePage*20>=result.total;}
 $("stats-question").onchange=action(loadStatistics);$("stats-back").onclick=()=>render();$("response-previous").onclick=action(async()=>{responsePage--;await loadResponses();});$("response-next").onclick=action(async()=>{responsePage++;await loadResponses();});
 fields();identify();
