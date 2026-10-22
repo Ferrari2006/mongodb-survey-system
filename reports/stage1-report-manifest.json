@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
-  "editor": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-分层图示编辑版.html",
-  "word": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-分层图示可编辑.docx",
+  "editor": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-最终提交编辑版.html",
+  "word": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-最终提交可编辑.docx",
   "markdown": "reports/第一阶段完成报告.md",
   "printable": "reports/第一阶段完成报告.html",
   "submission": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽.html",
   "normalized_body_sha256": "1d571ae3e3d4bbe0e0041ff76a49ac640724367b4a813ea001a3815e517793da",
   "files_sha256": {
-    "reports/第一阶段完成报告.md": "5daed30733ec535dba8d16bf23b025366ec51d9d7ec9b0d83e7a74c9aba59e38",
-    "reports/第一阶段完成报告.html": "a0c771f1b2746cd40a36b0bb537fcf2e1ffef94d7965cb702436f8513e70a4dd",
-    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽.html": "a0c771f1b2746cd40a36b0bb537fcf2e1ffef94d7965cb702436f8513e70a4dd",
-    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-分层图示编辑版.html": "ca29ff8755a6b317dd03f4c953224ad17e7e2cb794862f020fd31d4396b0d3c0",
-    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-分层图示可编辑.docx": "018efeec1a5f2557935e624522ff6fef7ff13c5a01465c682e1c4981089b93d2",
-    "第一阶段/提交材料/分层图示版/2026_ECNU_PJ1_1_温正泽.pdf": "991dba5db27024b23e548676d72b19fe5a5d54fb0efab3299f1bf13e51a2abd8"
+    "reports/第一阶段完成报告.md": "3aefd4e222fa99f5a2a38858728741a3f175603f9e5d5436fa2ce558c39fec8e",
+    "reports/第一阶段完成报告.html": "d397aed8afc954dec9339b95d0ca75bf0c6607ad603b2474242ee0e74e371643",
+    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽.html": "d397aed8afc954dec9339b95d0ca75bf0c6607ad603b2474242ee0e74e371643",
+    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-最终提交编辑版.html": "d16d48c97dfba42cb0dfc4140bc7fd55b52d8bbe75c273a5ca0ac97fd2a3e77d",
+    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-最终提交可编辑.docx": "0cd0426460d43dab674d5b775820df3b8ff4ebe8df5e06157eb57330d0d21a91",
+    "第一阶段/提交材料/最终提交版/2026_ECNU_PJ1_1_温正泽.pdf": "0ce1f993c3377b4174270ce9c28b6e445987eaf34a2a6f7a25d00a455c40af67"
   },
   "evidence_sha256": {
     "backend/app.py": "3f4fb0b5b6bd805ebc0a9feb16f9172fcb7b04012e26e309f2daa97c032a477e",
@@ -24,12 +24,12 @@
     "tests/results/latest.json": "8439abded3e36ac72cddbc60b664fe794b2c4ed49165d7bbaca40b9dddb10f54",
     "docs/API说明.md": "c784fd78ffba758d86b54d08d833fcfa14b515177564431a31388c9783419452",
     "docs/数据库与系统设计.md": "ac3198303e92329feb32aef303f3afb5b9d4440085e2a2e62b87cb2389cbb9a7",
-    "reports/images/stage1-architecture-layered.svg": "3fdc6d938c8bf61549560d52cb704914880f208cfd24e683bfc9787aed524f8b",
-    "reports/images/stage1-data-model-layered.svg": "e039c0f29212c1613bddda1661d05fee0a41bdc54ff696e1f995135a3d52637f",
+    "reports/images/stage1-architecture-final.svg": "67bc5a8141cb9933a7c3809d640a7b2e64927d9d0e5b5c403a5984fc33899989",
+    "reports/images/stage1-data-model-final.svg": "246dd16117928d3a00de02fd0969215b1e5bc70fa37786a0234e383289a3e505",
     "reports/images/stage1-statistics-academic.svg": "bc5073b398b90184ec7afae3b49f6962fc69198f70e108ee7efa5b3eb033f663"
   },
   "recorded_tests": 38,
   "backend_tests_rerun": false,
-  "pdf": "第一阶段/提交材料/分层图示版/2026_ECNU_PJ1_1_温正泽.pdf",
+  "pdf": "第一阶段/提交材料/最终提交版/2026_ECNU_PJ1_1_温正泽.pdf",
   "pdf_pages": 10
 }

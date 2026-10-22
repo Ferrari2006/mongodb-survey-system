@@ -1,0 +1,434 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>第一阶段完成报告</title><style>
+*{box-sizing:border-box}
+html{background:#edf0f3}
+body{margin:0;color:#111;font:11pt/1.5 'SimSun','Songti SC','Times New Roman',serif}
+#report{width:min(100% - 32px,920px);margin:24px auto;padding:40px 54px 48px;background:#fff;outline:none;min-height:90vh}
+#report h1,#report h2,#report h3{font-family:'SimHei','Microsoft YaHei',sans-serif;color:#000;break-after:avoid;line-height:1.35;page-break-after:avoid}
+#report h1{font-size:19pt;text-align:center;font-weight:700;margin:8pt 0 9pt;border:0;padding:0}
+#report h2{font-size:13.5pt;margin:18pt 0 7pt}
+#report h3{font-size:11.5pt;margin:12pt 0 6pt}
+#report p{margin:0 0 6pt;orphans:3;widows:3}
+#report>.repo-link{font-size:9.5pt;margin:0 0 8pt;overflow-wrap:anywhere}
+#report>.report-meta{text-align:center;font-size:9.5pt;margin-bottom:16pt;line-height:1.6}
+#report ul,#report ol{padding-left:1.9em;margin:4pt 0 8pt}
+#report li{padding-left:2pt;margin:0 0 4pt}
+#report a{color:#204f70;text-decoration:none}
+#report code{font:9.1pt/1.35 Consolas,'SimSun',monospace;overflow-wrap:anywhere}
+#report pre{font:8.8pt/1.4 Consolas,'SimSun',monospace;white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid #d9d9d9;background:#f7f8fa;padding:9pt 11pt;margin:8pt 0 9pt;break-inside:avoid}
+#report pre code{font-size:inherit;line-height:inherit;overflow-wrap:normal}
+.table-block{margin:9pt 0 10pt;break-inside:avoid;page-break-inside:avoid}
+#report .table-caption{text-align:center;font-size:10pt;line-height:1.4;margin:0 0 5pt;font-weight:bold;break-after:avoid}
+#report table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:9.1pt;line-height:1.35;margin:0}
+#report th,#report td{border:1px solid #d9d9d9;padding:5.5pt 6pt;vertical-align:middle;text-align:left;overflow-wrap:anywhere;word-break:normal}
+#report th{background:#edf2f6;color:#000;font-weight:bold}
+#report th:first-child{width:auto;min-width:0}
+#report th code,#report td code{font-size:8.7pt}
+#report thead{display:table-header-group}
+#report tr{break-inside:avoid;page-break-inside:avoid}
+.report-figure{margin:10pt 0 12pt;break-inside:avoid;page-break-inside:avoid}
+#report .report-figure p{margin:0}
+#report .report-figure img{display:block;width:100%;height:auto;margin:0 auto 6pt;max-height:none}
+#report .report-figure p:last-child{font:9pt/1.45 'SimSun','Times New Roman',serif;color:#333;text-align:left}
+#editor-bar{position:sticky;top:0;z-index:10;display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:12px 22px;background:white;border-bottom:1px solid #cbd3dc;font:14px/1.5 'Microsoft YaHei',sans-serif}
+#editor-bar button{border:1px solid #718291;background:#f4f7f9;border-radius:4px;padding:7px 13px;color:#17384c;cursor:pointer}
+#status{color:#204f70}#edit-help{font-size:12px;color:#4b5b68}
+@page{size:A4;margin:18mm 20mm 18mm;@bottom-center{content:counter(page) ' / ' counter(pages);font-family:'Times New Roman',serif;font-size:9pt;color:#555}}
+@media(max-width:700px){#report{width:calc(100% - 16px);padding:24px 18px}#report table{font-size:9pt}#report th,#report td{padding:4pt}}
+@media print{html,body{background:white}#editor-bar{display:none!important}#report{width:auto;max-width:none;margin:0;padding:0;min-height:0}a{color:#111!important}#report{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+#report .tool-reference{font-size:9pt;line-height:1.45;color:#444;margin:8pt 0}#section-nav{max-width:230px;padding:7px;border:1px solid #718291;border-radius:4px;font:13px Microsoft YaHei}#report h2{scroll-margin-top:100px}
+#page-header-preview{display:flex;justify-content:space-between;gap:15px;border-bottom:1px solid #888;padding:0 0 5px;margin:0 0 20px;color:#555;font:9pt 'Times New Roman','SimSun',serif}
+@page{margin-top:22mm;@top-left{content:"数据管理系统课程设计 · Project 1 / Stage 1";font:8pt 'Times New Roman','SimSun',serif;color:#555;width:70%;text-align:left;vertical-align:bottom;padding-bottom:2mm;border-bottom:.5pt solid #888;margin-bottom:4mm}@top-right{content:"MongoDB Survey System";font:8pt 'Times New Roman',serif;color:#555;width:30%;text-align:right;vertical-align:bottom;padding-bottom:2mm;border-bottom:.5pt solid #888;margin-bottom:4mm}}
+@media print{#page-header-preview{display:none!important}}
+@media print{#report p{break-inside:avoid}}
+/* Final course-report typography: indented prose, three-rule tables. */
+body{font:10.5pt/1.5 'SimSun','Songti SC','Times New Roman',serif;color:#111}
+#report p{text-align:justify;text-indent:2em;margin:0 0 6pt;line-height:1.5}
+#report>.repo-link,#report>.report-meta,#report .table-caption,#report .report-figure p,#report .tool-reference{text-indent:0}
+#report>.report-meta{text-align:center}
+#report>.repo-link{text-align:left;font-size:9.5pt}
+#report h1{font:700 19pt/1.4 'SimHei','Microsoft YaHei',sans-serif;margin:8pt 0 9pt}
+#report h2{font-size:13.5pt;margin:17pt 0 7pt}
+#report h3{font-size:11.5pt;margin:11pt 0 6pt}
+#report .design-point{margin-bottom:5pt}
+#report .table-caption{text-align:center;font-size:10pt;line-height:1.4}
+#report table{border-top:1.2pt solid #222;border-bottom:1.2pt solid #222;font-size:9.2pt;line-height:1.35}
+#report th,#report td{border:0;padding:5pt 6pt;background:white;vertical-align:top}
+#report thead th{border-bottom:.7pt solid #555;background:white}
+#report td p,#report th p{text-indent:0;margin:0}
+#report .report-figure p:last-child{font-size:9pt;line-height:1.5;text-align:left}
+#page-header-preview{font:9pt 'SimSun','Times New Roman',serif;color:#444;border-bottom:.7pt solid #333}
+@page{size:A4;margin:22mm 20mm 18mm;
+@top-left{content:'数据管理系统课程设计 · 第一阶段';width:65%;font:8.5pt 'SimSun',serif;color:#444;vertical-align:bottom;text-align:left;padding-bottom:2mm;border-bottom:.7pt solid #333;margin-bottom:4mm}
+@top-right{content:'温正泽  10244304404';width:35%;font:8.5pt 'SimSun',serif;color:#444;vertical-align:bottom;text-align:right;padding-bottom:2mm;border-bottom:.7pt solid #333;margin-bottom:4mm}
+@bottom-center{content:counter(page) ' / ' counter(pages);font:9pt 'Times New Roman',serif;color:#555}}
+@media print{#report p{break-inside:avoid}#editor-bar,#page-header-preview{display:none!important}}
+@media print{.table-block{break-inside:auto;page-break-inside:auto}}
+@media print{.table-block.keep-table{break-inside:avoid;page-break-inside:avoid}}
+
+/* Typography refinement: separate Latin and CJK faces, balanced leading. */
+body{font-family:'Times New Roman','SimSun',serif;font-size:10.5pt;line-height:1.58;color:#151515}
+#report p{line-height:1.58;margin-bottom:5pt;letter-spacing:0;text-align:justify;text-justify:inter-ideograph}
+#report h1{font-family:'SimHei','Microsoft YaHei',sans-serif;font-size:19pt;line-height:1.35;letter-spacing:.5pt;margin:9pt 0 11pt}
+#report h2{font-family:'SimHei','Microsoft YaHei',sans-serif;font-size:13pt;line-height:1.4;margin:16pt 0 7pt}
+#report h3{font-family:'SimHei','Microsoft YaHei',sans-serif;font-size:11.5pt;line-height:1.4;margin:11pt 0 6pt}
+#report>.report-meta{font-size:9.5pt;line-height:1.6;margin-bottom:14pt}
+#report table{font-family:'Times New Roman','SimSun',serif;font-size:9.5pt;line-height:1.45}
+#report th,#report td{padding:5pt 6pt;line-height:1.45}
+#report th{font-weight:700}
+#report code{font-family:Consolas,'SimSun',monospace;font-size:8.8pt;line-height:1.4}
+#report th code,#report td code{font-size:8.4pt}
+#report .table-caption{font-family:'Times New Roman','SimSun',serif;font-size:10pt;line-height:1.4;margin:0 0 6pt;font-weight:400}
+#report .report-figure p:last-child{font-family:'Times New Roman','SimSun',serif;font-size:9pt;line-height:1.45}
+#report .tool-reference{font-size:8.8pt;line-height:1.45;text-align:left}
+
+#report p{line-height:1.5;margin-bottom:4.5pt}
+#report table{font-size:9.3pt;line-height:1.4}
+#report th,#report td{padding:4.5pt 6pt;line-height:1.4}
+#report .report-figure img{width:94%}
+#report h2{margin-top:14pt}
+
+#report .architecture-figure img{width:100%}#report .architecture-figure{break-inside:avoid;page-break-inside:avoid}
+
+</style></head><body><main id="report"><div id="page-header-preview" contenteditable="false"><span>数据管理系统课程设计 · 第一阶段</span><span>温正泽 10244304404</span></div><p class="repo-link">GitHub 仓库：<a href="https://github.com/Ferrari2006/mongodb-survey-system">https://github.com/Ferrari2006/mongodb-survey-system</a></p>
+<h1>基于 MongoDB 的问卷系统第一阶段报告</h1>
+<p class="report-meta">课程：数据管理系统　学号：10244304404　姓名：温正泽　修订日期：2026年10月22日</p>
+<h2>一、项目目标与实现概览</h2>
+<p>本项目依据课程初始需求开发简化在线问卷系统，支持注册登录、本人问卷管理、分享填写、单选／多选／文本／数字题、条件跳转、校验、提交及统计。所有业务数据存入MongoDB，没有使用关系数据库或现成问卷系统框架。</p>
+<p>根据课堂补充，开发时先处理集合划分、后端规则和API测试，再补齐页面操作与AI协作记录。报告说明数据库如何组织、跳转和校验如何执行，以及测试发现了什么；完整接口和操作步骤放在README与设计文档中。</p>
+<h3>1.1 已实现的基本流程</h3>
+<p>创建者注册登录后创建草稿，设置标题、说明、匿名许可、重复填写许可和截止时间，添加题目与跳转规则；发布后获得分享链接，其他用户登录填写。系统逐题检查输入并计算后续路径，提交后生成正式答卷。创建者可查看本人问卷的整卷／单题统计及分页答卷，不能管理他人问卷。</p>
+<p>问卷采用<code>draft → published → closed</code>状态。第一阶段发布后固定题目和设置，保护已有答卷含义；需修改时创建新问卷。只允许向后跳或结束，多规则按配置顺序首条命中。这些是项目明确记录的实现约定，并非教师指定的唯一方案。</p>
+<h3>1.2 本项目保留并完善的设计特点</h3>
+<p class="design-point"><strong>填写进度与正式答卷分开保存。</strong> 下一题校验成功后保存已确认答案，刷新或重新登录可恢复；未提交进度不会影响统计。</p><p class="design-point"><strong>保存的答案与实际路径一致。</strong> 跳转由后端解释，返回修改清理后续答案，提交时重新检查整条路径，防止旧分支或伪造答案进入答卷。</p><p class="design-point"><strong>统计分别列出总数与单题分母。</strong> 单题有效回答数与整卷答卷数分别计算，多选明确分母；一次facet聚合让回答数、选项数和均值使用同批输入。</p><p class="design-point"><strong>补测正常流程以外的边界。</strong> 覆盖数字0、重复点击、网络重试、旧窗口覆盖、统计响应乱序和合法长文本等边界，并保存实际执行结果。</p>
+<p>这些做法分别对应进度恢复、分支改答、统计口径和并发操作中的问题，后文结合实现与测试说明。</p>
+<h2>二、数据库组织与MongoDB运用</h2>
+<h3>2.1 根据读写方式划分集合</h3>
+<p>题目通常随问卷整体读取，数量有界；答卷会持续增加；填写进度则频繁覆盖且可能从未提交。系统据此划分5个集合，把嵌入结构和引用关系结合使用。</p>
+<figure class="report-figure"><p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9Ijc3MCIgdmlld0JveD0iMCAwIDEyMDAgNzcwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUiPjx0aXRsZSBpZD0idGl0bGUiPuS6lOmbhuWQiOWFs+ezu++8mueUqOaIt+W8leeUqOOAgemXruWNt+WGheW1jOmimOebruOAgei/m+W6puS4juetlOWNt+eLrOeri+S/neWtmDwvdGl0bGU+PGRlZnM+PG1hcmtlciBpZD0iYXJyb3ciIHZpZXdCb3g9IjAgMCAxMCAxMCIgcmVmWD0iOSIgcmVmWT0iNSIgbWFya2VyV2lkdGg9IjYiIG1hcmtlckhlaWdodD0iNiIgb3JpZW50PSJhdXRvIj48cGF0aCBkPSJNMCAwTDEwIDVMMCAxMFoiIGZpbGw9IiM3Mjg0OTUiLz48L21hcmtlcj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0id2hpdGUiLz48ZyBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLFNpbUhlaSxzYW5zLXNlcmlmIiBmaWxsPSIjMjQzNjRCIj48cmVjdCB4PSIyNSIgeT0iMjUiIHdpZHRoPSIxMTUwIiBoZWlnaHQ9IjE2NSIgcng9IjMiIGZpbGw9IiNFREY1RkQiIHN0cm9rZT0iI0E3QzVFMSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSI1OCIgeT0iNTciIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzI0MzY0QiI+6LSm5Y+35LiO6K6/6ZeuPC90ZXh0PjxyZWN0IHg9IjY1IiB5PSI4MyIgd2lkdGg9IjI4MCIgaGVpZ2h0PSI3OCIgcng9IjMiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNBN0M1RTEiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iMjA1LjAiIHk9IjExNS4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMjQzNjRCIj51c2VyczwvdGV4dD48dGV4dCB4PSIyMDUuMCIgeT0iMTQxLjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI0MDAiIGZpbGw9IiMyNDM2NEIiPui0puWPtyAvIOWvhueggeWTiOW4jCAvIOWIm+W7uuaXtumXtDwvdGV4dD48cmVjdCB4PSI2MjAiIHk9IjgzIiB3aWR0aD0iNDg1IiBoZWlnaHQ9Ijc4IiByeD0iMyIgZmlsbD0id2hpdGUiIHN0cm9rZT0iI0E3QzVFMSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSI4NjIuNSIgeT0iMTE1LjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMyNDM2NEIiPnNlc3Npb25zIMK3IOeZu+W9leS8muivnTwvdGV4dD48dGV4dCB4PSI4NjIuNSIgeT0iMTQxLjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI0MDAiIGZpbGw9IiMyNDM2NEIiPnVzZXJfaWQgLyBleHBpcmVzX2F0IC8g5Luk54mM5pGY6KaBPC90ZXh0PjxwYXRoIGQ9Ik02MjAgMTIySDM0OCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzI4NDk1IiBzdHJva2Utd2lkdGg9IjEuNyIgbWFya2VyLWVuZD0idXJsKCNhcnJvdykiLz48cmVjdCB4PSIzOTUuMCIgeT0iOTAiIHdpZHRoPSIxNzQiIGhlaWdodD0iMjMiIHJ4PSIwIiBmaWxsPSJ3aGl0ZSIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEuNSIvPjx0ZXh0IHg9IjQ4MiIgeT0iMTA3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjMjQzNjRCIj51c2VyX2lkIOW8leeUqOeUqOaItzwvdGV4dD48cmVjdCB4PSIyNSIgeT0iMjM0IiB3aWR0aD0iMTE1MCIgaGVpZ2h0PSIyNTMiIHJ4PSIzIiBmaWxsPSIjRkZGOEU0IiBzdHJva2U9IiNEN0MyOEMiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iNTgiIHk9IjI2NyIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LXNpemU9IjIwIiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMjQzNjRCIj7pl67ljbflrprkuYkgwrcg5pWw6YeP5pyJ6ZmQ55qE6YWN572u5bWM5YWl5L+d5a2YPC90ZXh0PjxyZWN0IHg9IjY1IiB5PSIyOTUiIHdpZHRoPSIzMDAiIGhlaWdodD0iMTUxIiByeD0iMyIgZmlsbD0id2hpdGUiIHN0cm9rZT0iI0Q3QzI4QyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSIyMTUuMCIgeT0iMzUwLjUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTkiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMyNDM2NEIiPnN1cnZleXM8L3RleHQ+PHRleHQgeD0iMjE1LjAiIHk9IjM3Ni41IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE5IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjMjQzNjRCIj5vd25lcl9pZCAvIHRpdGxlIC8gc3RhdHVzPC90ZXh0Pjx0ZXh0IHg9IjIxNS4wIiB5PSI0MDIuNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iIzI0MzY0QiI+cmV2aXNpb24gLyBkZWFkbGluZTwvdGV4dD48cGF0aCBkPSJNMjA1IDE5MFYyMzIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzcyODQ5NSIgc3Ryb2tlLXdpZHRoPSIxLjciIG1hcmtlci1lbmQ9InVybCgjYXJyb3cpIi8+PHJlY3QgeD0iMTk3LjAiIHk9IjIwMCIgd2lkdGg9IjMwNCIgaGVpZ2h0PSIyMyIgcng9IjAiIGZpbGw9IndoaXRlIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iMzQ5IiB5PSIyMTciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI0MDAiIGZpbGw9IiMyNDM2NEIiPm93bmVyX2lkIMK3IOS4gOS9jeWIm+W7uuiAheWPr+acieWkmuS7vemXruWNtzwvdGV4dD48cmVjdCB4PSI0NDUiIHk9IjI5MSIgd2lkdGg9IjY2MCIgaGVpZ2h0PSIxNjMiIHJ4PSIzIiBmaWxsPSIjRkZGQ0YxIiBzdHJva2U9IiNEN0MyOEMiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iNzc1IiB5PSIzMjIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMjEiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMyNDM2NEIiPnF1ZXN0aW9uc1tdIMK3IOW1jOWFpemXruWNtzwvdGV4dD48cmVjdCB4PSI0NjkiIHk9IjM0MiIgd2lkdGg9IjE4OCIgaGVpZ2h0PSI4MiIgcng9IjMiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNEN0MyOEMiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iNTYzLjAiIHk9IjM3Ni4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMjQzNjRCIj7popjnm67kuI7pgInpobk8L3RleHQ+PHRleHQgeD0iNTYzLjAiIHk9IjQwMi4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjMjQzNjRCIj5pZCAvIHR5cGUgLyBvcHRpb25zW108L3RleHQ+PHJlY3QgeD0iNjgxIiB5PSIzNDIiIHdpZHRoPSIxODgiIGhlaWdodD0iODIiIHJ4PSIzIiBmaWxsPSJ3aGl0ZSIgc3Ryb2tlPSIjRDdDMjhDIiBzdHJva2Utd2lkdGg9IjEuNSIvPjx0ZXh0IHg9Ijc3NS4wIiB5PSIzNzYuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzI0MzY0QiI+5Zue562U5qCh6aqMPC90ZXh0Pjx0ZXh0IHg9Ijc3NS4wIiB5PSI0MDIuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iIzI0MzY0QiI+dmFsaWRhdGlvbnt9PC90ZXh0PjxyZWN0IHg9Ijg5MyIgeT0iMzQyIiB3aWR0aD0iMTg4IiBoZWlnaHQ9IjgyIiByeD0iMyIgZmlsbD0id2hpdGUiIHN0cm9rZT0iI0Q3QzI4QyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSI5ODcuMCIgeT0iMzc2LjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMyNDM2NEIiPuadoeS7tui3s+i9rDwvdGV4dD48dGV4dCB4PSI5ODcuMCIgeT0iNDAyLjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI0MDAiIGZpbGw9IiMyNDM2NEIiPmp1bXBzW108L3RleHQ+PHBhdGggZD0iTTM2NSAzNzBINDQyIiBmaWxsPSJub25lIiBzdHJva2U9IiM3Mjg0OTUiIHN0cm9rZS13aWR0aD0iMS43IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSIvPjxyZWN0IHg9IjM4My4wIiB5PSIzMzUiIHdpZHRoPSI0NCIgaGVpZ2h0PSIyMyIgcng9IjAiIGZpbGw9IndoaXRlIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iNDA1IiB5PSIzNTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI0MDAiIGZpbGw9IiMyNDM2NEIiPuW1jOWFpTwvdGV4dD48cmVjdCB4PSIyNSIgeT0iNTQzIiB3aWR0aD0iMTE1MCIgaGVpZ2h0PSIxNjgiIHJ4PSIzIiBmaWxsPSIjRURGNkYxIiBzdHJva2U9IiM5RUJGQUYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iNTgiIHk9IjU3NiIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LXNpemU9IjIwIiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMjQzNjRCIj7loavlhpnkuI7mj5DkuqQgwrcg54us56uL5paH5qGj77yM6YG/5YWN6Zeu5Y235oyB57ut6Iao6IOAPC90ZXh0PjxyZWN0IHg9IjY1IiB5PSI1OTUiIHdpZHRoPSI0NzUiIGhlaWdodD0iODciIHJ4PSIzIiBmaWxsPSJ3aGl0ZSIgc3Ryb2tlPSIjOUVCRkFGIiBzdHJva2Utd2lkdGg9IjEuNSIvPjx0ZXh0IHg9IjMwMi41IiB5PSI2MTguNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzI0MzY0QiI+ZmlsbF9wcm9ncmVzcyDCtyDmtLvliqjov5vluqY8L3RleHQ+PHRleHQgeD0iMzAyLjUiIHk9IjY0NC41IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjMjQzNjRCIj5hbnN3ZXJze30gLyByZXZpc2lvbiAvIHJlcXVlc3RfaWQ8L3RleHQ+PHRleHQgeD0iMzAyLjUiIHk9IjY3MC41IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjMjQzNjRCIj7mr4/otKblj7fmr4/pl67ljbfkuIDku73vvJvkuI3orqHlhaXnu5/orqE8L3RleHQ+PHJlY3QgeD0iNjMwIiB5PSI1OTUiIHdpZHRoPSI0NzUiIGhlaWdodD0iODciIHJ4PSIzIiBmaWxsPSJ3aGl0ZSIgc3Ryb2tlPSIjOUVCRkFGIiBzdHJva2Utd2lkdGg9IjEuNSIvPjx0ZXh0IHg9Ijg2Ny41IiB5PSI2MTguNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzI0MzY0QiI+cmVzcG9uc2VzIMK3IOato+W8j+etlOWNtzwvdGV4dD48dGV4dCB4PSI4NjcuNSIgeT0iNjQ0LjUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI0MDAiIGZpbGw9IiMyNDM2NEIiPmFuc3dlcnNbXSAvIHBhdGhbXSAvIHJlcXVlc3RfaWQ8L3RleHQ+PHRleHQgeD0iODY3LjUiIHk9IjY3MC41IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjMjQzNjRCIj7mr4/mrKHmiJDlip/mj5DkuqTkuIDku73vvJvkvZzkuLrnu5/orqHmnaXmupA8L3RleHQ+PHBhdGggZD0iTTIyMCA0ODdWNTkyIiBmaWxsPSJub25lIiBzdHJva2U9IiM3Mjg0OTUiIHN0cm9rZS13aWR0aD0iMS43IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSIvPjxwYXRoIGQ9Ik05NzQgNDg3VjU5MiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzI4NDk1IiBzdHJva2Utd2lkdGg9IjEuNyIgbWFya2VyLWVuZD0idXJsKCNhcnJvdykiLz48cmVjdCB4PSIxOTguMCIgeT0iNTAxIiB3aWR0aD0iMzA0IiBoZWlnaHQ9IjIzIiByeD0iMCIgZmlsbD0id2hpdGUiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSIzNTAiIHk9IjUxOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iIzI0MzY0QiI+c3VydmV5X2lkIC8gdXNlcl9pZCDlvJXnlKg8L3RleHQ+PHJlY3QgeD0iNzgzLjAiIHk9IjUwMSIgd2lkdGg9IjMwNCIgaGVpZ2h0PSIyMyIgcng9IjAiIGZpbGw9IndoaXRlIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iOTM1IiB5PSI1MTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI0MDAiIGZpbGw9IiMyNDM2NEIiPnN1cnZleV9pZCAvIHVzZXJfaWQg5byV55SoPC90ZXh0Pjx0ZXh0IHg9IjYwMCIgeT0iNzQ4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE3IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjMjQzNjRCIj7mlbDnu4TkuI7lr7nosaHmoYbooajnpLrltYzlhaXnu5PmnoTvvJvpm4blkIjpgJrov4flrZfnrKbkuLIgSUQg5YWz6IGU77yM55Sx5ZCO56uv5qCh6aqM77yM5LiN5piv5pWw5o2u5bqT5aSW6ZSu44CCPC90ZXh0PjwvZz48L3N2Zz4=" alt="五集合分层关系与题目嵌入结构" contenteditable="false" data-word-width-cm="16.9" data-source-file="stage1-data-model-layered.svg"></p><p>图1　实际集合组织。框内数组表示嵌入；集合间通过字符串ID关联，由后端检查业务关系。</p></figure>
+<section class="table-block"><p class="table-caption">表1　集合职责与关键字段</p><table>
+<thead>
+<tr>
+  <th>集合</th>
+  <th>关键字段及BSON类型（节选）</th>
+  <th>设计理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>users</td>
+  <td><code>_id/username/password_hash: string</code>；<code>created_at: date</code></td>
+  <td>账号独立保存，其他文档引用用户ID，不重复保存密码</td>
+</tr>
+<tr>
+  <td>sessions</td>
+  <td><code>_id/user_id: string</code>；<code>expires_at: date</code></td>
+  <td>保存令牌摘要；会话可退出、过期，与业务文档分开清理</td>
+</tr>
+<tr>
+  <td>surveys</td>
+  <td><code>owner_id/title/status: string</code>；<code>questions: array</code>；<code>revision/schema_version: int</code>；<code>deadline: date/null</code></td>
+  <td>题目、选项、校验和跳转一起读取，嵌入同份问卷</td>
+</tr>
+<tr>
+  <td>fill_progress</td>
+  <td><code>survey_id/user_id/request_id: string</code>；<code>answers: object</code>；<code>revision/survey_revision: int</code>；<code>anonymous: bool</code></td>
+  <td>一账号一问卷一份活动进度，保存有效前缀，不进入正式统计</td>
+</tr>
+<tr>
+  <td>responses</td>
+  <td><code>survey_id/user_id/request_id/submission_key: string</code>；<code>answers/path: array</code>；<code>anonymous: bool</code>；<code>created_at: date</code></td>
+  <td>一次成功提交一份文档，支持持续增长及按问卷聚合</td>
+</tr>
+</tbody>
+</table></section>
+<p>全部集合的<code>_id</code>为字符串，时间使用BSON Date。题目结构节选如下，省略其他题目及问卷级字段：</p>
+<pre><code class="language-json">{
+  "id": "q1", "type": "single", "title": "你是否使用校园服务？",
+  "required": true,
+  "options": [{"id": "yes", "label": "使用"}, {"id": "no", "label": "不使用"}],
+  "validation": {},
+  "jumps": [{"op": "eq", "value": "no", "target": "q4"}]
+}
+</code></pre>
+<p>题目和选项使用稳定ID，回答不依赖题号或显示文案。进度以<code>answers: {题目ID: 值}</code>保存已确认输入，正式答卷以<code>answers: [{question_id, value}]</code>保存有效回答，并用<code>path</code>记录实际经过题目。</p>
+<h3>2.2 取舍及约束</h3>
+<p>如果把答卷都嵌入问卷，文档会随提交次数增加而不断膨胀；如果把题目和选项全部拆开，读取完整问卷又需要多次关联。本项目将数量有限、经常一起读取的题目配置嵌入问卷，把持续增加的答卷单独保存。会话和填写进度各自清理、更新，不放进正式答卷集合。</p>
+<p>MongoDB允许不同题型保存不同的嵌套配置，但仍需要约束。数据库<code>$jsonSchema</code>检查必备字段、顶层类型和状态，应用补充选项唯一性、校验边界和目标题目等嵌套业务规则。关系数据库也能实现问卷系统；本项目结合课程指定环境和整体读取方式选择文档结构。</p>
+<p>密码保存带盐哈希，令牌只保存摘要。管理查询包含<code>owner_id</code>，认证时检查会话过期。以下索引各自对应实际查询或约束：</p>
+<section class="table-block"><p class="table-caption">表2　索引与对应访问需求</p><table>
+<thead>
+<tr>
+  <th>索引</th>
+  <th>对应需求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>users.username唯一；sessions.expires_at TTL</td>
+  <td>防止账号重名；清理过期会话，认证不依赖TTL清理时机</td>
+</tr>
+<tr>
+  <td>surveys.owner_id + updated_at</td>
+  <td>查询本人的问卷并按更新时间排序</td>
+</tr>
+<tr>
+  <td>fill_progress.survey_id + user_id唯一</td>
+  <td>每账号每问卷一份活动进度</td>
+</tr>
+<tr>
+  <td>responses.survey_id + user_id + submission_key唯一</td>
+  <td>不允许重复时同账号仅一份；允许重复时区分每次提交</td>
+</tr>
+<tr>
+  <td>responses.survey_id + user_id + request_id唯一</td>
+  <td>同次网络重试不重复入库</td>
+</tr>
+<tr>
+  <td>responses.survey_id + created_at</td>
+  <td>查询和分页展示问卷答卷</td>
+</tr>
+</tbody>
+</table></section>
+<p><code>schema_version</code>表示文档结构，<code>revision</code>表示编辑或进度修订号，正式答卷的<code>survey_revision</code>字段记录提交对应的问卷修订号。结构版本与编辑冲突分开处理，避免混为“完整发布历史”。旧草稿扩展采用显式、可重复执行的迁移脚本，测试验证保留已有数据。</p>
+<h3>2.3 与课程实验的联系</h3>
+<p>Lab2的CRUD、条件查询和嵌套字段用于账号、问卷与答卷管理；Lab3的索引和聚合用于防重与统计。具体包括展开多选答案后计数、用$avg求数字均值，以及用条件更新和唯一索引处理并发。</p>
+<h2>三、后端如何组织一次填写</h2>
+<h3>3.1 模块与接口</h3><figure class="report-figure architecture-figure"><p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9Ijk4NSIgdmlld0JveD0iMCAwIDEyMDAgOTg1IiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUiPjx0aXRsZSBpZD0idGl0bGUiPumXruWNt+ezu+e7n+WIhuWxguaetuaehO+8mua1j+iniOWZqOOAgUZsYXNr5ZCO56uv44CB6KeE5YiZ5qih5Z2X5LiOTW9uZ29EQuS6lOmbhuWQiDwvdGl0bGU+PGRlZnM+PG1hcmtlciBpZD0iYXJyb3ciIHZpZXdCb3g9IjAgMCAxMCAxMCIgcmVmWD0iOSIgcmVmWT0iNSIgbWFya2VyV2lkdGg9IjYiIG1hcmtlckhlaWdodD0iNiIgb3JpZW50PSJhdXRvIj48cGF0aCBkPSJNMCAwTDEwIDVMMCAxMFoiIGZpbGw9IiM3Mjg0OTUiLz48L21hcmtlcj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0id2hpdGUiLz48ZyBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLFNpbUhlaSxzYW5zLXNlcmlmIiBmaWxsPSIjMjQzNjRCIj48cmVjdCB4PSI0NTAiIHk9IjE4IiB3aWR0aD0iMzAwIiBoZWlnaHQ9IjY4IiByeD0iMyIgZmlsbD0iIzI5NDg2RSIgc3Ryb2tlPSIjMjk0ODZFIiBzdHJva2Utd2lkdGg9IjEuNSIvPjx0ZXh0IHg9IjYwMC4wIiB5PSI0NS4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSJ3aGl0ZSI+5L2/55So6ICFPC90ZXh0Pjx0ZXh0IHg9IjYwMC4wIiB5PSI3MS4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSJ3aGl0ZSI+6Zeu5Y235Yib5bu66ICFIC8g55m75b2V5aGr5YaZ6ICFPC90ZXh0PjxwYXRoIGQ9Ik02MDAgODZWMTE5IiBmaWxsPSJub25lIiBzdHJva2U9IiM3Mjg0OTUiIHN0cm9rZS13aWR0aD0iMS43IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSIvPjxyZWN0IHg9IjMwIiB5PSIxMjAiIHdpZHRoPSIxMTQwIiBoZWlnaHQ9IjE0MiIgcng9IjMiIGZpbGw9IiNFREY1RkQiIHN0cm9rZT0iI0E3QzVFMSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSI2MDAiIHk9IjE0OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzI0MzY0QiI+5YmN56uv5bGV56S65bGCIMK3IOWOn+eUnyBIVE1MIC8gQ1NTIC8gSmF2YVNjcmlwdDwvdGV4dD48cmVjdCB4PSI2MCIgeT0iMTcwIiB3aWR0aD0iMjQwIiBoZWlnaHQ9IjcwIiByeD0iMyIgZmlsbD0id2hpdGUiIHN0cm9rZT0iI0E3QzVFMSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSIxODAuMCIgeT0iMTk4LjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTciIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMyNDM2NEIiPui0puWPt+S4juW3peS9nOWPsDwvdGV4dD48dGV4dCB4PSIxODAuMCIgeT0iMjI0LjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTciIGZvbnQtd2VpZ2h0PSI0MDAiIGZpbGw9IiMyNDM2NEIiPueZu+W9lSAvIOacrOS6uumXruWNtzwvdGV4dD48cmVjdCB4PSIzNDAiIHk9IjE3MCIgd2lkdGg9IjI0MCIgaGVpZ2h0PSI3MCIgcng9IjMiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNBN0M1RTEiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iNDYwLjAiIHk9IjE5OC4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE3IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMjQzNjRCIj7pl67ljbfnvJbovpE8L3RleHQ+PHRleHQgeD0iNDYwLjAiIHk9IjIyNC4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE3IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjMjQzNjRCIj7popjnm64gLyDmoKHpqowgLyDop4TliJk8L3RleHQ+PHJlY3QgeD0iNjIwIiB5PSIxNzAiIHdpZHRoPSIyNDAiIGhlaWdodD0iNzAiIHJ4PSIzIiBmaWxsPSJ3aGl0ZSIgc3Ryb2tlPSIjQTdDNUUxIiBzdHJva2Utd2lkdGg9IjEuNSIvPjx0ZXh0IHg9Ijc0MC4wIiB5PSIxOTguMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNyIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzI0MzY0QiI+5YiG5Lqr5aGr5YaZPC90ZXh0Pjx0ZXh0IHg9Ijc0MC4wIiB5PSIyMjQuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNyIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iIzI0MzY0QiI+6YCQ6aKY5aGr5YaZIC8g5oGi5aSN6L+b5bqmPC90ZXh0PjxyZWN0IHg9IjkwMCIgeT0iMTcwIiB3aWR0aD0iMjQwIiBoZWlnaHQ9IjcwIiByeD0iMyIgZmlsbD0id2hpdGUiIHN0cm9rZT0iI0E3QzVFMSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSIxMDIwLjAiIHk9IjE5OC4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE3IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMjQzNjRCIj7nu5/orqHkuI7nrZTljbc8L3RleHQ+PHRleHQgeD0iMTAyMC4wIiB5PSIyMjQuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNyIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iIzI0MzY0QiI+5pW05Y23IC8g5Y2V6aKYIC8g5YiG6aG1PC90ZXh0PjxwYXRoIGQ9Ik02MDAgMjYyVjMxOSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzI4NDk1IiBzdHJva2Utd2lkdGg9IjEuNyIgbWFya2VyLWVuZD0idXJsKCNhcnJvdykiLz48cmVjdCB4PSI0MjIuMCIgeT0iMjc2IiB3aWR0aD0iMzU2IiBoZWlnaHQ9IjIzIiByeD0iMCIgZmlsbD0id2hpdGUiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSI2MDAiIHk9IjI5MyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iIzI0MzY0QiI+SFRUUCAvIEpTT04gwrcgQmVhcmVyIFRva2VuPC90ZXh0PjxyZWN0IHg9IjMwIiB5PSIzMjAiIHdpZHRoPSIxMTQwIiBoZWlnaHQ9IjQyMCIgcng9IjMiIGZpbGw9IiNGRkY4RTQiIHN0cm9rZT0iI0Q3QzI4QyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSI2MDAiIHk9IjM1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzI0MzY0QiI+5ZCO56uv5Lia5Yqh5bGCIMK3IFB5dGhvbiBGbGFzazwvdGV4dD48cmVjdCB4PSIzODUiIHk9IjM3MyIgd2lkdGg9IjQzMCIgaGVpZ2h0PSI3MiIgcng9IjMiIGZpbGw9IiNGOEU0QUIiIHN0cm9rZT0iI0Q3QzI4QyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSI2MDAuMCIgeT0iNDAyLjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMyNDM2NEIiPkFQSSDlhaXlj6PkuI7orr/pl67mjqfliLY8L3RleHQ+PHRleHQgeD0iNjAwLjAiIHk9IjQyOC4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjMjQzNjRCIj5KU09O57uT5p6EIMK3IOeZu+W9leS8muivnSDCtyDpl67ljbflvZLlsZ4gwrcg54q25oCB5qOA5p+lPC90ZXh0PjxwYXRoIGQ9Ik02MDAgNDQ1VjQ2NUgxODBWNDkwIiBmaWxsPSJub25lIiBzdHJva2U9IiM3Mjg0OTUiIHN0cm9rZS13aWR0aD0iMS43IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSIvPjxyZWN0IHg9IjY1IiB5PSI0OTAiIHdpZHRoPSIyMzAiIGhlaWdodD0iNzIiIHJ4PSIzIiBmaWxsPSJ3aGl0ZSIgc3Ryb2tlPSIjRDdDMjhDIiBzdHJva2Utd2lkdGg9IjEuNSIvPjx0ZXh0IHg9IjE4MC4wIiB5PSI1MTkuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNyIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzI0MzY0QiI+6Zeu5Y23566h55CGPC90ZXh0Pjx0ZXh0IHg9IjE4MC4wIiB5PSI1NDUuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNyIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iIzI0MzY0QiI+6I2J56i/57yW6L6RIC8g5Y+R5biD5Ya757uTPC90ZXh0PjxwYXRoIGQ9Ik02MDAgNDQ1VjQ2NUg0NjBWNDkwIiBmaWxsPSJub25lIiBzdHJva2U9IiM3Mjg0OTUiIHN0cm9rZS13aWR0aD0iMS43IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSIvPjxyZWN0IHg9IjM0NSIgeT0iNDkwIiB3aWR0aD0iMjMwIiBoZWlnaHQ9IjcyIiByeD0iMyIgZmlsbD0id2hpdGUiIHN0cm9rZT0iI0Q3QzI4QyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSI0NjAuMCIgeT0iNTE5LjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTciIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMyNDM2NEIiPui0puWPt+S4juS8muivnTwvdGV4dD48dGV4dCB4PSI0NjAuMCIgeT0iNTQ1LjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTciIGZvbnQtd2VpZ2h0PSI0MDAiIGZpbGw9IiMyNDM2NEIiPuWvhueggeWTiOW4jCAvIOS7pOeJjOaRmOimgTwvdGV4dD48cGF0aCBkPSJNNjAwIDQ0NVY0NjVINzQwVjQ5MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzI4NDk1IiBzdHJva2Utd2lkdGg9IjEuNyIgbWFya2VyLWVuZD0idXJsKCNhcnJvdykiLz48cmVjdCB4PSI2MjUiIHk9IjQ5MCIgd2lkdGg9IjIzMCIgaGVpZ2h0PSI3MiIgcng9IjMiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNEN0MyOEMiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iNzQwLjAiIHk9IjUxOS4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE3IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMjQzNjRCIj7ov5vluqbkuI7mj5DkuqQ8L3RleHQ+PHRleHQgeD0iNzQwLjAiIHk9IjU0NS4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE3IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjMjQzNjRCIj7mnInmlYjot6/lvoQgLyDpmLLph43kuI7ph43or5U8L3RleHQ+PHBhdGggZD0iTTYwMCA0NDVWNDY1SDEwMjBWNDkwIiBmaWxsPSJub25lIiBzdHJva2U9IiM3Mjg0OTUiIHN0cm9rZS13aWR0aD0iMS43IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSIvPjxyZWN0IHg9IjkwNSIgeT0iNDkwIiB3aWR0aD0iMjMwIiBoZWlnaHQ9IjcyIiByeD0iMyIgZmlsbD0id2hpdGUiIHN0cm9rZT0iI0Q3QzI4QyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSIxMDIwLjAiIHk9IjUxOS4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE3IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMjQzNjRCIj7nu5/orqHkuI7mn6Xor6I8L3RleHQ+PHRleHQgeD0iMTAyMC4wIiB5PSI1NDUuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNyIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iIzI0MzY0QiI+6IGa5ZCI6K6h5pWwIC8g5Yy/5ZCN6ISx5pWPPC90ZXh0PjxyZWN0IHg9IjY1IiB5PSI2MDIiIHdpZHRoPSIzNTAiIGhlaWdodD0iMTA1IiByeD0iMyIgZmlsbD0iI0YzRjBGQSIgc3Ryb2tlPSIjQkJCMEQzIiBzdHJva2Utd2lkdGg9IjEuNSIvPjx0ZXh0IHg9IjI0MCIgeT0iNjMyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE5IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMjQzNjRCIj7op4TliJnkuI7moKHpqozmqKHlnZc8L3RleHQ+PHRleHQgeD0iMjQwIiB5PSI2NjIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI0MDAiIGZpbGw9IiMyNDM2NEIiPnZhbGlkYXRpb24ucHkgwrcgbG9naWMucHk8L3RleHQ+PHRleHQgeD0iMjQwIiB5PSI2ODkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI0MDAiIGZpbGw9IiMyNDM2NEIiPuWumuS5ieagoemqjCAvIOWbnuetlOagoemqjCAvIOi3r+W+hOiuoeeulzwvdGV4dD48cmVjdCB4PSI1NTUiIHk9IjYyMyIgd2lkdGg9IjQyNSIgaGVpZ2h0PSI3NCIgcng9IjMiIGZpbGw9IiNGOEU0QUIiIHN0cm9rZT0iI0Q3QzI4QyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSI3NjcuNSIgeT0iNjUzLjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMyNDM2NEIiPuaVsOaNruiuv+mXriDCtyBQeU1vbmdvPC90ZXh0Pjx0ZXh0IHg9Ijc2Ny41IiB5PSI2NzkuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iIzI0MzY0QiI+Q1JVRCDCtyDmnaHku7bmm7TmlrAgwrcg5ZSv5LiA57Si5byVIMK3IOiBmuWQiDwvdGV4dD48cGF0aCBkPSJNMTgwIDU2MlY1ODBIMjEwVjYwMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzI4NDk1IiBzdHJva2Utd2lkdGg9IjEuNyIgc3Ryb2tlLWRhc2hhcnJheT0iNSA1IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSIvPjxwYXRoIGQ9Ik03NDAgNTYyVjU4MUgzNTVWNjAwIiBmaWxsPSJub25lIiBzdHJva2U9IiM3Mjg0OTUiIHN0cm9rZS13aWR0aD0iMS43IiBzdHJva2UtZGFzaGFycmF5PSI1IDUiIG1hcmtlci1lbmQ9InVybCgjYXJyb3cpIi8+PHBhdGggZD0iTTQ2MCA1NjJWNjEwSDY2NVY2MjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzcyODQ5NSIgc3Ryb2tlLXdpZHRoPSIxLjciIG1hcmtlci1lbmQ9InVybCgjYXJyb3cpIi8+PHBhdGggZD0iTTc0MCA1NjJWNjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM3Mjg0OTUiIHN0cm9rZS13aWR0aD0iMS43IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSIvPjxwYXRoIGQ9Ik0xMDIwIDU2MlY2NjBIOTgyIiBmaWxsPSJub25lIiBzdHJva2U9IiM3Mjg0OTUiIHN0cm9rZS13aWR0aD0iMS43IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSIvPjxwYXRoIGQ9Ik00MTUgNjU4SDU1MiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzI4NDk1IiBzdHJva2Utd2lkdGg9IjEuNyIgc3Ryb2tlLWRhc2hhcnJheT0iNSA1IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSIvPjxyZWN0IHg9IjQ0NC41IiB5PSI2MjMiIHdpZHRoPSI4MyIgaGVpZ2h0PSIyMyIgcng9IjAiIGZpbGw9IndoaXRlIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iNDg2IiB5PSI2NDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI0MDAiIGZpbGw9IiMyNDM2NEIiPuagoemqjOWQjuWGmeWFpTwvdGV4dD48cGF0aCBkPSJNNzY1IDY5N1Y3ODEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzcyODQ5NSIgc3Ryb2tlLXdpZHRoPSIxLjciIG1hcmtlci1lbmQ9InVybCgjYXJyb3cpIi8+PHJlY3QgeD0iODQ1LjUiIHk9Ijc0NyIgd2lkdGg9IjgzIiBoZWlnaHQ9IjIzIiByeD0iMCIgZmlsbD0id2hpdGUiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSI4ODciIHk9Ijc2NCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iIzI0MzY0QiI+5pWw5o2u5bqT5pON5L2cPC90ZXh0PjxyZWN0IHg9IjMwIiB5PSI3ODIiIHdpZHRoPSIxMTQwIiBoZWlnaHQ9IjE1NSIgcng9IjMiIGZpbGw9IiNFREY2RjEiIHN0cm9rZT0iIzlFQkZBRiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSI2MDAiIHk9IjgxMSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzI0MzY0QiI+5pWw5o2u5a2Y5YKo5bGCIMK3IE1vbmdvRELvvIjkuJrliqHmlbDmja7lhajpg6jmjIHkuYXljJbvvIk8L3RleHQ+PHBhdGggZD0iTTU1IDg0M1Y5MDdDNTUgOTI3IDI0NSA5MjcgMjQ1IDkwN1Y4NDMiIGZpbGw9IndoaXRlIiBzdHJva2U9IiM5RUJGQUYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGVsbGlwc2UgY3g9IjE1MC4wIiBjeT0iODQzIiByeD0iOTUuMCIgcnk9IjE1IiBmaWxsPSJ3aGl0ZSIgc3Ryb2tlPSIjOUVCRkFGIiBzdHJva2Utd2lkdGg9IjEuNSIvPjx0ZXh0IHg9IjE1MC4wIiB5PSI4NzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMyNDM2NEIiPnVzZXJzPC90ZXh0Pjx0ZXh0IHg9IjE1MC4wIiB5PSI5MDUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI0MDAiIGZpbGw9IiMyNDM2NEIiPueUqOaIt+i0puWPtzwvdGV4dD48cGF0aCBkPSJNMjgwIDg0M1Y5MDdDMjgwIDkyNyA0NzAgOTI3IDQ3MCA5MDdWODQzIiBmaWxsPSJ3aGl0ZSIgc3Ryb2tlPSIjOUVCRkFGIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxlbGxpcHNlIGN4PSIzNzUuMCIgY3k9Ijg0MyIgcng9Ijk1LjAiIHJ5PSIxNSIgZmlsbD0id2hpdGUiIHN0cm9rZT0iIzlFQkZBRiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSIzNzUuMCIgeT0iODc3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMjQzNjRCIj5zZXNzaW9uczwvdGV4dD48dGV4dCB4PSIzNzUuMCIgeT0iOTA1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjMjQzNjRCIj7nmbvlvZXkvJror508L3RleHQ+PHBhdGggZD0iTTUwNSA4NDNWOTA3QzUwNSA5MjcgNjk1IDkyNyA2OTUgOTA3Vjg0MyIgZmlsbD0id2hpdGUiIHN0cm9rZT0iIzlFQkZBRiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48ZWxsaXBzZSBjeD0iNjAwLjAiIGN5PSI4NDMiIHJ4PSI5NS4wIiByeT0iMTUiIGZpbGw9IndoaXRlIiBzdHJva2U9IiM5RUJGQUYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iNjAwLjAiIHk9Ijg3NyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzI0MzY0QiI+c3VydmV5czwvdGV4dD48dGV4dCB4PSI2MDAuMCIgeT0iOTA1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjMjQzNjRCIj7pl67ljbfkuI7ltYzlhaXpopjnm648L3RleHQ+PHBhdGggZD0iTTczMCA4NDNWOTA3QzczMCA5MjcgOTIwIDkyNyA5MjAgOTA3Vjg0MyIgZmlsbD0id2hpdGUiIHN0cm9rZT0iIzlFQkZBRiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48ZWxsaXBzZSBjeD0iODI1LjAiIGN5PSI4NDMiIHJ4PSI5NS4wIiByeT0iMTUiIGZpbGw9IndoaXRlIiBzdHJva2U9IiM5RUJGQUYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iODI1LjAiIHk9Ijg3NyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzI0MzY0QiI+ZmlsbF9wcm9ncmVzczwvdGV4dD48dGV4dCB4PSI4MjUuMCIgeT0iOTA1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjMjQzNjRCIj7lt7Lnoa7orqTov5vluqY8L3RleHQ+PHBhdGggZD0iTTk1NSA4NDNWOTA3Qzk1NSA5MjcgMTE0NSA5MjcgMTE0NSA5MDdWODQzIiBmaWxsPSJ3aGl0ZSIgc3Ryb2tlPSIjOUVCRkFGIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxlbGxpcHNlIGN4PSIxMDUwLjAiIGN5PSI4NDMiIHJ4PSI5NS4wIiByeT0iMTUiIGZpbGw9IndoaXRlIiBzdHJva2U9IiM5RUJGQUYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iMTA1MC4wIiB5PSI4NzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMyNDM2NEIiPnJlc3BvbnNlczwvdGV4dD48dGV4dCB4PSIxMDUwLjAiIHk9IjkwNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iIzI0MzY0QiI+5q2j5byP562U5Y23PC90ZXh0Pjx0ZXh0IHg9IjYwMCIgeT0iOTcxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSIjMjQzNjRCIj7lrp7nur/vvJror7fmsYLmiJbmlbDmja7orr/pl67vvJvomZrnur/vvJrmqKHlnZfosIPnlKjjgILmnKrmj5DkuqTov5vluqbkuI3lj4LkuI7nu5/orqHvvJvlvZPliY3mnKrkvb/nlKjot6jpm4blkIjkuovliqHjgII8L3RleHQ+PC9nPjwvc3ZnPg==" alt="系统分层架构：原生网页、Flask入口、后端规则模块、PyMongo与MongoDB五集合" data-source-file="stage1-architecture-layered.svg" contenteditable="false"></p><p>图2　系统分层架构。按当前源码中的职责组织，规则与校验在后端执行；数据访问为PyMongo调用方式，并非额外独立服务。</p></figure>
+<p>采用Python Flask、PyMongo和原生HTML/CSS/JavaScript。已验证环境为Python 3.13.7、Flask 3.1.2、PyMongo 4.18.1和MongoDB 6.0.1。</p>
+<section class="table-block keep-table"><p class="table-caption">表3　后端模块与主要接口</p><table>
+<thead>
+<tr>
+  <th>模块</th>
+  <th>职责及主要API（省略<code>/api</code>）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>账号与权限</td>
+  <td>注册、登录、退出及会话；<code>/auth/*</code>，管理接口检查问卷归属</td>
+</tr>
+<tr>
+  <td>问卷管理</td>
+  <td>草稿与题目增删改、发布关闭；<code>/surveys</code>、<code>/surveys/{sid}/questions</code>及状态接口</td>
+</tr>
+<tr>
+  <td>validation.py</td>
+  <td>检查题目定义与单题答案；<code>POST /surveys/{sid}/questions/{qid}/validate</code></td>
+</tr>
+<tr>
+  <td>logic.py</td>
+  <td>解释规则和有效路径；<code>POST /public/surveys/{sid}/evaluate</code></td>
+</tr>
+<tr>
+  <td>进度与提交</td>
+  <td><code>GET/PUT /public/surveys/{sid}/progress</code>；<code>POST /public/surveys/{sid}/responses</code></td>
+</tr>
+<tr>
+  <td>statistics.py</td>
+  <td>整卷／单题聚合；<code>GET /surveys/{sid}/statistics</code>及单题统计接口</td>
+</tr>
+</tbody>
+</table></section>
+<p>题目校验和路径计算分别放在独立模块，便于直接编写测试。接口层处理登录、问卷归属、状态和数据库写入。完整API表、参数与错误码见README和<code>docs/API说明.md</code>。</p>
+<h3>3.2 用数据配置跳转规则</h3>
+<p>每题<code>jumps</code>数组保存<code>op/value/target</code>，数组顺序就是优先级。单选使用eq；多选any表示包含任一条件项，all表示包含全部条件项；数字支持eq、lt、lte、gt、gte。首条匹配生效，未命中默认下一题；文本不设置条件跳转。发布时检查目标存在、位于后面或为END，阻止循环和无效目标。</p>
+<p>校园服务演示问卷有四题：q1是否使用服务、q2多选服务、q3整数评分0～10、q4选填建议。q1选择“不使用”时跳到q4，因此q2、q3虽然必答，也不应阻挡提交。程序读取规则计算下一题，无需为该问卷另写条件分支。</p>
+<p>提交时，后端从第一题重新计算路径，只检查实际经过的题目，并拒绝夹带被跳过题目的答案。例如，测试中的<code>q1=a → q3</code>可以通过，额外附带q2答案则会被拒绝。页面显示的路径不能直接作为入库依据。</p>
+<h3>3.3 题目定义与回答的分层校验</h3>
+<section class="table-block keep-table"><p class="table-caption">表4　题目定义与回答的分层校验</p><table>
+<thead>
+<tr>
+  <th>层次</th>
+  <th>校验内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>题目定义及发布</td>
+  <td>合法题型、唯一选项ID、约束范围、整数区间存在合法整数、跳转条件与目标</td>
+</tr>
+<tr>
+  <td>单题回答</td>
+  <td>必答、合法选项、多选无重复及数量、文本长度、数字有限性／范围／整数</td>
+</tr>
+<tr>
+  <td>最终提交</td>
+  <td>完整有效路径、问卷开放与截止状态、匿名许可及重复策略</td>
+</tr>
+</tbody>
+</table></section>
+<p>选填可以留空，非空时仍满足限制；多选最少和最多相同表示恰好数量。文本去首尾空白后检查字符数，单题上限5000字符；数字拒绝布尔值、无穷和NaN，绝对值不超过10^15，0作为正常数值保留。请求上限8 MiB，与整卷合法文本容量相协调。业务校验返回明确错误，assert用于测试。</p>
+<h3>3.4 从已确认进度到正式答卷</h3>
+<p>填写流程为“当前输入 → 后端校验与路径计算 → 保存有效前缀 → 下一题／等待提交”。点击下一题通过校验才写fill_progress，当前题未确认输入不自动保存；恢复时按已确认答案重新计算位置。返回修改会清理后续答案并重新填写，避免原路径后缀进入新分支。</p>
+<p>已有浏览器验证从“使用”填写到数字题后刷新，能够恢复；连续返回将首题改为“不使用”后进入建议题，旧多选和数字不再生效，匿名偏好也能恢复。提交后清理本次进度，允许重复时再次打开开始新一轮。该流程的记录见<code>tests/results/浏览器进度恢复-2026-10-16.md</code>。</p>
+<p>填写者必须先登录。匿名对创建者隐藏账号，内部保留user_id控制重复；创建者接口移除内部身份及去重字段。不允许重复时以唯一索引限制同账号一份，允许重复时每次新request_id独立保存；同request_id重试返回原回执，不覆盖答案或增加统计。</p>
+<h3>3.5 版本、关闭与并发边界</h3>
+<p>草稿保存、发布和关闭先验证客户端revision等于本次读取的快照，再以同一版本执行条件更新；进度也使用版本避免旧窗口覆盖。竞争写入导致版本变化时返回409。发布冻结和稳定ID共同保护既有答卷的题目含义。</p>
+<p>截止时间按服务器UTC比较。关闭与提交竞争时，以问卷单文档上的原子准入为边界：关闭前已准入的请求允许完成，之后的新提交拒绝；已成功提交的同request_id重试仍返回原回执。当前独立MongoDB未采用跨集合事务，正式答卷、进度清理等操作不声称事务化，统计只读实际responses。</p>
+<h2>四、从正式答卷生成统计</h2>
+<p>统计支持整卷和单题。单选返回各选项数量与回答数，多选返回各选项次数，填空列出内容，数字返回平均值。未选项补0，空选答和跳过题不计入本题回答数，无有效数字时均值为空。允许重复时按答卷份数统计，界面注明，不能混称独立人数。</p>
+<p>回答数、选项数、填写内容、数字均值及整卷总数放入一次facet聚合：match筛问卷，各分支使用同批答卷，unwind展开答案和多选项，group/sum计数、avg求均值。这样避免多次查询之间新答卷进入后，旧分母与新分子混用；不将其解释为跨请求固定时间点快照。</p>
+<p>图3使用2026年10月21日的独立合成问卷，核对跳题后的单题分母、零次选项和数值0的处理。该图与表5使用不同测试数据：图3检查界面统计口径，表5验证API聚合结果，二者不能混合计数。</p>
+<figure class="report-figure"><p><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhRE9DVFlQRSBzdmcNCiAgUFVCTElDICctLy9XM0MvL0RURCBTVkcgMS4wLy9FTicNCiAgJ2h0dHA6Ly93d3cudzMub3JnL1RSLzIwMDEvUkVDLVNWRy0yMDAxMDkwNC9EVEQvc3ZnMTAuZHRkJz4NCjxzdmcgcm9sZT0iaW1nIiBhcmlhLWxhYmVsbGVkYnk9InRpdGxlIGRlc2MiIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjY2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pbllNaW4gbWVldCIgdmlld0JveD0iMCAwIDEyMDAgNjY0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMCIgZmlsbC1ydWxlPSJldmVub2RkIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PHRpdGxlIGlkPSJ0aXRsZSI+5rWL6K+V6Zeu5Y235aSa6YCJ57uf6K6h5Y+K5pWw5a2X5bmz5Z2H5YC85qC45a+5PC90aXRsZT48ZGVzYyBpZD0iZGVzYyI+M+S7veato+W8j+etlOWNt+S4rTLku73lm57nrZTmnKzlpJrpgInpopjvvIzlm77kuabppoblkozpo5/loILlkIQy5qyh5Y2zMTAwJe+8jOS9k+iCsuiuvuaWvTDmrKHljbMwJeOAguaVsOWtl+acieaViOWAvOS4ujDlkow477yM5bmz5Z2H5YC8NOOAgui/meaYr+S+neaNrjIwMjblubQxMOaciDIx5pel6aqM6K+B6K6w5b2V6YeN57uY55qE5Zu+77yM5LiN5piv5paw55qE6L+Q6KGM5oiq5Zu+44CCPC9kZXNjPg0KCTx0aXRsZT4uLi48L3RpdGxlPg0KCTxkZXNjPi4uLjwvZGVzYz4NCgk8Y2xpcFBhdGggaWQ9ImNsaXAiPg0KCQk8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI2NjQiLz4NCgk8L2NsaXBQYXRoPg0KCTxnIGlkPSJncm91cCIgdHJhbnNmb3JtPSJzY2FsZSgxLC0xKSB0cmFuc2xhdGUoMCwtNjY0KSIgc3R5bGU9ImNsaXAtcGF0aDogdXJsKCNjbGlwKSI+DQoJCTxnIHRyYW5zZm9ybT0iIj4NCgkJCTxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjY2NCIgc3R5bGU9InN0cm9rZTogbm9uZTsgc3Ryb2tlLWxpbmVjYXA6IGJ1dHQ7IHN0cm9rZS13aWR0aDogMTsgZmlsbDogcmdiKDEwMCUsMTAwJSwxMDAlKTsgZmlsbC1ydWxlOiBldmVub2RkOyIvPg0KCQkJPHRleHQgeD0iMzIiIHk9IjYxOSIgc3R5bGU9ImZvbnQtZmFtaWx5OiBNaWNyb3NvZnQgWWFIZWksIFNpbUhlaSwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAzMnB4O2ZpbGw6IHJnYig5JSwyMCUsMjglKTsgc3Ryb2tlOm5vbmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDEyMzgpIHNjYWxlKDEsLTEpIj7nu5/orqHlj6PlvoTkuI7pqozor4Hnu5Pmnpw8L3RleHQ+DQoJCQk8dGV4dCB4PSIzMiIgeT0iNTgzIiBzdHlsZT0iZm9udC1mYW1pbHk6IE1pY3Jvc29mdCBZYUhlaSwgU2ltSGVpLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDIycHg7ZmlsbDogcmdiKDMxJSwzOSUsNDUlKTsgc3Ryb2tlOm5vbmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDExNjYpIHNjYWxlKDEsLTEpIj7kvp3mja4gMjAyNi0xMC0yMSDni6znq4vmtYvor5XorrDlvZXph43nu5ggwrcg5ZCI5oiQ562U5Y23PC90ZXh0Pg0KCQkJPHJlY3QgeD0iMzIiIHk9IjQ2MCIgd2lkdGg9IjM2MiIgaGVpZ2h0PSI5NSIgcng9IjgiIHJ5PSI4IiBzdHlsZT0ic3Ryb2tlOiByZ2IoNzglLDgzJSw4NyUpOyBzdHJva2UtbGluZWNhcDogYnV0dDsgc3Ryb2tlLXdpZHRoOiAxOyBmaWxsOiByZ2IoOTQlLDk2JSw5NyUpOyBmaWxsLXJ1bGU6IGV2ZW5vZGQ7Ii8+DQoJCQk8dGV4dCB4PSI1NCIgeT0iNTE0IiBzdHlsZT0iZm9udC1mYW1pbHk6IE1pY3Jvc29mdCBZYUhlaSwgU2ltSGVpLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDMxcHg7ZmlsbDogcmdiKDglLDQ5JSw1NSUpOyBzdHJva2U6bm9uZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMTAyOCkgc2NhbGUoMSwtMSkiPjMg5Lu9PC90ZXh0Pg0KCQkJPHRleHQgeD0iNTQiIHk9IjQ4MCIgc3R5bGU9ImZvbnQtZmFtaWx5OiBNaWNyb3NvZnQgWWFIZWksIFNpbUhlaSwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAyMXB4O2ZpbGw6IHJnYigzMSUsMzklLDQ1JSk7IHN0cm9rZTpub25lOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCw5NjApIHNjYWxlKDEsLTEpIj7mlbTljbfmraPlvI/nrZTljbc8L3RleHQ+DQoJCQk8cmVjdCB4PSI0MTkiIHk9IjQ2MCIgd2lkdGg9IjM2MiIgaGVpZ2h0PSI5NSIgcng9IjgiIHJ5PSI4IiBzdHlsZT0ic3Ryb2tlOiByZ2IoNzglLDgzJSw4NyUpOyBzdHJva2UtbGluZWNhcDogYnV0dDsgc3Ryb2tlLXdpZHRoOiAxOyBmaWxsOiByZ2IoOTQlLDk2JSw5NyUpOyBmaWxsLXJ1bGU6IGV2ZW5vZGQ7Ii8+DQoJCQk8dGV4dCB4PSI0NDEiIHk9IjUxNCIgc3R5bGU9ImZvbnQtZmFtaWx5OiBNaWNyb3NvZnQgWWFIZWksIFNpbUhlaSwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAzMXB4O2ZpbGw6IHJnYig4JSw0OSUsNTUlKTsgc3Ryb2tlOm5vbmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDEwMjgpIHNjYWxlKDEsLTEpIj4yIOS7vTwvdGV4dD4NCgkJCTx0ZXh0IHg9IjQ0MSIgeT0iNDgwIiBzdHlsZT0iZm9udC1mYW1pbHk6IE1pY3Jvc29mdCBZYUhlaSwgU2ltSGVpLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDIxcHg7ZmlsbDogcmdiKDMxJSwzOSUsNDUlKTsgc3Ryb2tlOm5vbmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDk2MCkgc2NhbGUoMSwtMSkiPuacrOWkmumAiemimOacieaViOWbnuetlDwvdGV4dD4NCgkJCTxyZWN0IHg9IjgwNiIgeT0iNDYwIiB3aWR0aD0iMzYyIiBoZWlnaHQ9Ijk1IiByeD0iOCIgcnk9IjgiIHN0eWxlPSJzdHJva2U6IHJnYig3OCUsODMlLDg3JSk7IHN0cm9rZS1saW5lY2FwOiBidXR0OyBzdHJva2Utd2lkdGg6IDE7IGZpbGw6IHJnYig5NCUsOTYlLDk3JSk7IGZpbGwtcnVsZTogZXZlbm9kZDsiLz4NCgkJCTx0ZXh0IHg9IjgyOCIgeT0iNTE0IiBzdHlsZT0iZm9udC1mYW1pbHk6IE1pY3Jvc29mdCBZYUhlaSwgU2ltSGVpLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDMxcHg7ZmlsbDogcmdiKDglLDQ5JSw1NSUpOyBzdHJva2U6bm9uZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMTAyOCkgc2NhbGUoMSwtMSkiPjEg5Lu9PC90ZXh0Pg0KCQkJPHRleHQgeD0iODI4IiB5PSI0ODAiIHN0eWxlPSJmb250LWZhbWlseTogTWljcm9zb2Z0IFlhSGVpLCBTaW1IZWksIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMjFweDtmaWxsOiByZ2IoMzElLDM5JSw0NSUpOyBzdHJva2U6bm9uZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsOTYwKSBzY2FsZSgxLC0xKSI+6Lez6L+H5pys6aKYPC90ZXh0Pg0KCQkJPHRleHQgeD0iMzIiIHk9IjQxNyIgc3R5bGU9ImZvbnQtZmFtaWx5OiBNaWNyb3NvZnQgWWFIZWksIFNpbUhlaSwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAyNHB4O2ZpbGw6IHJnYig5JSwyMCUsMjglKTsgc3Ryb2tlOm5vbmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDgzNCkgc2NhbGUoMSwtMSkiPuWkmumAiemimOWQhOmAiemhueiiq+mAieaLqeeahOasoeaVsOS4juavlOS+izwvdGV4dD4NCgkJCTx0ZXh0IHg9Ijk3Mi4wIiB5PSI0MTciIHN0eWxlPSJmb250LWZhbWlseTogTWljcm9zb2Z0IFlhSGVpLCBTaW1IZWksIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMjFweDtmaWxsOiByZ2IoMzElLDM5JSw0NSUpOyBzdHJva2U6bm9uZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsODM0KSBzY2FsZSgxLC0xKSI+5qyh5pWwPC90ZXh0Pg0KCQkJPHRleHQgeD0iMTExOC4wIiB5PSI0MTciIHN0eWxlPSJmb250LWZhbWlseTogTWljcm9zb2Z0IFlhSGVpLCBTaW1IZWksIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMjFweDtmaWxsOiByZ2IoMzElLDM5JSw0NSUpOyBzdHJva2U6bm9uZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsODM0KSBzY2FsZSgxLC0xKSI+5q+U5L6LPC90ZXh0Pg0KCQkJPHBhdGggZD0iTSAyMjYsMzc4IEwgMjI2LDIzNCBaIiBzdHlsZT0ic3Ryb2tlOiByZ2IoNzglLDgzJSw4NyUpOyBzdHJva2UtbGluZWNhcDogYnV0dDsgc3Ryb2tlLXdpZHRoOiAxOyIvPg0KCQkJPHRleHQgeD0iMjE3LjAiIHk9IjM4NSIgc3R5bGU9ImZvbnQtZmFtaWx5OiBNaWNyb3NvZnQgWWFIZWksIFNpbUhlaSwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxOHB4O2ZpbGw6IHJnYigzMSUsMzklLDQ1JSk7IHN0cm9rZTpub25lOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCw3NzApIHNjYWxlKDEsLTEpIj4wJTwvdGV4dD4NCgkJCTxwYXRoIGQ9Ik0gNTUzLjUsMzc4IEwgNTUzLjUsMjM0IFoiIHN0eWxlPSJzdHJva2U6IHJnYig3OCUsODMlLDg3JSk7IHN0cm9rZS1saW5lY2FwOiBidXR0OyBzdHJva2Utd2lkdGg6IDE7Ii8+DQoJCQk8dGV4dCB4PSI1NDAuMCIgeT0iMzg1IiBzdHlsZT0iZm9udC1mYW1pbHk6IE1pY3Jvc29mdCBZYUhlaSwgU2ltSGVpLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDE4cHg7ZmlsbDogcmdiKDMxJSwzOSUsNDUlKTsgc3Ryb2tlOm5vbmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDc3MCkgc2NhbGUoMSwtMSkiPjUwJTwvdGV4dD4NCgkJCTxwYXRoIGQ9Ik0gODgxLDM3OCBMIDg4MSwyMzQgWiIgc3R5bGU9InN0cm9rZTogcmdiKDc4JSw4MyUsODclKTsgc3Ryb2tlLWxpbmVjYXA6IGJ1dHQ7IHN0cm9rZS13aWR0aDogMTsiLz4NCgkJCTx0ZXh0IHg9Ijg2My4wIiB5PSIzODUiIHN0eWxlPSJmb250LWZhbWlseTogTWljcm9zb2Z0IFlhSGVpLCBTaW1IZWksIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMThweDtmaWxsOiByZ2IoMzElLDM5JSw0NSUpOyBzdHJva2U6bm9uZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsNzcwKSBzY2FsZSgxLC0xKSI+MTAwJTwvdGV4dD4NCgkJCTx0ZXh0IHg9IjMyIiB5PSIzNDAiIHN0eWxlPSJmb250LWZhbWlseTogTWljcm9zb2Z0IFlhSGVpLCBTaW1IZWksIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMjNweDtmaWxsOiByZ2IoOSUsMjAlLDI4JSk7IHN0cm9rZTpub25lOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCw2ODApIHNjYWxlKDEsLTEpIj7lm77kuabppoY8L3RleHQ+DQoJCQk8cmVjdCB4PSIyMjYiIHk9IjMzNSIgd2lkdGg9IjY1NSIgaGVpZ2h0PSIyOCIgcng9IjMiIHJ5PSIzIiBzdHlsZT0ic3Ryb2tlOiBub25lOyBzdHJva2UtbGluZWNhcDogYnV0dDsgc3Ryb2tlLXdpZHRoOiAxOyBmaWxsOiByZ2IoOTElLDk0JSw5NSUpOyBmaWxsLXJ1bGU6IGV2ZW5vZGQ7Ii8+DQoJCQk8cmVjdCB4PSIyMjYiIHk9IjMzNSIgd2lkdGg9IjY1NS4wIiBoZWlnaHQ9IjI4IiByeD0iMyIgcnk9IjMiIHN0eWxlPSJzdHJva2U6IG5vbmU7IHN0cm9rZS1saW5lY2FwOiBidXR0OyBzdHJva2Utd2lkdGg6IDE7IGZpbGw6IHJnYig4JSw0OSUsNTUlKTsgZmlsbC1ydWxlOiBldmVub2RkOyIvPg0KCQkJPHRleHQgeD0iMTAwMi4wIiB5PSIzNDAiIHN0eWxlPSJmb250LWZhbWlseTogTWljcm9zb2Z0IFlhSGVpLCBTaW1IZWksIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMjRweDtmaWxsOiByZ2IoOSUsMjAlLDI4JSk7IHN0cm9rZTpub25lOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCw2ODApIHNjYWxlKDEsLTEpIj4yPC90ZXh0Pg0KCQkJPHRleHQgeD0iMTA4OC4wIiB5PSIzNDAiIHN0eWxlPSJmb250LWZhbWlseTogTWljcm9zb2Z0IFlhSGVpLCBTaW1IZWksIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMjRweDtmaWxsOiByZ2IoOCUsNDklLDU1JSk7IHN0cm9rZTpub25lOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCw2ODApIHNjYWxlKDEsLTEpIj4xMDAuMCU8L3RleHQ+DQoJCQk8dGV4dCB4PSIzMiIgeT0iMjkyIiBzdHlsZT0iZm9udC1mYW1pbHk6IE1pY3Jvc29mdCBZYUhlaSwgU2ltSGVpLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDIzcHg7ZmlsbDogcmdiKDklLDIwJSwyOCUpOyBzdHJva2U6bm9uZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsNTg0KSBzY2FsZSgxLC0xKSI+6aOf5aCCPC90ZXh0Pg0KCQkJPHJlY3QgeD0iMjI2IiB5PSIyODciIHdpZHRoPSI2NTUiIGhlaWdodD0iMjgiIHJ4PSIzIiByeT0iMyIgc3R5bGU9InN0cm9rZTogbm9uZTsgc3Ryb2tlLWxpbmVjYXA6IGJ1dHQ7IHN0cm9rZS13aWR0aDogMTsgZmlsbDogcmdiKDkxJSw5NCUsOTUlKTsgZmlsbC1ydWxlOiBldmVub2RkOyIvPg0KCQkJPHJlY3QgeD0iMjI2IiB5PSIyODciIHdpZHRoPSI2NTUuMCIgaGVpZ2h0PSIyOCIgcng9IjMiIHJ5PSIzIiBzdHlsZT0ic3Ryb2tlOiBub25lOyBzdHJva2UtbGluZWNhcDogYnV0dDsgc3Ryb2tlLXdpZHRoOiAxOyBmaWxsOiByZ2IoOCUsNDklLDU1JSk7IGZpbGwtcnVsZTogZXZlbm9kZDsiLz4NCgkJCTx0ZXh0IHg9IjEwMDIuMCIgeT0iMjkyIiBzdHlsZT0iZm9udC1mYW1pbHk6IE1pY3Jvc29mdCBZYUhlaSwgU2ltSGVpLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDI0cHg7ZmlsbDogcmdiKDklLDIwJSwyOCUpOyBzdHJva2U6bm9uZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsNTg0KSBzY2FsZSgxLC0xKSI+MjwvdGV4dD4NCgkJCTx0ZXh0IHg9IjEwODguMCIgeT0iMjkyIiBzdHlsZT0iZm9udC1mYW1pbHk6IE1pY3Jvc29mdCBZYUhlaSwgU2ltSGVpLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDI0cHg7ZmlsbDogcmdiKDglLDQ5JSw1NSUpOyBzdHJva2U6bm9uZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsNTg0KSBzY2FsZSgxLC0xKSI+MTAwLjAlPC90ZXh0Pg0KCQkJPHRleHQgeD0iMzIiIHk9IjI0NCIgc3R5bGU9ImZvbnQtZmFtaWx5OiBNaWNyb3NvZnQgWWFIZWksIFNpbUhlaSwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAyM3B4O2ZpbGw6IHJnYig5JSwyMCUsMjglKTsgc3Ryb2tlOm5vbmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDQ4OCkgc2NhbGUoMSwtMSkiPuS9k+iCsuiuvuaWvTwvdGV4dD4NCgkJCTxyZWN0IHg9IjIyNiIgeT0iMjM5IiB3aWR0aD0iNjU1IiBoZWlnaHQ9IjI4IiByeD0iMyIgcnk9IjMiIHN0eWxlPSJzdHJva2U6IG5vbmU7IHN0cm9rZS1saW5lY2FwOiBidXR0OyBzdHJva2Utd2lkdGg6IDE7IGZpbGw6IHJnYig5MSUsOTQlLDk1JSk7IGZpbGwtcnVsZTogZXZlbm9kZDsiLz4NCgkJCTxwYXRoIGQ9Ik0gMjI2LDI2OCBMIDIyNiwyMzggWiIgc3R5bGU9InN0cm9rZTogcmdiKDMxJSwzOSUsNDUlKTsgc3Ryb2tlLWxpbmVjYXA6IGJ1dHQ7IHN0cm9rZS13aWR0aDogMTsiLz4NCgkJCTx0ZXh0IHg9IjEwMDIuMCIgeT0iMjQ0IiBzdHlsZT0iZm9udC1mYW1pbHk6IE1pY3Jvc29mdCBZYUhlaSwgU2ltSGVpLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDI0cHg7ZmlsbDogcmdiKDklLDIwJSwyOCUpOyBzdHJva2U6bm9uZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsNDg4KSBzY2FsZSgxLC0xKSI+MDwvdGV4dD4NCgkJCTx0ZXh0IHg9IjExMTIuMCIgeT0iMjQ0IiBzdHlsZT0iZm9udC1mYW1pbHk6IE1pY3Jvc29mdCBZYUhlaSwgU2ltSGVpLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDI0cHg7ZmlsbDogcmdiKDMxJSwzOSUsNDUlKTsgc3Ryb2tlOm5vbmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDQ4OCkgc2NhbGUoMSwtMSkiPjAuMCU8L3RleHQ+DQoJCQk8dGV4dCB4PSIzMiIgeT0iMTk1IiBzdHlsZT0iZm9udC1mYW1pbHk6IE1pY3Jvc29mdCBZYUhlaSwgU2ltSGVpLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDIxcHg7ZmlsbDogcmdiKDMxJSwzOSUsNDUlKTsgc3Ryb2tlOm5vbmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDM5MCkgc2NhbGUoMSwtMSkiPuWIhuavjSA9IOWunumZheWbnuetlOacrOmimOeahCAyIOS7veetlOWNt++8m+avj+S7veetlOWNt+WPr+mAieWkmumhue+8jOavlOS+i+S5i+WSjOWPr+i2hei/hyAxMDAl44CCPC90ZXh0Pg0KCQkJPHJlY3QgeD0iMzIiIHk9Ijc3IiB3aWR0aD0iMTEzNiIgaGVpZ2h0PSI5MiIgcng9IjgiIHJ5PSI4IiBzdHlsZT0ic3Ryb2tlOiByZ2IoNzglLDgzJSw4NyUpOyBzdHJva2UtbGluZWNhcDogYnV0dDsgc3Ryb2tlLXdpZHRoOiAxOyBmaWxsOiByZ2IoOTQlLDk2JSw5NyUpOyBmaWxsLXJ1bGU6IGV2ZW5vZGQ7Ii8+DQoJCQk8dGV4dCB4PSI1NCIgeT0iMTI5IiBzdHlsZT0iZm9udC1mYW1pbHk6IE1pY3Jvc29mdCBZYUhlaSwgU2ltSGVpLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDIzcHg7ZmlsbDogcmdiKDklLDIwJSwyOCUpOyBzdHJva2U6bm9uZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMjU4KSBzY2FsZSgxLC0xKSI+5pWw5a2X6aKY5qC45a+5PC90ZXh0Pg0KCQkJPHRleHQgeD0iNTQiIHk9Ijk2IiBzdHlsZT0iZm9udC1mYW1pbHk6IE1pY3Jvc29mdCBZYUhlaSwgU2ltSGVpLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDIwcHg7ZmlsbDogcmdiKDMxJSwzOSUsNDUlKTsgc3Ryb2tlOm5vbmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDE5Mikgc2NhbGUoMSwtMSkiPjAg5Lmf5piv5pyJ5pWI5pWw5YC8PC90ZXh0Pg0KCQkJPHRleHQgeD0iNDI1IiB5PSIxMjkiIHN0eWxlPSJmb250LWZhbWlseTogTWljcm9zb2Z0IFlhSGVpLCBTaW1IZWksIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMjRweDtmaWxsOiByZ2IoOSUsMjAlLDI4JSk7IHN0cm9rZTpub25lOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwyNTgpIHNjYWxlKDEsLTEpIj7ljp/lp4vlgLwgMOOAgTg8L3RleHQ+DQoJCQk8dGV4dCB4PSI0MjUiIHk9Ijk2IiBzdHlsZT0iZm9udC1mYW1pbHk6IE1pY3Jvc29mdCBZYUhlaSwgU2ltSGVpLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDIwcHg7ZmlsbDogcmdiKDMxJSwzOSUsNDUlKTsgc3Ryb2tlOm5vbmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDE5Mikgc2NhbGUoMSwtMSkiPjIg5Lu95pyJ5pWI5Zue562UPC90ZXh0Pg0KCQkJPHRleHQgeD0iOTAwIiB5PSIxMjkiIHN0eWxlPSJmb250LWZhbWlseTogTWljcm9zb2Z0IFlhSGVpLCBTaW1IZWksIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMjdweDtmaWxsOiByZ2IoOCUsNDklLDU1JSk7IHN0cm9rZTpub25lOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwyNTgpIHNjYWxlKDEsLTEpIj7lubPlnYflgLwgNDwvdGV4dD4NCgkJCTx0ZXh0IHg9IjkwMCIgeT0iOTYiIHN0eWxlPSJmb250LWZhbWlseTogTWljcm9zb2Z0IFlhSGVpLCBTaW1IZWksIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMjBweDtmaWxsOiByZ2IoMzElLDM5JSw0NSUpOyBzdHJva2U6bm9uZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMTkyKSBzY2FsZSgxLC0xKSI+KDAgKyA4KSDDtyAyPC90ZXh0Pg0KCQkJPHBhdGggZD0iTSAzMiw1MiBMIDExNjgsNTIgWiIgc3R5bGU9InN0cm9rZTogcmdiKDc4JSw4MyUsODclKTsgc3Ryb2tlLWxpbmVjYXA6IGJ1dHQ7IHN0cm9rZS13aWR0aDogMTsiLz4NCgkJCTx0ZXh0IHg9IjMyIiB5PSIyMCIgc3R5bGU9ImZvbnQtZmFtaWx5OiBNaWNyb3NvZnQgWWFIZWksIFNpbUhlaSwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAyMHB4O2ZpbGw6IHJnYigzMSUsMzklLDQ1JSk7IHN0cm9rZTpub25lOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCw0MCkgc2NhbGUoMSwtMSkiPuaVsOaNruadpea6kO+8mnRlc3RzL3Jlc3VsdHMv5Y+C6ICD5YCf6Ym05LyY5YyWLTIwMjYtMTAtMjEubWQ8L3RleHQ+DQoJCTwvZz4NCgk8L2c+DQo8L3N2Zz4NCg==" alt="2026年10月21日测试数据重绘。多选有效回答2份，图书馆和食堂各2次即100%，体育设施0次即0%；数字0和8的平均值为4。" contenteditable="false" data-word-width-cm="16.9" data-source-file="stage1-statistics-academic.svg"></p><p>图3　依据2026年10月21日实际验证数据重绘。多选有效回答2份，各选项次数与比例分别显示；数字0计入平均。本轮原始记录在<code>tests/results/参考借鉴优化-2026-10-21.md</code>，不与其他测试库混合计数。</p></figure>
+<h2>五、测试方法与验证结果</h2>
+<h3>5.1 验证方法与覆盖范围</h3>
+<p>测试代码放在<code>tests/</code>。逻辑测试用Python assert检查规则，API测试检查状态码、响应和数据库效果，浏览器验证实际页面。集成测试连接真实MongoDB，创建随机<code>survey_test_</code>数据库并在结束时清理，避免修改正常业务数据。</p>
+<p>2026年10月22日14:52（北京时间）完整执行38项自动化，0失败、0错误，逐项结果及环境见<code>tests/results/latest.json</code>。其中新增4项版本和3项统计／容量回归；浏览器、报告排版及静态检查不重复计入数量。本次报告调整未改变业务代码，沿用该次真实执行结果。</p>
+<section class="table-block keep-table"><p class="table-caption">表5　课程要求的六类测试及结果</p><table>
+<thead>
+<tr>
+  <th>课程必需类别</th>
+  <th>步骤与关键输入</th>
+  <th>预期及实际验证</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>创建问卷</td>
+  <td>创建草稿，再由另一账号读写</td>
+  <td>创建201；他人列表无该卷，越权404</td>
+</tr>
+<tr>
+  <td>添加题目</td>
+  <td>添加数字题、重复ID、矛盾范围</td>
+  <td>合法写入；错误400且题目与revision不变</td>
+</tr>
+<tr>
+  <td>跳转</td>
+  <td>q1=a跳q3；另夹带q2答案</td>
+  <td>合法路径q1→q3，被跳过必答不阻挡；夹带拒绝</td>
+</tr>
+<tr>
+  <td>校验</td>
+  <td>整数范围0～120，输入0、120、121、1.5</td>
+  <td>两端通过；越界与小数拒绝</td>
+</tr>
+<tr>
+  <td>提交</td>
+  <td>同账号4线程；同request_id重试</td>
+  <td>禁重复时1个201、3个409；重试200且ID相同</td>
+</tr>
+<tr>
+  <td>统计</td>
+  <td>单选a/b/a，多选ab/b/a，数字10/20/空</td>
+  <td>单选2/1/0，多选2/2/0；数字回答2份、均值15</td>
+</tr>
+</tbody>
+</table></section>
+<p>此外覆盖会话过期、匿名脱敏、进度隔离、分支修改、截止状态、空统计、数据迁移和并发编辑。完整前置条件、输入、输出与结果保留在<code>docs/测试说明.md</code>和测试记录中。</p>
+<h3>5.2 围绕实际风险补充边界</h3>
+<p>对正式流程之外的情况另作验证：20道题各5000汉字，进度保存200、正式提交201；超过8 MiB返回413。读快照后安排竞争写入，预测未来revision也不能覆盖或错误发布。统计读取后插入另一真实答卷，同次字段保持一致，下次读取再体现新增数据。</p>
+<p>浏览器通过4组边界：首次保存延迟时双submit仅发一次POST；题型切换保留旧规则移除入口；旧筛选响应晚到不覆盖新筛选；新问卷加载失败不残留旧统计与答卷。503是测试注入的故障，并非真实数据库异常，结果不重复计入38项。</p>
+<h3>5.3 问题、原因与解决</h3>
+<section class="table-block keep-table"><p class="table-caption">表6　已发现的问题与处理依据</p><table>
+<thead>
+<tr>
+  <th>发现的问题</th>
+  <th>原因及实际处理</th>
+  <th>验证依据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>选填文本空数组被当作空值；整数区间可能无解</td>
+  <td>收紧类型判断，定义阶段检查区间内存在整数</td>
+  <td>校验用例覆盖数组、0、0.2～0.8等边界</td>
+</tr>
+<tr>
+  <td>旧编辑状态、旧规则或旧统计留在页面</td>
+  <td>重置新问卷编辑状态；保留显式规则移除入口；清空旧结果并校验请求序号</td>
+  <td>浏览器检查及故障／乱序注入通过</td>
+</tr>
+<tr>
+  <td>版本条件与被验证快照未绑定</td>
+  <td>客户端、读取快照及条件更新使用同一revision</td>
+  <td>4项真实数据库版本回归通过</td>
+</tr>
+<tr>
+  <td>多次统计查询读到不同批答卷</td>
+  <td>改为一次facet聚合</td>
+  <td>受控读后插入验证字段自洽</td>
+</tr>
+<tr>
+  <td>整卷合法长文本超过旧请求上限</td>
+  <td>调整容量并保留超限拒绝</td>
+  <td>长文本完整入库及413用例通过</td>
+</tr>
+</tbody>
+</table></section>
+<p>记录见<code>tests/results/第一阶段参考优化-2026-10-22.md</code>及AI日志。通过只适用于已运行范围，尚未进行公网部署、压力或多浏览器兼容测试。</p>
+<h2>六、AI协作过程与问题修正</h2>
+<h3>6.1 人工约束如何影响开发</h3>
+<p>使用工具为Codex。人工持续提供和纠正课程原文、课堂转写、提交要求、参考材料及工作优先级，并明确后端与数据库优先、保留旧版本和分阶段完成。AI负责提出集合与模块方案，生成和修改程序、测试及文档，执行检查。设计依据和修改归属在日志中区分记录。</p>
+<section class="table-block keep-table"><p class="table-caption">表7　人工反馈与实现调整</p><table>
+<thead>
+<tr>
+  <th>实际任务或反馈</th>
+  <th>对实现及材料的影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>“先按照现有的做吧，没有的话以文件为准”</td>
+  <td>依据原文推进；未明确的匿名、优先级等标为实现约定</td>
+</tr>
+<tr>
+  <td>强调后端、Schema、测试及AI引导</td>
+  <td>集中完善集合与索引理由、API、跳转和校验测试，前端保持可操作</td>
+</tr>
+<tr>
+  <td>要求先完成第一阶段，再接第二阶段</td>
+  <td>保留基线和旧数据，当前不提前声称题目版本与跨问卷统计已实现</td>
+</tr>
+<tr>
+  <td>“保留之前已经实现的比较好的功能”并以课堂补充为准</td>
+  <td>保留进度恢复、有效路径和统计一致性，以现有设计和证据重组报告</td>
+</tr>
+</tbody>
+</table></section>
+<h3>6.2 一次实际迭代的记录</h3>
+<p>复核“每次填写都应该被保存”时，AI提出独立fill_progress方案，补充GET/PUT接口、进度修订号及提交清理，并用数据库和浏览器验证恢复、分支修改、匿名偏好与统计隔离。人工提出任务及保留已有成果的约束，方案和代码由AI提出并实施。</p>
+<p>实际提示、代码位置、修改者与结果保存在<code>ai_logs/</code>。例如，用户要求“保留之前已经实现的比较好的功能”，之后报告保留了进度恢复和有效路径说明；补充AI问题章节时，也没有删除已有失败记录。</p>
+<h3>6.3 使用过程中遇到的AI问题</h3>
+<p>复核AI生成内容时，发现的问题包括需求解释不清、边界条件遗漏，以及报告与代码没有同步。表8列出实际修正过程；其中的代码和材料修改由AI执行，人工提供要求、参考方向和反馈。</p>
+<section class="table-block keep-table"><p class="table-caption">表8　AI使用中的问题与修正证据</p><table>
+<thead>
+<tr>
+  <th>AI使用中的问题表现</th>
+  <th>如何发现与修正</th>
+  <th>实际依据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>“每次填写保存”未明确未提交进度如何恢复</td>
+  <td>区分已确认进度和正式答卷，补充fill_progress及恢复、清理规则</td>
+  <td>2026-10-16进度完善日志及恢复／隔离用例</td>
+</tr>
+<tr>
+  <td>校验遗漏空数组类型和0.2～0.8内无整数的边界</td>
+  <td>收紧类型判断，定义题目时检查整数区间，并补回归</td>
+  <td>test_validation.py、test_progress.py及校验优化日志</td>
+</tr>
+<tr>
+  <td>组合流程遗漏统计读取一致性、整卷容量及校验快照绑定</td>
+  <td>改用同批facet，协调请求上限并绑定revision；用真实数据库回归</td>
+  <td>2026-10-22新增7项回归，完整38项通过</td>
+</tr>
+<tr>
+  <td>参考报告的组织方式未充分突出本项目功能和课堂重点</td>
+  <td>按用户反馈重组进度、路径、答卷与统计的说明，保留功能及历史</td>
+  <td>2026-10-22课堂要求与自身特点整理日志</td>
+</tr>
+<tr><td>文档中的字段说明没有随代码一起核对</td><td>设计文档曾把ID统称UUID、答案统称数组。对照代码后，改为区分会话令牌摘要、进度答案对象和正式答卷数组，并同步报告入口。</td><td>2026-10-22仓库报告统一与页眉日志；代码、Schema及23个API路由对应检查</td></tr><tr><td>报告生成脚本误把正文当作图表注释</td><td>以“表8”或“图3”开头的正文被错误套用注释样式。收紧识别条件，并分别渲染Word与HTML，检查字号、对齐和分页。</td><td>2026-10-22科学技能实际复核日志；导出脚本及逐页排版检查</td></tr></tbody>
+</table></section>
+<p>工具执行也有过失败。Windows终端直接接收多行浏览器脚本时出现解析错误，后来改为从文件加载；一次浏览器检查被原生确认框打断，改用API准备前置数据后重新执行。首次失败没有记作通过，最终结果与重跑过程分别保留在日志中。</p>
+<p>这些问题说明，只给AI一个功能名称还不够。需要先说明何时保存、何时算提交、哪些输入应被拒绝，再让它写实现和测试。完成后还要检查数据库中的实际记录，区分程序错误、需求理解偏差和工具执行失败。</p>
+<h3>6.4 参与及成果归属</h3>
+<p>人工负责明确要求、选择开发重点、纠正参考使用方向及反馈验收目标；Schema、规则解释器和代码修正主要由AI完成。结果依据已保存的自动化及浏览器记录，未记录的个人操作不列为验收；各轮实际模型未核实。</p>
+<p>参考阅读用于检查需求遗漏及设计取舍，当前字段、流程、图和结果均按本项目实现组织。更完整的技术比较单独保留为学习资料，不用他人的功能、测试数量或个人经历充当本项目证据。</p>
+<p class="tool-reference">报告辅助工具：Scientific Writing与Scientific Visualization用于表述一致性及图表检查。来源：Kassis T., Agarwal V., He Y., Patel D., Brueckner A. M. (2026). <em>Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents</em>. <a href="https://doi.org/10.48550/arXiv.2609.00065">doi:10.48550/arXiv.2609.00065</a>。</p><h2>七、总结与后续演进</h2>
+<p>第一阶段完成了从创建问卷到填写、提交和统计的流程。题目与规则嵌入问卷，已确认进度单独保存；提交时重新校验有效路径，统计只读取正式答卷。稳定ID、条件更新和唯一索引分别处理关联、并发覆盖和重复提交问题。</p>
+<p>在第一阶段基础上保留可运行前后端、Schema、配置、系统和API说明、测试步骤与结果、AI日志及报告；README集中说明版本、启动方式、各集合及接口。应用运行不需要AI API Key。既有数据和Git历史保留，第二阶段将继续在原代码上扩展。</p>
+<p>当前验证范围限于本地开发服务器和课程规模数据。文本统计目前全部返回，数据增长后需要分页；跨集合操作没有事务保证，普通JSON/BSON数值也不承诺任意精度小数。题目共享、版本管理和跨问卷统计留到第二阶段实现。第一阶段的Git基线与旧数据已经保留，后续修改可以据此比较。</p>
+</main></body></html>
