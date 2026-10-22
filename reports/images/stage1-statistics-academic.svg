@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg role="img" aria-labelledby="title desc" width="1200" height="664" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1200 664" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink"><title id="title">测试问卷多选统计及数字平均值核对</title><desc id="desc">3份正式答卷中2份回答本多选题，图书馆和食堂各2次即100%，体育设施0次即0%。数字有效值为0和8，平均值4。这是依据2026年10月21日验证记录重绘的图，不是新的运行截图。</desc>
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1200" height="664"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-664)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1200" height="664" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="32" y="619" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 32px;fill: rgb(9%,20%,28%); stroke:none;" transform="translate(0,1238) scale(1,-1)">统计口径与验证结果</text>
+			<text x="32" y="583" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 22px;fill: rgb(31%,39%,45%); stroke:none;" transform="translate(0,1166) scale(1,-1)">依据 2026-10-21 独立测试记录重绘 · 合成答卷</text>
+			<rect x="32" y="460" width="362" height="95" rx="8" ry="8" style="stroke: rgb(78%,83%,87%); stroke-linecap: butt; stroke-width: 1; fill: rgb(94%,96%,97%); fill-rule: evenodd;"/>
+			<text x="54" y="514" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 31px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,1028) scale(1,-1)">3 份</text>
+			<text x="54" y="480" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 21px;fill: rgb(31%,39%,45%); stroke:none;" transform="translate(0,960) scale(1,-1)">整卷正式答卷</text>
+			<rect x="419" y="460" width="362" height="95" rx="8" ry="8" style="stroke: rgb(78%,83%,87%); stroke-linecap: butt; stroke-width: 1; fill: rgb(94%,96%,97%); fill-rule: evenodd;"/>
+			<text x="441" y="514" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 31px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,1028) scale(1,-1)">2 份</text>
+			<text x="441" y="480" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 21px;fill: rgb(31%,39%,45%); stroke:none;" transform="translate(0,960) scale(1,-1)">本多选题有效回答</text>
+			<rect x="806" y="460" width="362" height="95" rx="8" ry="8" style="stroke: rgb(78%,83%,87%); stroke-linecap: butt; stroke-width: 1; fill: rgb(94%,96%,97%); fill-rule: evenodd;"/>
+			<text x="828" y="514" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 31px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,1028) scale(1,-1)">1 份</text>
+			<text x="828" y="480" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 21px;fill: rgb(31%,39%,45%); stroke:none;" transform="translate(0,960) scale(1,-1)">跳过本题</text>
+			<text x="32" y="417" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 24px;fill: rgb(9%,20%,28%); stroke:none;" transform="translate(0,834) scale(1,-1)">多选题各选项被选择的次数与比例</text>
+			<text x="972.0" y="417" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 21px;fill: rgb(31%,39%,45%); stroke:none;" transform="translate(0,834) scale(1,-1)">次数</text>
+			<text x="1118.0" y="417" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 21px;fill: rgb(31%,39%,45%); stroke:none;" transform="translate(0,834) scale(1,-1)">比例</text>
+			<path d="M 226,378 L 226,234 Z" style="stroke: rgb(78%,83%,87%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="217.0" y="385" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 18px;fill: rgb(31%,39%,45%); stroke:none;" transform="translate(0,770) scale(1,-1)">0%</text>
+			<path d="M 553.5,378 L 553.5,234 Z" style="stroke: rgb(78%,83%,87%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="540.0" y="385" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 18px;fill: rgb(31%,39%,45%); stroke:none;" transform="translate(0,770) scale(1,-1)">50%</text>
+			<path d="M 881,378 L 881,234 Z" style="stroke: rgb(78%,83%,87%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="863.0" y="385" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 18px;fill: rgb(31%,39%,45%); stroke:none;" transform="translate(0,770) scale(1,-1)">100%</text>
+			<text x="32" y="340" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 23px;fill: rgb(9%,20%,28%); stroke:none;" transform="translate(0,680) scale(1,-1)">图书馆</text>
+			<rect x="226" y="335" width="655" height="28" rx="3" ry="3" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(91%,94%,95%); fill-rule: evenodd;"/>
+			<rect x="226" y="335" width="655.0" height="28" rx="3" ry="3" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(8%,49%,55%); fill-rule: evenodd;"/>
+			<text x="1002.0" y="340" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 24px;fill: rgb(9%,20%,28%); stroke:none;" transform="translate(0,680) scale(1,-1)">2</text>
+			<text x="1088.0" y="340" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 24px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,680) scale(1,-1)">100.0%</text>
+			<text x="32" y="292" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 23px;fill: rgb(9%,20%,28%); stroke:none;" transform="translate(0,584) scale(1,-1)">食堂</text>
+			<rect x="226" y="287" width="655" height="28" rx="3" ry="3" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(91%,94%,95%); fill-rule: evenodd;"/>
+			<rect x="226" y="287" width="655.0" height="28" rx="3" ry="3" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(8%,49%,55%); fill-rule: evenodd;"/>
+			<text x="1002.0" y="292" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 24px;fill: rgb(9%,20%,28%); stroke:none;" transform="translate(0,584) scale(1,-1)">2</text>
+			<text x="1088.0" y="292" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 24px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,584) scale(1,-1)">100.0%</text>
+			<text x="32" y="244" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 23px;fill: rgb(9%,20%,28%); stroke:none;" transform="translate(0,488) scale(1,-1)">体育设施</text>
+			<rect x="226" y="239" width="655" height="28" rx="3" ry="3" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(91%,94%,95%); fill-rule: evenodd;"/>
+			<path d="M 226,268 L 226,238 Z" style="stroke: rgb(31%,39%,45%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="1002.0" y="244" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 24px;fill: rgb(9%,20%,28%); stroke:none;" transform="translate(0,488) scale(1,-1)">0</text>
+			<text x="1112.0" y="244" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 24px;fill: rgb(31%,39%,45%); stroke:none;" transform="translate(0,488) scale(1,-1)">0.0%</text>
+			<text x="32" y="195" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 21px;fill: rgb(31%,39%,45%); stroke:none;" transform="translate(0,390) scale(1,-1)">分母 = 实际回答本题的 2 份答卷；每份答卷可选多项，比例之和可超过 100%。</text>
+			<rect x="32" y="77" width="1136" height="92" rx="8" ry="8" style="stroke: rgb(78%,83%,87%); stroke-linecap: butt; stroke-width: 1; fill: rgb(94%,96%,97%); fill-rule: evenodd;"/>
+			<text x="54" y="129" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 23px;fill: rgb(9%,20%,28%); stroke:none;" transform="translate(0,258) scale(1,-1)">数字题核对</text>
+			<text x="54" y="96" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 20px;fill: rgb(31%,39%,45%); stroke:none;" transform="translate(0,192) scale(1,-1)">0 也是有效数值</text>
+			<text x="425" y="129" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 24px;fill: rgb(9%,20%,28%); stroke:none;" transform="translate(0,258) scale(1,-1)">原始值 0、8</text>
+			<text x="425" y="96" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 20px;fill: rgb(31%,39%,45%); stroke:none;" transform="translate(0,192) scale(1,-1)">2 份有效回答</text>
+			<text x="900" y="129" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 27px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,258) scale(1,-1)">平均值 4</text>
+			<text x="900" y="96" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 20px;fill: rgb(31%,39%,45%); stroke:none;" transform="translate(0,192) scale(1,-1)">(0 + 8) ÷ 2</text>
+			<path d="M 32,52 L 1168,52 Z" style="stroke: rgb(78%,83%,87%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="32" y="20" style="font-family: Microsoft YaHei, SimHei, sans-serif; font-size: 20px;fill: rgb(31%,39%,45%); stroke:none;" transform="translate(0,40) scale(1,-1)">数据来源：tests/results/参考借鉴优化-2026-10-21.md</text>
+		</g>
+	</g>
+</svg>
