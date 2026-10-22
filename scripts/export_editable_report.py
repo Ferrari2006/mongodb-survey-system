@@ -204,7 +204,11 @@ def make_word(body, destination):
     doc.save(destination)
     # Verify the output has editable paragraphs/tables and embedded images.
     check = Document(destination)
-    assert len(check.tables) == 8 and len(check.inline_shapes) == 2
+    def count_tags(element, tag):
+        if isinstance(element, str): return 0
+        return int(element.tag == tag) + sum(count_tags(c, tag) for c in element.children)
+    assert len(check.tables) == count_tags(body, 'table')
+    assert len(check.inline_shapes) == count_tags(body, 'img')
     assert any("6.3 使用过程中遇到的AI问题" in p.text for p in check.paragraphs)
     return len(check.paragraphs), len(check.tables)
 

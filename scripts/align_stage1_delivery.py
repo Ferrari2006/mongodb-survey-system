@@ -54,7 +54,7 @@ def markdown(report):
         if n.tag=='p':
             pics=[c for c in n.children if isinstance(c,Element) and c.tag=='img']
             if pics:
-                pic=pics[0];stem='stage1-data-model-refined.svg' if '五集合' in pic.attrs.get('alt','') else 'stage1-statistics-academic.svg'
+                pic=pics[0];stem=pic.attrs.get('data-source-file') or ('stage1-data-model-refined.svg' if '五集合' in pic.attrs.get('alt','') else 'stage1-statistics-academic.svg')
                 return '!['+pic.attrs.get('alt','')+'](images/'+stem+')\n\n'
             return inline(n)+'\n\n'
         if n.tag=='pre':return '```json\n'+n.text().rstrip()+'\n```\n\n'

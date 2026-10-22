@@ -1,0 +1,19 @@
+flowchart TB
+    accTitle: 问卷系统分层架构
+    accDescr: 原生前端通过JSON和Bearer令牌调用Flask，服务端校验和路径计算后通过PyMongo访问五集合。
+    users["问卷创建者 / 登录填写者"] --> frontend
+    subgraph frontend["前端 HTML / CSS / JavaScript"]
+      pages["账号工作台 · 编辑 · 分享填写 · 统计答卷"]
+    end
+    pages -->|HTTP / JSON / Bearer| api["Flask API：认证、归属、状态检查"]
+    api --> manage["问卷管理：编辑、发布冻结"]
+    api --> account["账号与会话"]
+    api --> submit["进度与提交：防重、幂等"]
+    api --> statistics["统计与查询：聚合、脱敏"]
+    manage -.-> rules["validation.py / logic.py"]
+    submit -.-> rules
+    rules -.-> mongo["PyMongo 数据访问"]
+    account --> mongo
+    submit --> mongo
+    statistics --> mongo
+    mongo --> database[("MongoDB：users / sessions / surveys / fill_progress / responses")]
