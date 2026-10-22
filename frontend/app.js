@@ -2,6 +2,7 @@
 const $ = id => document.getElementById(id);
 let token = sessionStorage.getItem("survey_token"), survey = null, editing = null, page = 1, jumps=[];
 let filling=null, answers={}, visited=[], current=null, requestId=null, responsePage=1, progressRevision=0, fillBusy=false;
+let surveySaveBusy=false, statisticsRequest=0, responsesRequest=0;
 const sharedId=location.pathname.startsWith("/survey/")?location.pathname.split("/")[2]:null;
 function message(text, error=false) { $("message").textContent=text; $("message").className=error?"error":""; }
 async function api(path, method="GET", body) {
@@ -11,7 +12,7 @@ async function api(path, method="GET", body) {
   return result;
 }
 function action(fn) { return async event => { event?.preventDefault(); try { await fn(event); } catch(error) { message(error.message,true); } }; }
-function show(id) { for(const section of ["auth","dashboard","editor","fill","statistics"]) $(section).hidden=section!==id; }
+function show(id) { if(id!=="statistics"){statisticsRequest++;responsesRequest++;}for(const section of ["auth","dashboard","editor","fill","statistics"]) $(section).hidden=section!==id; }
 function node(tag,text,cls) { const e=document.createElement(tag); if(text!==undefined)e.textContent=text; if(cls)e.className=cls; return e; }
 function constraintText(q) {
   const v=q.validation;
@@ -74,7 +75,12 @@ function render() {
   if(!survey.questions.length)$("question-list").append(node("p","尚未添加题目。","muted"));
   $("question-form").hidden=!draft;
 }
-$("survey-form").onsubmit=action(async()=>{const body={title:$("survey-title").value,description:$("survey-description").value,allow_anonymous:$("allow-anonymous").checked,allow_repeat:$("allow-repeat").checked,deadline:$("deadline").value?new Date($("deadline").value).toISOString():null};survey=survey?await api(`/surveys/${survey._id}`,"PATCH",{...body,revision:survey.revision}):await api("/surveys","POST",body);render();message("问卷已保存");});
+$("survey-form").onsubmit=action(async()=>{
+  if(surveySaveBusy)return;
+  surveySaveBusy=true;const saveButton=$("survey-form").querySelector('button[type="submit"]');saveButton.disabled=true;
+  try{const body={title:$("survey-title").value,description:$("survey-description").value,allow_anonymous:$("allow-anonymous").checked,allow_repeat:$("allow-repeat").checked,deadline:$("deadline").value?new Date($("deadline").value).toISOString():null};survey=survey?await api(`/surveys/${survey._id}`,"PATCH",{...body,revision:survey.revision}):await api("/surveys","POST",body);render();message("问卷已保存");}
+  finally{surveySaveBusy=false;saveButton.disabled=!!survey&&survey.status!=="draft";}
+});
 function fields() {
   const kind=$("question-type").value;$("options-panel").hidden=!["single","multiple"].includes(kind);$("bounds-panel").hidden=kind==="single";$("integer-panel").hidden=kind!=="number";
   $("min-label").textContent={multiple:"最少选择数量",text:"最少字符数",number:"最小值"}[kind]||"最小值";
@@ -82,7 +88,7 @@ function fields() {
   const allowed={single:["eq"],multiple:["any","all"],number:["eq","lt","lte","gt","gte"],text:[]}[kind];
   for(const opt of $("jump-op").options){opt.disabled=!allowed.includes(opt.value);opt.hidden=opt.disabled;}
   if(!allowed.includes($("jump-op").value))$("jump-op").value=allowed[0]||"";
-  $("jump-editor").hidden=kind==="text";
+  renderJumps();
   jumpSuggestions();
 }
 function jumpSuggestions(){
@@ -95,10 +101,11 @@ $("question-options").oninput=jumpSuggestions;$("question-id").oninput=jumpSugge
 function resetQuestion(){editing=null;jumps=[];renderJumps();$("question-form").reset();$("question-id").disabled=false;$("question-id").value=`q${crypto.randomUUID().slice(0,8)}`;$("question-heading").textContent="添加题目";fields();}
 function edit(q){editing=q.id;$("question-id").value=q.id;$("question-id").disabled=true;$("question-title").value=q.title;$("question-type").value=q.type;$("question-required").checked=q.required;$("question-options").value=(q.options||[]).map(o=>`${o.id} | ${o.label}`).join("\n");const keys=q.type==="multiple"?["min_choices","max_choices"]:q.type==="text"?["min_length","max_length"]:["min","max"];$("question-min").value=q.validation[keys[0]]??"";$("question-max").value=q.validation[keys[1]]??"";$("question-integer").checked=!!q.validation.integer;$("question-heading").textContent="编辑题目";fields();$("question-form").scrollIntoView({behavior:"smooth"});}
 $("question-type").onchange=fields;$("reset-question").onclick=resetQuestion;
-function renderJumps(){$("jump-list").replaceChildren();jumps.forEach((r,i)=>{const row=node("div",undefined,"rule-row");row.append(node("p",`${i+1}. ${jumpText(r,{options:optionDefinitions()})}`));const acts=node("div",undefined,"actions");if(i>0)acts.append(button("上移",()=>{[jumps[i-1],jumps[i]]=[jumps[i],jumps[i-1]];renderJumps();}));if(i<jumps.length-1)acts.append(button("下移",()=>{[jumps[i+1],jumps[i]]=[jumps[i],jumps[i+1]];renderJumps();}));acts.append(button("移除",()=>{jumps.splice(i,1);renderJumps();}));row.append(acts);$("jump-list").append(row);});}
+function renderJumps(){const textKind=$("question-type").value==="text";$("jump-editor").hidden=textKind&&!jumps.length;for(const id of ["jump-op","jump-value","jump-target","add-jump"])$(id).disabled=textKind;$("jump-list").replaceChildren();if(textKind&&jumps.length)$("jump-list").append(node("p","文本填空不支持跳转。已有规则已保留，请逐条移除后保存，或切回原题型继续编辑。","muted"));jumps.forEach((r,i)=>{const row=node("div",undefined,"rule-row");row.append(node("p",`${i+1}. ${jumpText(r,{options:optionDefinitions()})}`));const acts=node("div",undefined,"actions");if(i>0)acts.append(button("上移",()=>{[jumps[i-1],jumps[i]]=[jumps[i],jumps[i-1]];renderJumps();}));if(i<jumps.length-1)acts.append(button("下移",()=>{[jumps[i+1],jumps[i]]=[jumps[i],jumps[i+1]];renderJumps();}));acts.append(button("移除",()=>{jumps.splice(i,1);renderJumps();}));row.append(acts);$("jump-list").append(row);});}
 const originalEdit=edit;edit=q=>{originalEdit(q);jumps=structuredClone(q.jumps||[]);renderJumps();};
 $("add-jump").onclick=action(async()=>{let value=$("jump-value").value;const kind=$("question-type").value;if(kind==="text")throw new Error("文本填空不设置条件跳转");if(kind==="multiple")value=value.split(",").map(v=>v.trim());if(kind==="number"){if(!value.trim()||!Number.isFinite(Number(value)))throw new Error("比较值须为数字");value=Number(value);}jumps.push({op:$("jump-op").value,value,target:$("jump-target").value.trim()});renderJumps();});
 $("question-form").onsubmit=action(async()=>{
+  if($("question-type").value==="text"&&jumps.length)throw new Error("文本填空不支持跳转，请先移除已有规则或切回原题型。");
   const q={id:$("question-id").value,title:$("question-title").value,type:$("question-type").value,required:$("question-required").checked,validation:{},jumps};
   if(["single","multiple"].includes(q.type))q.options=$("question-options").value.split("\n").filter(line=>line.trim()).map(line=>{const i=line.indexOf("|");if(i<0)throw new Error("每行选项请使用 ID | 文字 格式");return {id:line.slice(0,i).trim(),label:line.slice(i+1).trim()};});
   if(q.type!=="single"){const keys=q.type==="multiple"?["min_choices","max_choices"]:q.type==="text"?["min_length","max_length"]:["min","max"];["question-min","question-max"].forEach((id,i)=>{if($(id).value!=="")q.validation[keys[i]]=Number($(id).value);});}
@@ -124,8 +131,8 @@ $("fill-back").onclick=fillAction(async()=>{if(!visited.length)return;const befo
 $("fill-anonymous").onchange=fillAction(async()=>{await persistProgress();message("匿名设置及已确认进度已保存。");});
 $("fill-review").onclick=$("fill-back").onclick;
 $("submit-response").onclick=fillAction(async()=>{$("submit-response").disabled=true;try{await api(`/public/surveys/${filling._id}/responses`,"POST",{answers,anonymous:$("fill-anonymous").checked,request_id:requestId});$("fill-submit").hidden=true;$("fill-back").disabled=true;$("fill-review").disabled=true;$("fill-anonymous").disabled=true;$("fill-question-title").textContent="提交成功，感谢填写";message("答卷已保存。");}finally{$("submit-response").disabled=false;}});
-$("view-statistics").onclick=action(async()=>{show("statistics");$("stats-title").textContent=`${survey.title} · 统计`;$("stats-question").replaceChildren(node("option","全部题目"));$("stats-question").firstChild.value="";for(const q of survey.questions){const opt=node("option",q.title);opt.value=q.id;$("stats-question").append(opt);}responsePage=1;await loadStatistics();await loadResponses();});
-async function loadStatistics(){const qid=$("stats-question").value;const result=await api(`/surveys/${survey._id}${qid?"/questions/"+qid:""}/statistics`);$("stats-total").textContent=`共 ${result.response_count} 份有效答卷，按答卷份数计数。`;$("stats-content").replaceChildren();for(const q of result.questions){const card=node("article",undefined,"card");card.append(node("h2",q.title),node("p",`有效回答：${q.answer_count}`));if(q.options){
+$("view-statistics").onclick=action(async()=>{statisticsRequest++;responsesRequest++;show("statistics");message("");$("stats-content").replaceChildren();$("response-list").replaceChildren();$("stats-title").textContent=`${survey.title} · 统计`;$("stats-question").replaceChildren(node("option","全部题目"));$("stats-question").firstChild.value="";for(const q of survey.questions){const opt=node("option",q.title);opt.value=q.id;$("stats-question").append(opt);}responsePage=1;await Promise.all([loadStatistics(),loadResponses()]);});
+async function loadStatistics(){const selectedSurvey=survey,qid=$("stats-question").value,request=++statisticsRequest;const active=()=>request===statisticsRequest&&survey?._id===selectedSurvey._id&&!$("statistics").hidden;$("stats-total").textContent="正在加载统计…";$("stats-content").replaceChildren();let result;try{result=await api(`/surveys/${selectedSurvey._id}${qid?"/questions/"+qid:""}/statistics`);}catch(error){if(!active())return;$("stats-total").textContent="统计加载失败，请重新选择题目或返回后重试。";throw error;}if(!active())return;$("stats-total").textContent=`共 ${result.response_count} 份有效答卷，按答卷份数计数。`;for(const q of result.questions){const card=node("article",undefined,"card");card.append(node("h2",q.title),node("p",`有效回答：${q.answer_count}`));if(q.options){
       card.append(node("p",q.type==="multiple"?"比例 = 选择该项的答卷数 ÷ 本题有效回答份数。多选比例之和可能超过100%。":"比例 = 选择该项的答卷数 ÷ 本题有效回答份数。", "muted"));
       const table=node("table",undefined,"option-stats");const caption=node("caption",`${q.title} · 选项分布`);table.append(caption);
       const head=node("thead"),hr=node("tr");for(const title of ["选项","次数 / 比例","分布"]) {const th=node("th",title);th.scope="col";hr.append(th);}head.append(hr);table.append(head);
@@ -133,6 +140,6 @@ async function loadStatistics(){const qid=$("stats-question").value;const result
       for(const o of q.options){const row=node("tr");const label=node("th",o.label);label.scope="row";const text=node("td",`${o.count} · ${q.answer_count?(o.count/q.answer_count*100).toFixed(1)+"%":"—"}`);const visual=node("td");const bar=node("meter");bar.min=0;bar.max=Math.max(q.answer_count,1);bar.value=o.count;bar.setAttribute("aria-label",`${o.label}，${o.count}份，本题有效回答${q.answer_count}份`);bar.textContent=String(o.count);visual.append(bar);row.append(label,text,visual);body.append(row);}
       table.append(body);card.append(table);
     }else{if(q.type==="number")card.append(node("p",`平均值：${q.average??"暂无数据"}`));if(!q.values.length)card.append(node("p","暂无填写内容","muted"));else{const entries=node("ol");for(const value of q.values)entries.append(node("li",String(value)));card.append(entries);}}$("stats-content").append(card);}}
-async function loadResponses(){const result=await api(`/surveys/${survey._id}/responses?page=${responsePage}`);$("response-list").replaceChildren();for(const r of result.items){const card=node("article",undefined,"card");card.append(node("p",`${r.respondent} · ${new Date(r.created_at).toLocaleString("zh-CN")}`));for(const answer of r.answers){const q=survey.questions.find(q=>q.id===answer.question_id);card.append(node("p",`${q?.title||answer.question_id}：${answerText(q,answer.value)}`));}$("response-list").append(card);}$("response-page").textContent=`第 ${responsePage} 页`;$("response-previous").disabled=responsePage===1;$("response-next").disabled=responsePage*20>=result.total;}
+async function loadResponses(){const selectedSurvey=survey,selectedPage=responsePage,request=++responsesRequest;const active=()=>request===responsesRequest&&survey?._id===selectedSurvey._id&&!$("statistics").hidden;$("response-list").replaceChildren();$("response-page").textContent="正在加载答卷…";$("response-previous").disabled=true;$("response-next").disabled=true;let result;try{result=await api(`/surveys/${selectedSurvey._id}/responses?page=${selectedPage}`);}catch(error){if(!active())return;$("response-page").textContent="答卷加载失败，请返回后重试。";throw error;}if(!active())return;for(const r of result.items){const card=node("article",undefined,"card");card.append(node("p",`${r.respondent} · ${new Date(r.created_at).toLocaleString("zh-CN")}`));for(const answer of r.answers){const q=selectedSurvey.questions.find(q=>q.id===answer.question_id);card.append(node("p",`${q?.title||answer.question_id}：${answerText(q,answer.value)}`));}$("response-list").append(card);}$("response-page").textContent=`第 ${selectedPage} 页`;$("response-previous").disabled=selectedPage===1;$("response-next").disabled=selectedPage*20>=result.total;}
 $("stats-question").onchange=action(loadStatistics);$("stats-back").onclick=()=>render();$("response-previous").onclick=action(async()=>{responsePage--;await loadResponses();});$("response-next").onclick=action(async()=>{responsePage++;await loadResponses();});
 fields();identify();

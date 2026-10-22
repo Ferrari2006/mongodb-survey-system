@@ -28,7 +28,7 @@ def now():
 def create_app(config=None):
     app = Flask(__name__, static_folder=str(Path(__file__).resolve().parents[1] / "frontend"), static_url_path="/static")
     app.config.update(MONGO_URI=os.getenv("MONGO_URI", "mongodb://127.0.0.1:27017/"),
-                      MONGO_DB=os.getenv("MONGO_DB", "mongodb_survey_course"), MAX_CONTENT_LENGTH=256 * 1024)
+                      MONGO_DB=os.getenv("MONGO_DB", "mongodb_survey_course"), MAX_CONTENT_LENGTH=8 * 1024 * 1024)
     app.config.update(config or {})
     client = MongoClient(app.config["MONGO_URI"], serverSelectionTimeoutMS=5000, tz_aware=True)
     db = client[app.config["MONGO_DB"]]
@@ -65,11 +65,14 @@ def create_app(config=None):
     def save(survey, revision):
         require(type(revision) is int, "必须提供整数revision")
         require(survey["status"] == "draft", "发布后题目与配置固定，请创建新问卷")
+        snapshot_revision = survey["revision"]
+        if revision != snapshot_revision:
+            raise DomainError("问卷已被修改，请刷新后重试", 409, "revision_conflict")
         validate_jumps(survey["questions"])
         survey["updated_at"] = now()
-        survey["revision"] = revision + 1
+        survey["revision"] = snapshot_revision + 1
         result = db.surveys.replace_one({"_id": survey["_id"], "owner_id": g.user_id,
-                                         "revision": revision, "status": "draft"}, survey)
+                                         "revision": snapshot_revision, "status": "draft"}, survey)
         if not result.matched_count:
             raise DomainError("问卷已被修改，请刷新后重试", 409, "revision_conflict")
         return jsonify(survey)
@@ -271,10 +274,13 @@ def create_app(config=None):
         survey = owned(sid)
         require(survey["status"] == "draft", "仅草稿可发布")
         require(type(data.get("revision")) is int, "须提供revision")
+        snapshot_revision = survey["revision"]
+        if data["revision"] != snapshot_revision:
+            raise DomainError("问卷已被修改，请刷新", 409, "revision_conflict")
         require(bool(survey["questions"]), "空问卷不能发布")
         validate_jumps(survey["questions"], publishing=True)
         require(not survey.get("deadline") or survey["deadline"] > now(), "截止时间必须晚于当前时间")
-        result = db.surveys.update_one({"_id": sid, "owner_id": g.user_id, "status": "draft", "revision": data["revision"]},
+        result = db.surveys.update_one({"_id": sid, "owner_id": g.user_id, "status": "draft", "revision": snapshot_revision},
                                       {"$set": {"status": "published", "published_at": now(), "updated_at": now()}, "$inc": {"revision": 1}})
         if not result.matched_count:
             raise DomainError("问卷已被修改，请刷新", 409, "revision_conflict")
@@ -287,7 +293,10 @@ def create_app(config=None):
         survey = owned(sid)
         require(survey["status"] == "published", "仅已发布问卷可关闭")
         require(type(data.get("revision")) is int, "须提供revision")
-        result = db.surveys.update_one({"_id": sid, "owner_id": g.user_id, "status": "published", "revision": data["revision"]},
+        snapshot_revision = survey["revision"]
+        if data["revision"] != snapshot_revision:
+            raise DomainError("问卷已被修改，请刷新", 409, "revision_conflict")
+        result = db.surveys.update_one({"_id": sid, "owner_id": g.user_id, "status": "published", "revision": snapshot_revision},
                                       {"$set": {"status": "closed", "updated_at": now()}, "$inc": {"revision": 1}})
         if not result.matched_count:
             raise DomainError("问卷已被修改，请刷新", 409, "revision_conflict")
