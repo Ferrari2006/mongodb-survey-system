@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
-  "editor": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-最终提交编辑版.html",
-  "word": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-最终提交可编辑.docx",
+  "editor": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-AI过程修订编辑版.html",
+  "word": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-AI过程修订可编辑.docx",
   "markdown": "reports/第一阶段完成报告.md",
   "printable": "reports/第一阶段完成报告.html",
   "submission": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽.html",
-  "normalized_body_sha256": "1d571ae3e3d4bbe0e0041ff76a49ac640724367b4a813ea001a3815e517793da",
+  "normalized_body_sha256": "1ce6e5fb993b0d875ca6b3313c6c242c330009c6a8aa0760182de35763bef684",
   "files_sha256": {
-    "reports/第一阶段完成报告.md": "3aefd4e222fa99f5a2a38858728741a3f175603f9e5d5436fa2ce558c39fec8e",
-    "reports/第一阶段完成报告.html": "d397aed8afc954dec9339b95d0ca75bf0c6607ad603b2474242ee0e74e371643",
-    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽.html": "d397aed8afc954dec9339b95d0ca75bf0c6607ad603b2474242ee0e74e371643",
-    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-最终提交编辑版.html": "d16d48c97dfba42cb0dfc4140bc7fd55b52d8bbe75c273a5ca0ac97fd2a3e77d",
-    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-最终提交可编辑.docx": "0cd0426460d43dab674d5b775820df3b8ff4ebe8df5e06157eb57330d0d21a91",
-    "第一阶段/提交材料/最终提交版/2026_ECNU_PJ1_1_温正泽.pdf": "0ce1f993c3377b4174270ce9c28b6e445987eaf34a2a6f7a25d00a455c40af67"
+    "reports/第一阶段完成报告.md": "6d4e00ab9fc8e315dd8ad784452dd8b164cee6c567266f3ae200a4dbe7ac7bcf",
+    "reports/第一阶段完成报告.html": "3faedfef16476e38ff830d807506b5906cd2a17b3ea4e81f0025cb73db49c75c",
+    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽.html": "3faedfef16476e38ff830d807506b5906cd2a17b3ea4e81f0025cb73db49c75c",
+    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-AI过程修订编辑版.html": "1ac411cbc6448a922315d8251ed71efdd8a7e10df27e0b0be1b28e558fb3024e",
+    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-AI过程修订可编辑.docx": "070505b52871c7c75a508915fcb3de00e5e090c232e69d68b901522b7c4d299b",
+    "第一阶段/提交材料/AI过程修订版/2026_ECNU_PJ1_1_温正泽.pdf": "9c7715bb59afb6bdb013f217b68ff0d0892dd75315ec173429c88583aea71ae3"
   },
   "evidence_sha256": {
     "backend/app.py": "3f4fb0b5b6bd805ebc0a9feb16f9172fcb7b04012e26e309f2daa97c032a477e",
@@ -30,6 +30,6 @@
   },
   "recorded_tests": 38,
   "backend_tests_rerun": false,
-  "pdf": "第一阶段/提交材料/最终提交版/2026_ECNU_PJ1_1_温正泽.pdf",
-  "pdf_pages": 10
+  "pdf": "第一阶段/提交材料/AI过程修订版/2026_ECNU_PJ1_1_温正泽.pdf",
+  "pdf_pages": 11
 }
