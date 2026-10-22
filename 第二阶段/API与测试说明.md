@@ -33,7 +33,7 @@ revision是并发控制修订号；versions[].id是题目业务版本。工作�
 
 ## 实际测试记录
 
-运行 `python tests/run_tests.py`，结果写入 tests/results/stage2-latest.json。第一阶段38项保存在 tests/results/latest.json，不能把新结果覆盖进去。2026-10-23首次运行新增9项及原38项，共47项通过；以下对应测试文件 tests/test_library.py（最终数量以结果文件为准）。
+运行 `python tests/run_tests.py`，结果写入tests/results/stage2-latest.json。最近一次完整运行通过52项，其中第一阶段38项回归、第二阶段14项扩展。第一阶段原始结果保留在tests/results/latest.json。以下为题库主要用例，对应tests/test_library.py。
 
 | 场景 | 输入与步骤 | 预期及实测 |
 |---|---|---|
@@ -47,16 +47,16 @@ revision是并发控制修订号；versions[].id是题目业务版本。工作�
 | 入库与题库管理 | 问卷题有跳转、保存到题库、移动题库；对象型ID | 明确去除跳转、分组准确、非法ID拒绝；通过 |
 | 多选统计 | 一次作答选择两项 | 作答分母1、每项次数1；通过 |
 
-浏览器流程 tests/browser_library.js 通过实际点击注册/登录、新建题库、新建题目、保存工作稿、提交版本、恢复、导入首版、查询使用位置及390px移动端布局；结果在 tests/results/stage2-browser.json。页面没有JavaScript异常。首次脚本遗漏注册后的登录步骤，等待超时；补上真实登录后重跑通过，这是测试脚本修正，不是产品登录缺陷。
+补充边界用例覆盖数字分布与选答空值、空数字组、23条文本分页、共享双方答卷隔离，以及非法导入和未知共享对象不落库，均已通过。
 
-本轮进一步增加5项真实数据库用例：数字分布与选答空值、空数字组、23条文本分页、共享双方各自答卷统计、非法导入/未知共享对象不落库。完整52项通过，结果文件已更新；第一阶段38项保持原样。浏览器也验证0与8的分布表、21条文本第二页显示及原题库流程，实际结果见浏览器JSON，不将API前置准备说成人工填答。
+浏览器脚本tests/browser_library.js验证注册登录、题库创建、工作稿、提交与恢复、旧版导入、使用位置、数字分布、文本翻页和390px宽度布局。数字分布以0与8检查，文本翻页用21条回答检查。前置答卷通过API准备，页面操作由Playwright执行，结果保存在tests/results/stage2-browser.json，未发现页面JavaScript异常。
 
-使用随机 survey_test_ 数据库测试；浏览器使用单独 survey_test_stage2_browser_20261023 数据库。未清空原业务库。浏览器CLI依赖下载受限，改用本机已安装Playwright执行普通脚本，没有引入新的问卷框架。
+自动测试使用随机survey_test_数据库，浏览器使用独立测试数据库，原业务库不受影响。环境问题和脚本修正过程见[AI开发记录](../ai_logs/2026-10-23-stage2-review.md)。
 
 ## 运行与检查
 
 沿用README的MongoDB与Python环境，执行 python run.py。新建两个集合与索引为增量操作，旧五集合和历史业务数据不需要清空。完整当前结构为 database/schema-stage2.json；database/schema.json保持第一阶段快照。
 
-执行 `python scripts/check_stage2.py` 核对集合导出、全部API、真实测试记录、页面结果及第一阶段报告不变。原 scripts/check_submission.py 是第一阶段交付校验，应在stage1-submission-20261023快照使用，不能把第二阶段的新增集合算作第一阶段报告错误。
+执行 `python scripts/check_stage2.py` 核对集合导出、全部API、真实测试记录、页面结果及第一阶段报告不变。原scripts/check_submission.py用于第一阶段提交快照；第二阶段使用check_stage2.py检查当前工作树。
 
 当前已有第二阶段报告草稿及需求实现与验收对应表，尚需本人核对与正式定稿。已提交的阶段一PDF不因本次开发更新。

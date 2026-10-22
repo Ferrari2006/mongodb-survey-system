@@ -1,47 +1,29 @@
-# MongoDB 问卷系统课程项目
+# MongoDB 问卷系统
 
-数据管理系统课程大作业：使用 MongoDB 实现支持账号、问卷管理、题目校验、条件跳转、答卷提交和统计的问卷系统。
+数据管理系统课程项目。系统支持账号管理、问卷编辑、条件跳转、填写进度、答卷提交和统计，并提供题库共享、历史版本及跨问卷统计。
 
-当前优先级与后续衔接见[项目上下文](docs/项目上下文与交接.md)。用户于2026-10-23确认已提交第一阶段PDF；当前开始第二阶段，在原系统上加入题库、共享、历史版本、恢复和跨卷统计。见[实施设计](第二阶段/实施设计-2026-10-23.md)与[新增API及测试](第二阶段/API与测试说明.md)。
+后端使用Flask和PyMongo，前端为原生HTML/CSS/JavaScript，业务数据保存在MongoDB。前端无需构建，应用运行不需要AI API Key。
 
-当前状态：保留初始需求对应的注册登录、本人问卷管理、题型和校验、可配置跳转、发布与截止/关闭、分享填写、匿名/重复控制及统计。第一阶段38项记录和报告保持原样；第二阶段新增题库及权限隔离、工作稿、不可变版本、分支/恢复、导入来源追踪及跨卷分组统计，补充数字分布和文本分页。当前52项自动化测试（含真实MongoDB集成测试）通过，并完成题库浏览器流程。[第二阶段报告草稿](第二阶段/第二阶段完成报告草稿.md)已整理，尚待本人核对，不能将本轮开发记录当作最终提交。未明确的细节为项目设计选择，见实施设计。
+## 功能
 
-## 两阶段提交
+| 模块 | 功能 |
+|---|---|
+| 账号与权限 | 注册、登录、退出；问卷管理按创建者隔离，密码保存带盐哈希 |
+| 问卷编辑 | 标题、说明、匿名与重复填写设置、截止时间；单选、多选、文本和数字题 |
+| 校验与跳转 | 必答、选项数量、文本长度、数字范围和整数限制；按配置计算答题路径 |
+| 发布与填写 | 分享链接、发布冻结、截止与关闭；已确认进度保存和恢复，提交时后端重新校验 |
+| 答卷与统计 | 匿名展示、重复控制、请求重试防重；整卷和单题统计 |
+| 题库与版本 | 新建题库、保存和复用题目、指定账号共享、工作稿、历史版本、分支及恢复 |
+| 使用追踪 | 查看本人问卷的引用位置和版本；其他账号的引用仅显示数量 |
+| 跨问卷统计 | 按来源版本及实际定义分组，统计选项次数、数字均值和分布，文本回答分页 |
 
-网页规定：GitHub保存可运行的前后端、测试和README；水杉只上传项目完成报告PDF，仓库链接放报告最前面。第一阶段文件名为2026_ECNU_PJ1_1_温正泽.pdf，截止2026-10-23 00:00；第二阶段为2026_ECNU_PJ1_2_温正泽.pdf，截止2026-10-30 00:00。详见[网页提交要求](docs/网页提交要求.md)。
-
-- 第一阶段：完成初始需求对应的可运行系统、数据库设计、API 和关键逻辑说明、测试用例、AI 使用日志及报告。
-- 第二阶段：根据后续需求变更，在第一阶段代码上修改，保留核心结构、旧数据及主要功能，记录兼容性处理和回归测试。
-- 两阶段共用本仓库。第一阶段提交快照为stage1-submission-20261023（0cdfefd）；第二阶段在main继续开发，完成后再标记阶段二提交快照。
-
-当前仓库已按本人要求公开，教师无需协作者邀请即可读取。可直接提交的[第一阶段PDF](第一阶段/提交材料/AI过程修订版/2026_ECNU_PJ1_1_温正泽.pdf)与下述报告源文件对应。
-
-## 当前文件
-
-当前报告统一入口为[可打印HTML](reports/第一阶段完成报告.html)、[对应Markdown](reports/第一阶段完成报告.md)，正文与[提交润色编辑稿](第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-AI过程修订编辑版.html)及提交目录同名正式HTML一致；[Word副本](第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-AI过程修订可编辑.docx)供编辑。旧版保存在第一阶段/历史材料及带版本后缀的原文件中，不代表当前交付入口。报告与实现的逐项对应见[核对表](docs/报告与仓库对应.md)，一致性清单见reports/stage1-report-manifest.json。
-
-- `大作业一.docx`：课程要求。
-- `第一阶段/大作业一第一阶段.docx`：第一阶段提供的要求，当前核对正文与总要求一致。
-- `skills/mongodb-course-project/`：开发和学习辅助规范，包含需求基线、AI 记录及不同读者的表达规则；不是项目完成报告。
-- `ai_logs/`：真实 AI 协作记录，从已有可核实的工作开始记录。
-
-目录包括backend、frontend、database、tests、docs、reports、ai_logs和scripts。Schema与索引以backend/database.py为准，database/schema.json保留第一阶段结构，database/schema-stage2.json导出当前七集合结构。第二阶段八项需求已有对应后端实现和题库页面，最终验收和阶段二报告仍待整理。
-
-## 第二阶段开发检查
-
-沿用下方环境与启动步骤，直接执行 `python run.py`，题库入口在登录后的“管理我的题库与共享题目”；问卷编辑页可从题库导入特定版本，也可把已有题目存入题库。工作稿仅自己可见，提交版本后才用于复用；共享账号只能读取和导入，不能修改原题。
-
-`python tests/run_tests.py` 当前结果写入tests/results/stage2-latest.json。第一阶段tests/results/latest.json保留38项原始结果。新增API见第二阶段/API与测试说明.md。`python scripts/check_stage2.py` 核对当前材料；原check_submission.py针对已提交第一阶段快照，不用于检查第二阶段工作树。
-
-第二阶段当前可编辑材料在[报告草稿目录](第二阶段/报告草稿/)，提供HTML、Word及6页PDF，正文源为第二阶段/第二阶段完成报告草稿.md。它们仍是供本人核对的草稿，不代表已向水杉提交。需求覆盖见[需求实现与验收对应](第二阶段/需求实现与验收对应.md)，自己操作与设计理解见[学习核对清单](第二阶段/学习与核对清单.md)。已运行的旧服务需重启才能加载新增后端接口。
-
-## 批阅导航
-
-第一阶段从[批阅与验收入口](docs/批阅与验收入口.md)查看“设计→实现→操作→测试证据”的对应关系。环境只读检查为 `python scripts/check_environment.py`，当前阶段材料一致性检查为 `python scripts/check_stage2.py`，业务测试为 `python tests/run_tests.py`；三者验证范围不同。
+发布后的问卷保持原题目内容。题库更新不会自动改动已导入的问卷。共享题目授予读取和使用权，接收者不能编辑源题，也不能因此读取他人的问卷或答卷。
 
 ## 本地运行
 
-需要 Python 3.10或以上和可连接的 MongoDB（本机验证版本为Python 3.13.7、MongoDB 6.0.1）。从仓库根目录执行：
+需要Python 3.10及以上和可连接的MongoDB。已验证环境：Python 3.13.7、MongoDB 6.0.1、Flask 3.1.2、PyMongo 4.18.1。依赖版本见[requirements.txt](requirements.txt)。
+
+先启动MongoDB，再在仓库根目录执行：
 
 ```powershell
 py -m venv .venv
@@ -51,97 +33,92 @@ $env:MONGO_DB = "mongodb_survey_course"
 .\.venv\Scripts\python.exe run.py
 ```
 
-浏览器打开 http://127.0.0.1:5050，自行注册账号后创建问卷。MongoDB须先启动；应用不会自动启动或安装数据库，也不会创建内置管理员账号。已有安装依赖的Python环境可直接运行 `python run.py`。
+打开 http://127.0.0.1:5050，注册账号后登录。已有依赖环境可直接执行 `python run.py`。
 
-本机也可执行start.ps1，它使用已安装的Python或项目虚拟环境，并在需要时调用同级lab1的已有MongoDB启动脚本。该快捷方式依赖本机课程目录；其他机器使用上述标准步骤。
-
-如曾运行“账号与草稿”旧版本，在同一MONGO_DB上先执行python scripts/migrate_drafts.py。该脚本只扩展已知validator和补默认设置，不删除旧问卷；新安装的数据库无需迁移。勿直接修改数据库跳过验证。
-
-可选演示：应用启动后执行python scripts/seed_demo.py，会通过真实HTTP接口创建合成创建者/填写者及一份四题问卷，控制台显示本次账号密码与链接，不创建内置生产账号。修改端口时加--base http://127.0.0.1:端口。
-
-`.env.example` 只展示配置变量，本应用不自动读取.env文件。可通过PORT修改端口。初始化会创建当前缺少的集合和索引，不清空现有数据，不自动覆盖已有validator。应用运行不需要任何AI API Key。
-
-## 测试与设计资料
-
-### 技术组成与版本
-
-后端为 Python Flask + PyMongo，前端为原生 HTML/CSS/JavaScript，数据库为 MongoDB。已有验证环境为 Python 3.13.7、MongoDB 6.0.1、Flask 3.1.2、PyMongo 4.18.1；Python 依赖以 requirements.txt 为准。前端不需要 Node.js 构建。启动、端口和数据库配置见上文。
-
-### 数据库结构摘要
-
-本系统使用五个 MongoDB 集合，集合不等同于关系数据库表。
-
-| 集合 | Schema 主要字段 | 作用和组织方式 |
+| 变量 | 默认值 | 用途 |
 |---|---|---|
-| users | _id、username、password_hash、created_at | 用户账号；密码保存带盐哈希 |
-| sessions | _id、user_id、expires_at | 可撤销会话；令牌摘要作为 ID，引用用户 |
-| surveys | _id、owner_id、title、description、status、allow_anonymous、allow_repeat、deadline、questions、revision、schema_version、created_at、updated_at、published_at | 问卷引用创建者；questions 数组嵌入题目、options、validation、jumps |
-| fill_progress | _id、survey_id、user_id、survey_revision、revision、answers、anonymous、request_id、updated_at | 每账号每问卷一份有效进度，保存已确认答案；不进入统计 |
-| responses | _id、survey_id、user_id、anonymous、submission_key、request_id、survey_revision、answers、path、created_at | 每次提交独立文档，引用问卷及用户；answers 嵌入题目 ID 与回答值 |
+| MONGO_URI | mongodb://127.0.0.1:27017/ | 数据库连接地址 |
+| MONGO_DB | mongodb_survey_course | 应用数据库名称 |
+| PORT | 5050 | 本地服务端口 |
+| TEST_MONGO_URI | mongodb://127.0.0.1:27017/ | 自动化测试数据库服务器 |
 
-ID 使用字符串，时间使用 BSON Date，版本为整数。题目随问卷读取所以嵌入，答卷持续增长所以单独保存；用稳定 ID 关联答案，避免依赖可变文案。完整字段、约束、索引与嵌套取舍见[数据库设计](docs/数据库与系统设计.md)、[Schema](database/schema.json)及初始化实现 backend/database.py。
+[.env.example](.env.example)提供配置示例；程序读取进程环境变量，不自动加载.env。初始化会创建缺少的集合和索引，不清空现有数据，也不覆盖已有验证器。服务绑定本机地址，未进行公网部署或压力测试。
 
-### API 摘要
+从早期“账号与草稿”版本升级时，先运行 `python scripts/migrate_drafts.py`，扩展已知验证器并补齐默认设置。完整第一阶段升级到第二阶段无需清空数据库。旧服务需重启后加载新增接口。
 
-接口前缀为 /api，JSON 请求；除健康检查、注册、登录外均须 Bearer token，管理操作须属于本人。完整输入、输出、错误码见[API说明](docs/API说明.md)。
+本机快捷启动可使用start.ps1，它依赖同级lab1的MongoDB启动脚本；其他机器使用上述标准步骤。可选演示脚本 `python scripts/seed_demo.py` 通过HTTP接口生成测试账号和一份四题问卷，输出登录信息及分享链接。修改端口时传入 `--base http://127.0.0.1:端口`。
 
-| 方法 | 路径（省略 /api） | 用途 |
+## 数据库设计
+
+当前使用七个集合，完整字段与约束见[Schema](database/schema-stage2.json)，初始化和索引见[backend/database.py](backend/database.py)。
+
+| 集合 | 主要字段 | 作用与组织方式 |
 |---|---|---|
-| POST | /auth/register、/auth/login、/auth/logout | 注册、登录、退出 |
-| GET | /auth/me | 当前用户 |
-| GET / POST | /surveys | 本人列表 / 创建草稿 |
-| GET / PATCH | /surveys/{sid} | 读取 / 编辑本人草稿 |
-| POST | /surveys/{sid}/questions | 添加题目 |
-| PUT / DELETE | /surveys/{sid}/questions/{qid} | 编辑 / 删除题目 |
-| POST | /surveys/{sid}/questions/{qid}/validate | 单题校验预览 |
-| POST | /surveys/{sid}/publish、/surveys/{sid}/close | 发布、关闭 |
-| GET | /public/surveys/{sid} | 登录后读取分享问卷 |
-| POST | /public/surveys/{sid}/evaluate | 按答案计算有效路径与下一题 |
-| GET / PUT | /public/surveys/{sid}/progress | 读取 / 乐观版本保存本人的填写进度 |
-| POST | /public/surveys/{sid}/responses | 校验路径并保存答卷 |
-| GET | /surveys/{sid}/statistics | 整卷统计 |
-| GET | /surveys/{sid}/questions/{qid}/statistics | 单题统计 |
-| GET | /surveys/{sid}/responses | 本人问卷脱敏答卷列表 |
+| users | _id、username、password_hash、created_at | 账号与密码哈希 |
+| sessions | _id、user_id、expires_at | 令牌摘要、用户引用和过期时间 |
+| surveys | owner_id、title、status、questions、revision、schema_version | 题目、选项、校验和跳转规则嵌入问卷；来源题另记source |
+| fill_progress | survey_id、user_id、survey_revision、revision、answers、request_id | 每账号每问卷一份有效进度，与正式答卷分开 |
+| responses | survey_id、user_id、anonymous、submission_key、request_id、answers、path、created_at | 每次提交独立保存，answers嵌入题目ID和回答值 |
+| question_banks | owner_id、title、description、created_at | 题库分组及所有者 |
+| library_questions | owner_id、bank_id、shared_with、working_copy、versions、current_version、revision | 题目权限、工作稿与不可变历史版本 |
 
-### 测试证据与课堂补充
+ID采用字符串，时间使用BSON Date。revision是整数并发修订号，题库版本使用独立字符串ID。题目随问卷一起读取，因此保留嵌入副本；答卷持续增长，独立存储。题库历史与当前指针同文档条件更新，每题最多100个已提交版本。
 
-tests/ 保存自动化与浏览器测试，docs/测试说明.md 列出步骤、输入和期望，tests/results/latest.json 保存已有自动化实际结果，tests/results/浏览器检查.md 保存页面实际结果。详细证据不以“计划测试”代替“测试通过”。
+第一阶段五集合设计见[数据库与系统设计](docs/数据库与系统设计.md)；第二阶段的扩展理由、版本语义及权限范围见[实施设计](第二阶段/实施设计-2026-10-23.md)。[database/schema.json](database/schema.json)保留第一阶段结构。
 
-2026-10-16 助教补充强调后端、Schema、AI 引导与可扩展性，详见[补充核对与交付清单](docs/课堂补充核对-2026-10-16.md)。随后新增填写进度保存与恢复，31项真实MongoDB自动化测试通过，并实际验证浏览器刷新、分支切换和统计。
+## API
+
+接口前缀为/api，使用JSON。除健康检查、注册和登录外，需要 `Authorization: Bearer <token>`。问卷管理接口校验所有者；共享题目的读取与导入按共享名单授权。
+
+| 模块 | 主要接口 |
+|---|---|
+| 账号 | /auth/register、/auth/login、/auth/logout、/auth/me |
+| 问卷 | /surveys、/surveys/{sid}、/surveys/{sid}/questions |
+| 发布与关闭 | /surveys/{sid}/publish、/surveys/{sid}/close |
+| 填写与进度 | /public/surveys/{sid}及其/evaluate、/progress、/responses |
+| 单卷统计 | /surveys/{sid}/statistics、/surveys/{sid}/questions/{qid}/statistics |
+| 答卷列表 | /surveys/{sid}/responses |
+| 题库 | /banks、/banks/{bid}、/library/questions |
+| 题目版本与共享 | /library/questions/{lid}及其/restore、/sharing |
+| 导入与跨卷查询 | /surveys/{sid}/library-import、/library/questions/{lid}/usage、/library/questions/{lid}/statistics |
+
+上表为分组摘要。35个接口的完整路径、方法、输入、响应及错误码见[基础API](docs/API说明.md)和[题库API](第二阶段/API与测试说明.md)。
+
+## 测试与检查
 
 ```powershell
 .\.venv\Scripts\python.exe tests/run_tests.py
+.\.venv\Scripts\python.exe scripts/check_stage2.py
 ```
 
-测试须连接MongoDB，会创建随机测试库并在结束时清理，当前结果写入 `tests/results/stage2-latest.json`，阶段一latest.json保留；不要用Python的-O参数。手工测试步骤、API和设计理由分别见：
+自动化测试使用真实MongoDB，创建随机survey_test_数据库并在结束后清理。请勿使用Python的-O参数，测试依赖assert。最近一次完整运行通过52项，结果保存在[stage2-latest.json](tests/results/stage2-latest.json)。其中包括第一阶段38项回归，以及题库版本、权限、并发、旧问卷保护、数字分布和文本分页等14项测试。
 
-- [数据库与系统设计](docs/数据库与系统设计.md)
-- [API说明](docs/API说明.md)
-- [测试说明](docs/测试说明.md)
-- [需求核对与实现约定](docs/需求与进度.md)
-- [操作与演示](docs/操作与演示.md)
-- [第一阶段完成报告](reports/第一阶段完成报告.md)及[可打印HTML](reports/第一阶段完成报告.html)
+浏览器检查覆盖题库创建、工作稿、版本提交与恢复、旧版本导入、引用位置、数字分布、文本翻页和390px宽度布局，记录见[stage2-browser.json](tests/results/stage2-browser.json)。测试范围和输入输出见[API与测试说明](第二阶段/API与测试说明.md)。尚未进行大规模性能和全浏览器兼容性验证。
 
-HTML可直接用浏览器打印为PDF。第一阶段报告已交，原同步工具align_stage1_delivery.py和check_submission.py仅在第一阶段快照使用；第二阶段开发不覆盖该报告。Schema单独导出使用 `python scripts/export_materials.py --schema-only`，当前写入schema-stage2.json，不影响原报告及schema.json。
+check_stage2.py检查Schema、API、保存的测试结果及报告文件是否一致，不重新执行业务测试。启动环境可用 `python scripts/check_environment.py` 检查；未启动MongoDB时可加--skip-mongo。第一阶段38项原始记录在[latest.json](tests/results/latest.json)，旧材料检查脚本check_submission.py适用于第一阶段提交快照。
+
+## 文档与报告
+
+| 内容 | 入口 |
+|---|---|
+| 第二阶段需求覆盖 | [需求实现与验收对应](第二阶段/需求实现与验收对应.md) |
+| 第二阶段设计 | [实施设计](第二阶段/实施设计-2026-10-23.md) |
+| 第二阶段报告草稿 | [正文](第二阶段/第二阶段完成报告草稿.md)、[PDF](第二阶段/报告草稿/2026_ECNU_PJ1_2_温正泽-草稿.pdf)、[Word](第二阶段/报告草稿/2026_ECNU_PJ1_2_温正泽-草稿-可编辑.docx)、[可编辑网页](第二阶段/报告草稿/2026_ECNU_PJ1_2_温正泽-草稿-可编辑.html) |
+| 第一阶段报告 | [正文](reports/第一阶段完成报告.md)、[PDF](第一阶段/提交材料/AI过程修订版/2026_ECNU_PJ1_1_温正泽.pdf) |
+| 基础功能操作 | [操作与演示](docs/操作与演示.md) |
+| AI使用记录 | [ai_logs](ai_logs/)，包含实际需求引导、问题、修正与测试依据 |
+
+第二阶段报告目前为6页草稿，待核对后定稿。第一阶段报告保留已提交版本；排版过程和早期材料不作为当前报告入口。
 
 ## 提交材料
 
-第一阶段的上传范围、PDF命名及最后操作见[提交前说明](第一阶段/提交材料/提交前说明.md)，用户已确认上传。第二阶段使用check_stage2.py检查当前材料，报告仍待编写；材料检查不代替PDF排版、教师访问权限及平台提交状态检查。
+两阶段共用本仓库。第一阶段提交快照为stage1-submission-20261023（0cdfefd）；第二阶段在main上继续开发。仓库为公开仓库。
 
-两个阶段均须提供可运行代码及配置说明、MongoDB Schema、系统和数据库设计、API 与关键逻辑说明、测试步骤和实际结果、完整报告以及真实 AI 使用说明。设计决定及未确认事项须注明依据。
+GitHub保存可运行的前后端、配置说明、README、Schema、系统设计、API、测试用例和结果，以及AI使用说明。水杉上传项目完成报告PDF，仓库链接放在报告最前面。
 
-当前测试覆盖创建、题目、跳转、校验、提交、统计及权限/并发/兼容性。报告和真实AI日志已整理；尚未进行公网部署或压力测试，尚未创建最终提交标签。
+| 阶段 | 报告文件名 | 截止时间（北京时间） |
+|---|---|---|
+| 第一阶段 | 2026_ECNU_PJ1_1_温正泽.pdf | 2026-10-23 00:00 |
+| 第二阶段 | 2026_ECNU_PJ1_2_温正泽.pdf | 2026-10-30 00:00 |
 
-2026-10-21借鉴参考成果的展示方式，补充选项条形图及分母说明、题型对应的跳转条件、目标建议和规则优先级调整。报告增加Schema节选、输入输出示例及真实统计截图，HTML内嵌图片。验证记录见[参考展示优化](tests/results/参考借鉴优化-2026-10-21.md)，不将参考报告的功能或测试冒充本项目成果。
-
-2026-10-22补集合图、设计取舍与AI贡献说明，并修正题型切换规则入口、首次保存防连点、统计加载与乱序、快照版本绑定、统计单次facet及整卷容量。完整执行38项通过，新增浏览器检查单独记录。随后按用户补充，以课堂重点和本项目已有功能重新组织报告，突出进度、路径、正式答卷与统计的关系，业务代码保持不变。详见[设计特点与课堂要求](docs/第一阶段设计特点与课堂要求.md)、[技术对照与优化](docs/第一阶段参考对照与优化-2026-10-22.md)、[本轮验证](tests/results/第一阶段参考优化-2026-10-22.md)。
-
-仓库当前采用私有权限；向教师提交前应确认教师有访问权限及课程的提交要求。真实凭据、本地数据库文件和未脱敏用户数据不提交。
-
-最新字体优化仅调整HTML/PDF：中文宋体、英文数字Times New Roman，正文10.5pt、1.5倍行距，表格9.3pt、1.4倍行距，标题黑体。PDF仍9页。旧PDF保留，当前上传入口为提交材料/字体优化版下同名PDF；Word副本正文一致，仍保留此前字体设置。
-
-最新分层图示版为10页PDF，包含重新绘制的五集合图、新增分层架构图及原数据统计图（图3）。SVG/PNG与绘图代码、图示依据见[分层图示说明](docs/分层图示说明.md)。旧版页数说明仅对应其历史稿，当前以manifest中的PDF路径和页数为准。
-
-最终复核：当前PDF位于提交材料/最终提交版，10页。图示另用青绿、蓝灰、陶粉、淡紫配色和编号圆角层级，绘图脚本输出*-final.svg；图中文字与实际实现对应，报告文字、统计数据及业务代码未变。
-
-AI使用过程修订：当前PDF与Word共11页，按帮助、引导与调整、问题、设计思考重整第六章，保留真实AI分工与已有问题依据；其他章节、图和业务实现不变。当前提交路径以本页PDF链接及manifest为准。
+第二阶段应在10月29日结束前提交，正式文件去掉“草稿”后缀。完整规则见[网页提交要求](docs/网页提交要求.md)。仓库不保存真实凭据、本地数据库文件或未脱敏业务数据。
