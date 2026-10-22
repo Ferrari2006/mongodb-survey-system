@@ -25,6 +25,10 @@
 
 目录包括backend、frontend、database、tests、docs、reports、ai_logs和scripts。Schema与索引以backend/database.py为准，database/schema.json是导出结构。第二阶段课堂转写及正式需求Word均已读取，8项扩展要求已记录，尚未开发。
 
+## 批阅导航
+
+从[批阅与验收入口](docs/批阅与验收入口.md)查看“设计→实现→操作→测试证据”的对应关系。环境只读检查为 `python scripts/check_environment.py`，材料一致性检查为 `python scripts/check_submission.py`，业务测试为 `python tests/run_tests.py`；三者验证范围不同。
+
 ## 本地运行
 
 需要 Python 3.10或以上和可连接的 MongoDB（本机验证版本为Python 3.13.7、MongoDB 6.0.1）。从仓库根目录执行：

@@ -1,0 +1,173 @@
+{
+  "scope": "Read-only script smoke checks; separate from 38 business tests",
+  "cases": [
+    {
+      "scenario": "normal",
+      "exit_code": 0,
+      "output": {
+        "checked_at_utc": "2026-10-22T15:09:57.628657+00:00",
+        "read_only": true,
+        "successful": true,
+        "checks": [
+          {
+            "check": "python",
+            "status": "passed",
+            "detail": "Python 3.13.7; requires >=3.10"
+          },
+          {
+            "check": "Flask",
+            "status": "passed",
+            "detail": "3.1.2; pinned=3.1.2"
+          },
+          {
+            "check": "pymongo",
+            "status": "passed",
+            "detail": "4.18.1; pinned=4.18.1"
+          },
+          {
+            "check": "frontend/index.html",
+            "status": "passed",
+            "detail": "Required project file"
+          },
+          {
+            "check": "frontend/app.js",
+            "status": "passed",
+            "detail": "Required project file"
+          },
+          {
+            "check": "frontend/style.css",
+            "status": "passed",
+            "detail": "Required project file"
+          },
+          {
+            "check": "database/schema.json",
+            "status": "passed",
+            "detail": "Required project file"
+          },
+          {
+            "check": "port",
+            "status": "passed",
+            "detail": "PORT must be an integer from 1 to 65535"
+          },
+          {
+            "check": "mongodb",
+            "status": "passed",
+            "detail": "Ping succeeded; collection permissions and API behavior are not tested"
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "invalid_port",
+      "exit_code": 1,
+      "output": {
+        "checked_at_utc": "2026-10-22T15:09:58.638228+00:00",
+        "read_only": true,
+        "successful": false,
+        "checks": [
+          {
+            "check": "python",
+            "status": "passed",
+            "detail": "Python 3.13.7; requires >=3.10"
+          },
+          {
+            "check": "Flask",
+            "status": "passed",
+            "detail": "3.1.2; pinned=3.1.2"
+          },
+          {
+            "check": "pymongo",
+            "status": "passed",
+            "detail": "4.18.1; pinned=4.18.1"
+          },
+          {
+            "check": "frontend/index.html",
+            "status": "passed",
+            "detail": "Required project file"
+          },
+          {
+            "check": "frontend/app.js",
+            "status": "passed",
+            "detail": "Required project file"
+          },
+          {
+            "check": "frontend/style.css",
+            "status": "passed",
+            "detail": "Required project file"
+          },
+          {
+            "check": "database/schema.json",
+            "status": "passed",
+            "detail": "Required project file"
+          },
+          {
+            "check": "port",
+            "status": "failed",
+            "detail": "PORT must be an integer from 1 to 65535"
+          },
+          {
+            "check": "mongodb",
+            "status": "not_checked",
+            "detail": "Explicitly skipped; database readiness is unknown"
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "invalid_uri",
+      "exit_code": 1,
+      "output": {
+        "checked_at_utc": "2026-10-22T15:09:59.139032+00:00",
+        "read_only": true,
+        "successful": false,
+        "checks": [
+          {
+            "check": "python",
+            "status": "passed",
+            "detail": "Python 3.13.7; requires >=3.10"
+          },
+          {
+            "check": "Flask",
+            "status": "passed",
+            "detail": "3.1.2; pinned=3.1.2"
+          },
+          {
+            "check": "pymongo",
+            "status": "passed",
+            "detail": "4.18.1; pinned=4.18.1"
+          },
+          {
+            "check": "frontend/index.html",
+            "status": "passed",
+            "detail": "Required project file"
+          },
+          {
+            "check": "frontend/app.js",
+            "status": "passed",
+            "detail": "Required project file"
+          },
+          {
+            "check": "frontend/style.css",
+            "status": "passed",
+            "detail": "Required project file"
+          },
+          {
+            "check": "database/schema.json",
+            "status": "passed",
+            "detail": "Required project file"
+          },
+          {
+            "check": "port",
+            "status": "passed",
+            "detail": "PORT must be an integer from 1 to 65535"
+          },
+          {
+            "check": "mongodb",
+            "status": "failed",
+            "detail": "ValueError; check service, MONGO_URI and MONGO_DB; connection details omitted"
+          }
+        ]
+      }
+    }
+  ]
+}
