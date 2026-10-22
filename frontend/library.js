@@ -41,4 +41,27 @@ $("library-use").onclick=action(async()=>{if(!libraryItem||!libraryTarget)throw 
 $("library-restore").onclick=action(async()=>{if(!libraryItem||!confirm("将选定版本恢复为一个新版本，保留全部历史？"))return;const r=await api(`/library/questions/${libraryItem._id}/restore`,"POST",{revision:libraryItem.revision,version:$("library-version").value});await listLibrary();await openLibraryItem(r._id);message("已恢复并生成新版本");});
 $("library-share").onclick=action(async()=>{const r=await api(`/library/questions/${libraryItem._id}/sharing`,"PUT",{revision:libraryItem.revision,usernames:$("library-users").value.split(/[,，]/).map(s=>s.trim()).filter(Boolean)});await openLibraryItem(r._id);message("共享权限已更新；对方可读取版本并导入，不能修改原题");});
 $("library-usage").onclick=action(async()=>{const r=await api(`/library/questions/${libraryItem._id}/usage`),out=$("library-result");out.replaceChildren(node("h3","题目使用位置"));for(const i of r.items)out.append(node("p",`${i.title} · ${i.status} · ${i.question_id} · ${i.version.slice(0,8)}${i.locally_changed?" · 本卷内容已调整":""}`));out.append(node("p",`其他用户问卷中的题目引用数：${r.external_occurrences}（不显示其问卷名称或答卷）`));});
-$("library-stats").onclick=action(async()=>{if(!libraryItem)throw Error("请先保存题目");const r=await api(`/library/questions/${libraryItem._id}/statistics`),out=$("library-result");out.replaceChildren(node("h3","本人问卷中的跨卷统计"),node("p","按来源版本与实际题目定义分组；同一题在两份问卷中各回答一次，计为两次作答。"));for(const g of r.groups){const card=node("article",undefined,"card");card.append(node("h3",g.title),node("p",`版本 ${g.version.slice(0,8)} · ${g.instances.length} 个题目位置 · ${g.answer_count} 次有效作答${g.locally_changed?" · 本卷已调整，单独统计":""}`));if(g.options)for(const o of g.options)card.append(node("p",`${o.label}：${o.count} 次（${g.answer_count?(100*o.count/g.answer_count).toFixed(1):0}%）`));else if(g.type==="number")card.append(node("p",`平均值：${g.average??"暂无"}`));else for(const v of g.values)card.append(node("p",v));out.append(card);}if(!r.groups.length)out.append(node("p","本人问卷中尚未引用该题。"));});
+async function renderLibraryStatistics(page=1){
+  if(!libraryItem)throw Error("请先保存题目");
+  const r=await api(`/library/questions/${libraryItem._id}/statistics?page=${page}`),out=$("library-result");
+  out.replaceChildren(node("h3","本人问卷中的跨卷统计"),node("p","按来源版本与实际题目定义分组；同一题在两份问卷中各回答一次，计为两次作答。"));
+  for(const g of r.groups){
+    const card=node("article",undefined,"card");
+    card.append(node("h3",g.title),node("p",`版本 ${g.version.slice(0,8)} · ${g.instances.length} 个题目位置 · ${g.answer_count} 次有效作答${g.locally_changed?" · 本卷已调整，单独统计":""}`));
+    if(g.options)for(const o of g.options)card.append(node("p",`${o.label}：${o.count} 次（${g.answer_count?(100*o.count/g.answer_count).toFixed(1):0}%）`));
+    else if(g.type==="number"){
+      card.append(node("p",`平均值：${g.average??"暂无"}；最小值：${g.minimum??"暂无"}；最大值：${g.maximum??"暂无"}`));
+      card.append(node("p","根据当前数据自动划分最多10个区间，左端包含，右端不含；最后一个区间包含右端。", "muted"));
+      const table=node("table"),head=node("tr");head.append(node("th","数值区间"),node("th","作答次数"));table.append(head);
+      for(const b of g.distribution||[]){const row=node("tr");row.append(node("td",`[${b.minimum}, ${b.maximum}${b.upper_inclusive?"]":")"}`),node("td",String(b.count)));table.append(row);}
+      card.append(table);if(!g.answer_count)card.append(node("p","尚无有效数字回答"));
+    }else{
+      for(const v of g.values)card.append(node("p",v));
+      const nav=node("div",undefined,"actions"),previous=button("上一页文本",()=>renderLibraryStatistics(page-1)),next=button("下一页文本",()=>renderLibraryStatistics(page+1));
+      previous.disabled=page===1;next.disabled=page*20>=g.answer_count;nav.append(previous,node("span",`第 ${page} 页 / 共 ${g.answer_count} 条`),next);card.append(nav);
+    }
+    out.append(card);
+  }
+  if(!r.groups.length)out.append(node("p","本人问卷中尚未引用该题。"));
+}
+$("library-stats").onclick=action(()=>renderLibraryStatistics());

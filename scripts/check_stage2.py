@@ -1,6 +1,7 @@
 """Validate the stage-two working tree without rewriting submitted stage-one evidence."""
 import ast
 import json
+import hashlib
 import re
 import subprocess
 import sys
@@ -38,6 +39,15 @@ def main():
     result=subprocess.run(['git','-c','safe.directory='+ROOT.as_posix(),'diff','--name-only','stage1-submission-20261023','--',
         'reports/','第一阶段/提交材料/','database/schema.json','tests/results/latest.json'],cwd=ROOT,capture_output=True,text=True,encoding='utf-8',check=True)
     assert not result.stdout.strip(),'Stage-one evidence changed: '+result.stdout
+    draft=ROOT/'第二阶段/报告草稿/draft-manifest.json'
+    if draft.exists():
+        manifest=json.loads(draft.read_text(encoding='utf-8'))
+        source=ROOT/'第二阶段/第二阶段完成报告草稿.md'
+        assert hashlib.sha256(source.read_bytes()).hexdigest()==manifest['source_sha256'],'Draft source changed; regenerate drafts'
+        assert manifest['recorded_tests']==observed['tests_run'],'Draft test count is stale'
+        for name,digest in manifest['files_sha256'].items():
+            assert hashlib.sha256((draft.parent/name).read_bytes()).hexdigest()==digest,'Draft changed: '+name
+        print(f'Stage-two draft: {manifest["pdf_pages"]} pages; HTML/Word/PDF hashes match reviewed copies.')
     print(f'{len(SCHEMAS)} collections; {len(defined)} API routes; {observed["tests_run"]} observed tests passed; browser passed; stage-one report unchanged.')
 
 if __name__=='__main__':main()

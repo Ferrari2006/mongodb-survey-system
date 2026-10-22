@@ -40,11 +40,39 @@ async (page) => {
   await page.getByText('指定版本已加入问卷，可返回调整顺序与跳转',{exact:true}).waitFor();
   await page.locator('#library-usage').click();
   await page.locator('#library-result').getByText(/题库引用浏览器验证/).waitFor();
+  // API fixtures prepare submitted answers; the assertions below exercise rendered UI.
+  const token=await page.evaluate(()=>sessionStorage.getItem('survey_token'));
+  const request=async(method,path,data)=>{
+    const r=await page.request.fetch('http://127.0.0.1:5052/api'+path,{method,data,headers:{Authorization:'Bearer '+token}});
+    const result=await r.json();if(!r.ok())throw Error(JSON.stringify(result));return result;
+  };
+  const bank=await page.locator('#library-bank option').nth(1).getAttribute('value');
+  const number=(await request('POST','/library/questions',{bank_id:bank,question:{title:'年龄分布验证',type:'number',required:true,validation:{min:0,max:100}}})).item;
+  const text=(await request('POST','/library/questions',{bank_id:bank,question:{title:'建议分页验证',type:'text',required:true}})).item;
+  const prepare=async(item,values)=>{
+    let s=await request('POST','/surveys',{title:'统计页面测试',allow_repeat:true});
+    s=await request('POST',`/surveys/${s._id}/library-import`,{revision:s.revision,library_id:item._id,version:item.current_version,question_id:'q1'});
+    await request('POST',`/surveys/${s._id}/publish`,{revision:s.revision});
+    for(const [i,value] of values.entries())await request('POST',`/public/surveys/${s._id}/responses`,{answers:{q1:value},request_id:'browser-'+item._id+'-'+i});
+  };
+  await prepare(number,[0,8]);await prepare(text,Array.from({length:21},(_,i)=>'建议'+i));
+  await page.locator('#library-mine').click();
+  await page.locator('#library-list article').filter({hasText:'年龄分布验证'}).getByRole('button',{name:'查看版本与使用'}).click();
+  await page.locator('#library-stats').click();
+  await page.locator('#library-result').getByText('平均值：4；最小值：0；最大值：8',{exact:true}).waitFor();
+  if(await page.locator('#library-result table tr').count()<2)throw Error('Missing numeric distribution');
+  await page.locator('#library-result').screenshot({path:'output/playwright/stage2-numeric-distribution.png'});
+  await page.locator('#library-list article').filter({hasText:'建议分页验证'}).getByRole('button',{name:'查看版本与使用'}).click();
+  await page.locator('#library-stats').click();
+  await page.locator('#library-result').getByText('第 1 页 / 共 21 条',{exact:true}).waitFor();
+  await page.getByRole('button',{name:'下一页文本',exact:true}).click();
+  await page.locator('#library-result').getByText('第 2 页 / 共 21 条',{exact:true}).waitFor();
+  await page.locator('#library-result').getByText('建议20',{exact:true}).waitFor();
   await page.locator('#library-back').click();
   await page.locator('#question-list').getByText('1. 共享与版本测试题',{exact:true}).waitFor();
   await page.setViewportSize({width:390,height:844});
   if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2))throw Error('Mobile overflow');
   await page.screenshot({path:'output/playwright/stage2-library-mobile.png',fullPage:true});
   if(errors.length)throw Error(errors.join('\n'));
-  return {successful:true,username:name,flows:['bank','working copy','commit','restore','old-version import','usage','mobile layout'],pageErrors:errors};
+  return {successful:true,username:name,flows:['bank','working copy','commit','restore','old-version import','usage','numeric distribution','text pagination','mobile layout'],pageErrors:errors};
 }

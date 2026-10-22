@@ -141,7 +141,7 @@ def create_app(config=None):
     @app.get("/api/health")
     def health():
         db.command("ping")
-        return jsonify(status="ok", milestone="stage1")
+        return jsonify(status="ok", milestone="stage2")
 
     @app.post("/api/auth/register")
     def register():

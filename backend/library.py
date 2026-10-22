@@ -212,6 +212,8 @@ def register_library(app, db, login_required, payload, owned, save):
     @login_required
     def cross_survey_statistics(lid):
         item=accessible(lid)
+        text_page=pagination()
+        text_offset=(text_page-1)*20
         selected=request.args.get('version')
         if selected:version(item,selected)
         surveys=list(db.surveys.find({'owner_id':g.user_id,'questions.source.library_id':lid}))
@@ -229,24 +231,44 @@ def register_library(app, db, login_required, payload, owned, save):
                 condition={'survey_id':survey['_id'],'answers.question_id':q['id']};match.append(condition)
                 branches.append({'case':{'$and':[{'$eq':['$survey_id',survey['_id']]},{'$eq':['$answers.question_id',q['id']]}]},'then':key})
         # Each answer occurrence belongs to exactly one local question and compatibility group.
-        data={'counts':[],'options':[],'numbers':[],'texts':[]}
+        facets={
+            'counts':[{'$group':{'_id':'$_group','count':{'$sum':1}}}],
+            'options':[{'$match':{'_group':{'$in':[k for k,v in groups.items() if v['type'] in ('single','multiple')]}}},
+                {'$unwind':'$answers.value'},{'$group':{'_id':{'g':'$_group','value':'$answers.value'},'count':{'$sum':1}}}],
+            'numbers':[{'$match':{'answers.value':{'$type':'number'}}},{'$group':{'_id':'$_group',
+                'average':{'$avg':'$answers.value'},'minimum':{'$min':'$answers.value'},'maximum':{'$max':'$answers.value'}}}]
+        }
+        # Page text and bucket numbers inside their facets, so the returned document
+        # does not grow with every text answer. All groups use the same answer input.
+        for i,(key,group) in enumerate(groups.items()):
+            if group['type']=='number':
+                facets[f'distribution_{i}']=[{'$match':{'_group':key}},
+                    {'$bucketAuto':{'groupBy':'$answers.value','buckets':10}}]
+            elif group['type']=='text':
+                facets[f'text_{i}']=[{'$match':{'_group':key}},
+                    {'$sort':{'created_at':1,'_id':1}}, {'$skip':text_offset},{'$limit':20},
+                    {'$project':{'_id':0,'value':'$answers.value'}}]
+        data={key:[] for key in facets}
         if match:
             data=list(db.responses.aggregate([
                 {'$match':{'survey_id':{'$in':[s['_id'] for s in surveys]}}},
                 {'$unwind':'$answers'},{'$match':{'$or':match}},
                 {'$set':{'_group':{'$switch':{'branches':branches,'default':None}}}},
-                {'$facet':{
-                    'counts':[{'$group':{'_id':'$_group','count':{'$sum':1}}}],
-                    'options':[{'$unwind':'$answers.value'},{'$group':{'_id':{'g':'$_group','value':'$answers.value'},'count':{'$sum':1}}}],
-                    'numbers':[{'$match':{'answers.value':{'$type':'number'}}},{'$group':{'_id':'$_group','average':{'$avg':'$answers.value'}}}],
-                    'texts':[{'$match':{'answers.value':{'$type':'string'}}},{'$group':{'_id':'$_group','values':{'$push':'$answers.value'}}}]
-                }}]))[0]
+                {'$facet':facets}]))[0]
         counts={r['_id']:r['count'] for r in data['counts']}
         options={(r['_id']['g'],r['_id']['value']):r['count'] for r in data['options']}
-        numbers={r['_id']:r['average'] for r in data['numbers']};texts={r['_id']:r['values'] for r in data['texts']}
-        for key,group in groups.items():
+        numbers={r['_id']:r for r in data['numbers']}
+        for i,(key,group) in enumerate(groups.items()):
             q=group.pop('question');group['answer_count']=counts.get(key,0)
             if q['type'] in ('single','multiple'):group['options']=[{**o,'count':options.get((key,o['id']),0)} for o in q['options']]
-            elif q['type']=='number':group['average']=numbers.get(key)
-            else:group['values']=texts.get(key,[])
+            elif q['type']=='number':
+                summary=numbers.get(key,{})
+                for field in ('average','minimum','maximum'):group[field]=summary.get(field)
+                group['distribution']=[{'minimum':b['_id']['min'],'maximum':b['_id']['max'],
+                    'count':b['count'],'upper_inclusive':j==len(data[f'distribution_{i}'])-1}
+                    for j,b in enumerate(data[f'distribution_{i}'])]
+                group['distribution_method']='automatic_buckets_up_to_10'
+            else:
+                group['values']=[r['value'] for r in data[f'text_{i}']]
+                group['page']=text_page;group['page_size']=20
         return jsonify(library_id=lid,scope='owned_surveys_only',counting_unit='answered_question_occurrence',groups=list(groups.values()))

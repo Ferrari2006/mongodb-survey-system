@@ -19,7 +19,7 @@
 | PUT | /library/questions/{lid}/sharing | revision、usernames数组 | 仅作者；替换共享名单，不存在的账号拒绝；空数组撤销 |
 | POST | /surveys/{sid}/library-import | revision、library_id、version、question_id | 本人草稿问卷加入指定版本副本，返回问卷 |
 | GET | /library/questions/{lid}/usage | 无 | 仅作者；本人引用位置与他人引用次数，不披露他人标题/答卷 |
-| GET | /library/questions/{lid}/statistics | version可选 | 本人问卷中的跨卷分组统计，不跨越答卷所有权 |
+| GET | /library/questions/{lid}/statistics | version可选、page为文本页码 | 本人问卷中的跨卷分组统计，不跨越答卷所有权；文本每组每页20条，数字含分布 |
 
 ## 版本语义与统计口径
 
@@ -28,6 +28,8 @@ revision是并发控制修订号；versions[].id是题目业务版本。工作�
 题目导入问卷后即为独立副本。问卷内可继续编辑来源题，但source元数据由服务器保留，客户端不能伪造。跳转指向本卷的局部题号，所以入库时明确去除跳转并提示，导入后重新配置。
 
 统计按“来源版本ID + 实际定义摘要”分组。改选项、标题、必答或约束的本卷副本分开计算，不自动假定语义等价。跳转配置不影响定义摘要。分母为已提交答卷中的该题有效作答次数，空答和跳过题不计；同一题在两份问卷中各作答一次算两次。多选每项占比除以该题作答次数，合计可能大于100%。数字0参与均值，空组均值为null。共享题不授予查看别人答卷的权限。页面版本缩写仅作展示。
+
+数字组增加minimum、maximum、distribution和distribution_method；distribution每项包含minimum、maximum、count及upper_inclusive。MongoDB自动划分最多10个区间，左闭右开、末项右闭，空组为空数组；它不是固定年龄段。文本组增加page与page_size=20，values仅当前页；answer_count仍为全部有效文本数。page对本次所有文本分组一致，排序为created_at、答卷_id，界面按每组总量控制翻页。
 
 ## 实际测试记录
 
@@ -47,6 +49,8 @@ revision是并发控制修订号；versions[].id是题目业务版本。工作�
 
 浏览器流程 tests/browser_library.js 通过实际点击注册/登录、新建题库、新建题目、保存工作稿、提交版本、恢复、导入首版、查询使用位置及390px移动端布局；结果在 tests/results/stage2-browser.json。页面没有JavaScript异常。首次脚本遗漏注册后的登录步骤，等待超时；补上真实登录后重跑通过，这是测试脚本修正，不是产品登录缺陷。
 
+本轮进一步增加5项真实数据库用例：数字分布与选答空值、空数字组、23条文本分页、共享双方各自答卷统计、非法导入/未知共享对象不落库。完整52项通过，结果文件已更新；第一阶段38项保持原样。浏览器也验证0与8的分布表、21条文本第二页显示及原题库流程，实际结果见浏览器JSON，不将API前置准备说成人工填答。
+
 使用随机 survey_test_ 数据库测试；浏览器使用单独 survey_test_stage2_browser_20261023 数据库。未清空原业务库。浏览器CLI依赖下载受限，改用本机已安装Playwright执行普通脚本，没有引入新的问卷框架。
 
 ## 运行与检查
@@ -55,4 +59,4 @@ revision是并发控制修订号；versions[].id是题目业务版本。工作�
 
 执行 `python scripts/check_stage2.py` 核对集合导出、全部API、真实测试记录、页面结果及第一阶段报告不变。原 scripts/check_submission.py 是第一阶段交付校验，应在stage1-submission-20261023快照使用，不能把第二阶段的新增集合算作第一阶段报告错误。
 
-当前版本尚未生成第二阶段最终报告，后续需补充使用讲解、验收核对及阶段二完成报告。已提交的阶段一PDF不因本次开发更新。
+当前已有第二阶段报告草稿及需求实现与验收对应表，尚需本人核对与正式定稿。已提交的阶段一PDF不因本次开发更新。

@@ -1,0 +1,23 @@
+{
+  "source_sha256": "f4c4feaa12a6da366ebee41073b230deab578f739f96087f3a0d5395405e7ebc",
+  "reference_sha256": "070505b52871c7c75a508915fcb3de00e5e090c232e69d68b901522b7c4d299b",
+  "recorded_tests": 52,
+  "stage": "stage2-review-draft",
+  "files": [
+    "2026_ECNU_PJ1_2_温正泽-草稿-可编辑.html",
+    "2026_ECNU_PJ1_2_温正泽-草稿-可编辑.docx",
+    "2026_ECNU_PJ1_2_温正泽-草稿.pdf"
+  ],
+  "files_sha256": {
+    "2026_ECNU_PJ1_2_温正泽-草稿-可编辑.html": "51e23ce6a7c62cd6513a806ebda9b6767c3af1bb952486bae06f4fe4eb07d469",
+    "2026_ECNU_PJ1_2_温正泽-草稿-可编辑.docx": "acbfa781d72d5f1a63067d51c735194b0f04a886dba078fe64ae493d6f984f3d",
+    "2026_ECNU_PJ1_2_温正泽-草稿.pdf": "0c203953d79f92f500b7c063cac1c3c43006e62b0293223f96b5eeef3065d859"
+  },
+  "pdf_pages": 6,
+  "qa": {
+    "source_text_present": true,
+    "each_page_reviewed": true,
+    "renderer": "Word read-only PDF export; LibreOffice unavailable",
+    "template_styles_preserved": true
+  }
+}

@@ -48,6 +48,7 @@ class LibraryTests(unittest.TestCase):
         return name,lambda method,path,body=None:client.open(path,method=method,json=body,headers={'Authorization':'Bearer '+token})
 
     def test_working_copy_version_branch_and_restore(self):
+        assert self.client.get('/api/health').json['milestone']=='stage2'
         item=self.library();first=deepcopy(item['versions'][0]);q=deepcopy(first['question']);q['title']='修改后的题目'
         item=self.update(item,question=q,create_version=False)
         assert len(item['versions'])==1 and item['versions'][0]==first
@@ -156,3 +157,63 @@ class LibraryTests(unittest.TestCase):
         self.submit(s,{'q1':['a','b']})
         g=self.call('GET',f"/api/library/questions/{item['_id']}/statistics").json['groups'][0]
         assert g['answer_count']==1 and [o['count'] for o in g['options']]==[1,1]
+
+    def test_numeric_distribution_and_optional_skipped_answers(self):
+        item=self.library('number');q=deepcopy(item['working_copy']);q['required']=False
+        item=self.update(item,question=q,create_version=True)
+        empty=self.import_to(item);zero=self.import_to(item);eight=self.import_to(item)
+        self.submit(empty,{'q1':None});self.submit(zero,{'q1':0});self.submit(eight,{'q1':8})
+        g=self.call('GET',f"/api/library/questions/{item['_id']}/statistics").json['groups'][0]
+        assert g['answer_count']==2 and g['average']==4 and g['minimum']==0 and g['maximum']==8
+        assert sum(b['count'] for b in g['distribution'])==2
+        assert g['distribution'][0]['minimum']==0 and g['distribution'][-1]['upper_inclusive']
+        assert all(not b['upper_inclusive'] for b in g['distribution'][:-1])
+
+    def test_empty_numeric_distribution(self):
+        item=self.library('number');self.import_to(item)
+        g=self.call('GET',f"/api/library/questions/{item['_id']}/statistics").json['groups'][0]
+        assert g['answer_count']==0 and g['average'] is None and g['distribution']==[]
+
+    def test_text_answers_are_paged_and_ordered(self):
+        item=self.library('text');s=self.import_to(item)
+        sid=s['_id'];r=self.call('PATCH',f'/api/surveys/{sid}',{'revision':s['revision'],'allow_repeat':True})
+        self.submit(r.json,{'q1':'回答00'})
+        for i in range(1,23):
+            r=self.call('POST',f'/api/public/surveys/{sid}/responses',{'answers':{'q1':f'回答{i:02}'},'request_id':uuid4().hex})
+            assert r.status_code==201,r.json
+        path=f"/api/library/questions/{item['_id']}/statistics"
+        first=self.call('GET',path).json['groups'][0];second=self.call('GET',path+'?page=2').json['groups'][0]
+        assert first['answer_count']==23 and len(first['values'])==20
+        assert second['values']==['回答20','回答21','回答22'] and second['page']==2
+        assert first['values'][0]=='回答00'
+        assert self.call('GET',path+'?page=0').status_code==400
+
+    def test_shared_user_sees_only_own_cross_survey_answers(self):
+        item=self.library();self.submit(self.import_to(item),{'q1':'a'})
+        name,other=self.other();url=f"/api/library/questions/{item['_id']}"
+        shared=self.call('PUT',url+'/sharing',{'revision':item['revision'],'usernames':[name]})
+        assert shared.status_code==200
+        s=other('POST','/api/surveys',{'title':'另一账号答卷隔离'}).json
+        r=other('POST',f"/api/surveys/{s['_id']}/library-import",{'library_id':item['_id'],'version':item['current_version'],'question_id':'other','revision':1})
+        assert r.status_code==200
+        r=other('POST',f"/api/surveys/{s['_id']}/publish",{'revision':r.json['revision']})
+        assert r.status_code==200
+        assert other('POST',f"/api/public/surveys/{s['_id']}/responses",{'answers':{'other':'b'},'request_id':uuid4().hex}).status_code==201
+        owner=self.call('GET',url+'/statistics').json['groups'][0]
+        receiver=other('GET',url+'/statistics').json['groups'][0]
+        assert owner['answer_count']==receiver['answer_count']==1
+        assert [o['count'] for o in owner['options']]==[1,0]
+        assert [o['count'] for o in receiver['options']]==[0,1]
+
+    def test_invalid_import_and_unknown_sharing_leave_data_unchanged(self):
+        item=self.library();s=self.import_to(item);path=f"/api/surveys/{s['_id']}/library-import"
+        original=deepcopy(s['questions'])
+        base={'revision':s['revision'],'question_id':'q1','library_id':item['_id'],'version':item['current_version']}
+        assert self.call('POST',path,base).status_code==400
+        assert self.call('POST',path,{**base,'question_id':'q2','version':'missing'}).status_code==404
+        assert self.call('POST',path,{**base,'question_id':'q2','revision':1}).status_code==409
+        assert self.call('GET',f"/api/surveys/{s['_id']}").json['questions']==original
+        url=f"/api/library/questions/{item['_id']}"
+        r=self.call('PUT',url+'/sharing',{'revision':item['revision'],'usernames':['nobody_'+uuid4().hex[:10]]})
+        assert r.status_code==400
+        assert self.call('GET',url).json['revision']==item['revision']
