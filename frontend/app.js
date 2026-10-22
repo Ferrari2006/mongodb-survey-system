@@ -12,7 +12,7 @@ async function api(path, method="GET", body) {
   return result;
 }
 function action(fn) { return async event => { event?.preventDefault(); try { await fn(event); } catch(error) { message(error.message,true); } }; }
-function show(id) { if(id!=="statistics"){statisticsRequest++;responsesRequest++;}for(const section of ["auth","dashboard","editor","fill","statistics"]) $(section).hidden=section!==id; }
+function show(id) { if(id!=="statistics"){statisticsRequest++;responsesRequest++;}for(const section of ["auth","dashboard","editor","fill","statistics","library"]) {const el=$(section);if(el)el.hidden=section!==id;} }
 function node(tag,text,cls) { const e=document.createElement(tag); if(text!==undefined)e.textContent=text; if(cls)e.className=cls; return e; }
 function constraintText(q) {
   const v=q.validation;
@@ -55,6 +55,7 @@ async function open(id) {survey=await api(`/surveys/${id}`);render();resetQuesti
 function render() {
   show("editor");$("editor-heading").textContent="编辑问卷";$("survey-title").value=survey.title;$("survey-description").value=survey.description;
   const draft=survey.status==="draft";$("allow-anonymous").checked=!!survey.allow_anonymous;$("allow-repeat").checked=!!survey.allow_repeat;
+  $("import-library").disabled=!draft;
   if(survey.deadline){const dt=new Date(survey.deadline);$("deadline").value=new Date(dt.getTime()-dt.getTimezoneOffset()*60000).toISOString().slice(0,16);}else $("deadline").value="";
   for(const e of $("survey-form").elements)e.disabled=!draft;
   $("publish-survey").disabled=!draft;$("close-survey").disabled=survey.status!=="published";$("view-statistics").disabled=false;
@@ -69,6 +70,8 @@ function render() {
     row.append(node("p",constraintText(q),"muted"));
     for(const rule of q.jumps||[])row.append(node("p",jumpText(rule,q)));
     if(!q.jumps?.length)row.append(node("p","按顺序进入下一题","muted"));
+    if(q.source)row.append(node("p",`来源：题库版本 ${q.source.version.slice(0,8)}；本卷修改独立保存`,"muted"));
+    row.append(button("存入我的题库",()=>saveQuestionToLibrary(q)));
     if(draft){const acts=node("div",undefined,"actions");acts.append(button("编辑",()=>edit(q)),button("删除",async()=>{if(!confirm(`删除题目“${q.title}”？`))return;survey=await api(`/surveys/${survey._id}/questions/${q.id}`,"DELETE",{revision:survey.revision});render();resetQuestion();}));row.append(acts);}$("question-list").append(row);
     const opt=node("option",q.title);opt.value=q.id;$("validation-question").append(opt);
   }

@@ -1,5 +1,6 @@
 """Run real tests and save their observed result, not a handwritten pass list."""
 import json
+import argparse
 import platform
 import sys
 import time
@@ -41,6 +42,9 @@ class RecordedResult(unittest.TextTestResult):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--output', default='tests/results/stage2-latest.json', help='Observed result path relative to repository')
+    args = parser.parse_args()
     if not __debug__:
         raise SystemExit("Run without -O: these tests use Python assert.")
     suite = unittest.defaultTestLoader.discover(str(ROOT / "tests"), pattern="test_*.py")
@@ -50,7 +54,9 @@ if __name__ == "__main__":
               "database": "real MongoDB; random survey_test_ database, cleaned after integration tests",
               "tests_run": result.testsRun, "failures": len(result.failures), "errors": len(result.errors),
               "successful": result.wasSuccessful(), "cases": result.records}
-    destination = ROOT / "tests" / "results" / "latest.json"
+    destination = (ROOT / args.output).resolve()
+    if not destination.is_relative_to(ROOT / 'tests' / 'results'):
+        raise SystemExit('Result must stay inside tests/results')
     destination.parent.mkdir(exist_ok=True)
     destination.write_text(json.dumps(report, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
     raise SystemExit(0 if result.wasSuccessful() else 1)

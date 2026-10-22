@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>问卷工作台</title><link rel="stylesheet" href="/static/style.css"><script defer src="/static/app.js"></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>问卷工作台</title><link rel="stylesheet" href="/static/style.css"><script defer src="/static/app.js"></script><script defer src="/static/library.js"></script></head>
 <body>
 <header><div><span class="brand">问卷工作台</span><span class="subtitle">MongoDB 课程项目</span></div><div id="identity"></div></header>
 <main>
@@ -14,6 +14,7 @@
 </section>
 <section id="dashboard" hidden>
 <div class="section-head"><div><h1>我的问卷</h1><p class="muted">从一个问题开始，逐步完善问卷。</p></div><button id="new-survey">新建问卷</button></div>
+<button id="open-library" class="secondary">管理我的题库与共享题目</button>
 <div id="survey-list"></div><div class="actions"><button class="secondary" id="previous-page">上一页</button><span id="page-info"></span><button class="secondary" id="next-page">下一页</button></div>
 </section>
 <section id="editor" hidden>
@@ -21,7 +22,7 @@
 <div class="section-head"><h1 id="editor-heading">编辑问卷</h1><span class="badge">草稿</span></div>
 <form id="survey-form" class="card"><label>问卷标题<input id="survey-title" required maxlength="200"></label><label>问卷说明<textarea id="survey-description" maxlength="2000" rows="3"></textarea></label><label class="check"><input id="allow-anonymous" type="checkbox">允许对创建者匿名提交（仍须登录）</label><label class="check"><input id="allow-repeat" type="checkbox">允许同一账号多次填写</label><label>截止时间（本地时间，可留空）<input id="deadline" type="datetime-local"></label><button type="submit">保存基本信息</button></form>
 <section class="card"><div class="actions"><button id="publish-survey">发布问卷</button><button id="close-survey" class="secondary">关闭问卷</button><button id="view-statistics" class="secondary">查看统计与答卷</button></div><p id="survey-state"></p><label>分享链接<input id="share-url" readonly></label><p class="muted">发布后题目和填写设置固定；需要修改时可创建新问卷。</p></section>
-<h2>问卷题目</h2><div id="question-list"></div>
+<h2>问卷题目</h2><button id="import-library" class="secondary">从题库选择题目</button><div id="question-list"></div>
 <form id="question-form" class="card">
 <h2 id="question-heading">添加题目</h2>
 <div class="grid"><label>题目 ID<input id="question-id" required pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}" placeholder="例如 q1"></label><label>题型<select id="question-type"><option value="single">单选题</option><option value="multiple">多选题</option><option value="text">文本填空</option><option value="number">数字填空</option></select></label></div>

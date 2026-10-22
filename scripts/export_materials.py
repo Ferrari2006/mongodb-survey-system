@@ -12,6 +12,13 @@ from backend.database import SCHEMAS
 
 
 def main():
+    if 'library_questions' in SCHEMAS:
+        if '--schema-only' not in sys.argv:
+            raise SystemExit('Stage two is active. Stage-one report remains frozen; use --schema-only to export schema-stage2.json.')
+        target = ROOT / 'database' / 'schema-stage2.json'
+        target.write_text(json.dumps(SCHEMAS, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+        print(target)
+        return
     if (ROOT/'reports/stage1-report-manifest.json').exists() and '--schema-only' not in sys.argv:
         raise SystemExit('Current report is aligned from its saved editing copy. Review and use scripts/align_stage1_delivery.py --sync-only; use --schema-only for a schema-only export.')
     schema_dir = ROOT / "database"

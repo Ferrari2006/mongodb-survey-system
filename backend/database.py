@@ -44,6 +44,29 @@ SCHEMAS = {
     }
 }
 
+# Additive stage-two collections. Existing business documents and validators stay intact.
+SCHEMAS["question_banks"] = {
+    "bsonType": "object", "required": ["_id", "owner_id", "title", "description", "created_at"],
+    "properties": {"_id": {"bsonType": "string"}, "owner_id": {"bsonType": "string"},
+                   "title": {"bsonType": "string"}, "description": {"bsonType": "string"},
+                   "created_at": {"bsonType": "date"}}
+}
+SCHEMAS["library_questions"] = {
+    "bsonType": "object",
+    "required": ["_id", "owner_id", "bank_id", "title", "working_copy", "versions", "current_version", "revision", "shared_with", "created_at", "updated_at"],
+    "properties": {"_id": {"bsonType": "string"}, "owner_id": {"bsonType": "string"},
+                   "bank_id": {"bsonType": "string"}, "title": {"bsonType": "string"},
+                   "working_copy": {"bsonType": "object"},
+                   "versions": {"bsonType": "array", "minItems": 1, "maxItems": 100,
+                       "items": {"bsonType": "object", "required": ["id", "number", "parent_version", "restored_from", "question", "created_at"],
+                           "properties": {"id": {"bsonType": "string"}, "number": {"bsonType": "int", "minimum": 1},
+                               "parent_version": {"bsonType": ["string", "null"]}, "restored_from": {"bsonType": ["string", "null"]},
+                               "question": {"bsonType": "object"}, "created_at": {"bsonType": "date"}}}},
+                   "current_version": {"bsonType": "string"}, "revision": {"bsonType": "int", "minimum": 1},
+                   "shared_with": {"bsonType": "array", "items": {"bsonType": "string"}},
+                   "created_at": {"bsonType": "date"}, "updated_at": {"bsonType": "date"}}
+}
+
 
 def initialize(db):
     # Existing validators are not silently replaced: future changes need a migration.
@@ -53,6 +76,11 @@ def initialize(db):
         except CollectionInvalid:
             pass
     db.users.create_index("username", unique=True, name="unique_username")
+    db.question_banks.create_index([("owner_id", 1), ("created_at", -1)], name="bank_owner_created")
+    db.library_questions.create_index([("owner_id", 1), ("updated_at", -1)], name="library_owner_updated")
+    db.library_questions.create_index([("shared_with", 1), ("updated_at", -1)], name="library_shared_updated")
+    db.library_questions.create_index([("bank_id", 1), ("updated_at", -1)], name="library_bank_updated")
+    db.surveys.create_index("questions.source.library_id", name="library_usage")
     db.fill_progress.create_index([("survey_id", 1), ("user_id", 1)], unique=True, name="one_active_progress")
     db.sessions.create_index("expires_at", expireAfterSeconds=0, name="session_expiry")
     db.surveys.create_index([("owner_id", 1), ("updated_at", -1)], name="owner_updated")

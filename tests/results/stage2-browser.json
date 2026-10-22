@@ -1,0 +1,15 @@
+{
+  "successful": true,
+  "username": "browser_lib_1792688536557",
+  "flows": [
+    "bank",
+    "working copy",
+    "commit",
+    "restore",
+    "old-version import",
+    "usage",
+    "mobile layout"
+  ],
+  "pageErrors": [],
+  "executed_at_utc": "2026-10-22T17:02:17.552Z"
+}

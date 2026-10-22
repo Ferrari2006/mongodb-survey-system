@@ -1,0 +1,250 @@
+{
+  "executed_at_utc": "2026-10-22T16:57:43.047599+00:00",
+  "python": "3.13.7",
+  "dependencies": {
+    "Flask": "3.1.2",
+    "pymongo": "4.18.1"
+  },
+  "database": "real MongoDB; random survey_test_ database, cleaned after integration tests",
+  "tests_run": 47,
+  "failures": 0,
+  "errors": 0,
+  "successful": true,
+  "cases": [
+    {
+      "test": "test_api.ApiTests.test_auth_password_and_logout",
+      "outcome": "passed",
+      "seconds": 0.3293
+    },
+    {
+      "test": "test_api.ApiTests.test_create_edit_and_owner_isolation",
+      "outcome": "passed",
+      "seconds": 0.3329
+    },
+    {
+      "test": "test_api.ApiTests.test_invalid_question_does_not_write",
+      "outcome": "passed",
+      "seconds": 0.1495
+    },
+    {
+      "test": "test_api.ApiTests.test_malformed_requests_and_schema",
+      "outcome": "passed",
+      "seconds": 0.1538
+    },
+    {
+      "test": "test_api.ApiTests.test_optimistic_concurrent_edit",
+      "outcome": "passed",
+      "seconds": 0.1548
+    },
+    {
+      "test": "test_api.ApiTests.test_question_crud_and_preview",
+      "outcome": "passed",
+      "seconds": 0.1561
+    },
+    {
+      "test": "test_api.ApiTests.test_unauthenticated_and_expired",
+      "outcome": "passed",
+      "seconds": 0.1508
+    },
+    {
+      "test": "test_library.LibraryTests.test_bank_move_source_jump_removal_and_invalid_ids",
+      "outcome": "passed",
+      "seconds": 0.1701
+    },
+    {
+      "test": "test_library.LibraryTests.test_conflicting_writes_reject_stale_revision",
+      "outcome": "passed",
+      "seconds": 0.1568
+    },
+    {
+      "test": "test_library.LibraryTests.test_cross_survey_same_version_aggregation_and_zero",
+      "outcome": "passed",
+      "seconds": 0.1765
+    },
+    {
+      "test": "test_library.LibraryTests.test_distinct_versions_not_silently_merged",
+      "outcome": "passed",
+      "seconds": 0.1787
+    },
+    {
+      "test": "test_library.LibraryTests.test_local_edit_keeps_provenance_and_separates_statistics",
+      "outcome": "passed",
+      "seconds": 0.181
+    },
+    {
+      "test": "test_library.LibraryTests.test_multiple_choice_counts_use_answer_occurrences",
+      "outcome": "passed",
+      "seconds": 0.1677
+    },
+    {
+      "test": "test_library.LibraryTests.test_published_snapshot_and_old_version_reuse",
+      "outcome": "passed",
+      "seconds": 0.1737
+    },
+    {
+      "test": "test_library.LibraryTests.test_share_read_only_revoke_and_privacy",
+      "outcome": "passed",
+      "seconds": 0.3429
+    },
+    {
+      "test": "test_library.LibraryTests.test_working_copy_version_branch_and_restore",
+      "outcome": "passed",
+      "seconds": 0.1885
+    },
+    {
+      "test": "test_progress.ProgressTests.test_concurrent_progress_and_survey_availability",
+      "outcome": "passed",
+      "seconds": 0.2228
+    },
+    {
+      "test": "test_progress.ProgressTests.test_integer_range_must_contain_an_integer",
+      "outcome": "passed",
+      "seconds": 0.1548
+    },
+    {
+      "test": "test_progress.ProgressTests.test_repeat_attempts_keep_distinct_submissions",
+      "outcome": "passed",
+      "seconds": 0.1789
+    },
+    {
+      "test": "test_progress.ProgressTests.test_restore_prefix_isolation_and_no_statistics",
+      "outcome": "passed",
+      "seconds": 0.3434
+    },
+    {
+      "test": "test_progress.ProgressTests.test_validation_branch_changes_and_submit_cleanup",
+      "outcome": "passed",
+      "seconds": 0.1979
+    },
+    {
+      "test": "test_progress.ProgressTests.test_zero_numeric_jump",
+      "outcome": "passed",
+      "seconds": 0.1566
+    },
+    {
+      "test": "test_recording.RecordingTests.test_class_setup_failure_is_recorded",
+      "outcome": "passed",
+      "seconds": 0.0009
+    },
+    {
+      "test": "test_revision_boundaries.RevisionBoundaryTests.test_future_edit_revision_cannot_overwrite_competing_write",
+      "outcome": "passed",
+      "seconds": 0.164
+    },
+    {
+      "test": "test_revision_boundaries.RevisionBoundaryTests.test_future_publish_revision_cannot_publish_unvalidated_questions",
+      "outcome": "passed",
+      "seconds": 0.1603
+    },
+    {
+      "test": "test_revision_boundaries.RevisionBoundaryTests.test_matching_revision_still_cas_rejects_write_after_snapshot",
+      "outcome": "passed",
+      "seconds": 0.1987
+    },
+    {
+      "test": "test_revision_boundaries.RevisionBoundaryTests.test_revision_type_and_state_errors_keep_existing_priority",
+      "outcome": "passed",
+      "seconds": 0.1796
+    },
+    {
+      "test": "test_stage1.JumpTests.test_missing_and_optional_answers",
+      "outcome": "passed",
+      "seconds": 0.0001
+    },
+    {
+      "test": "test_stage1.JumpTests.test_multi_numeric_priority_and_default",
+      "outcome": "passed",
+      "seconds": 0.0002
+    },
+    {
+      "test": "test_stage1.JumpTests.test_reject_cycles_missing_target_bad_rule",
+      "outcome": "passed",
+      "seconds": 0.0001
+    },
+    {
+      "test": "test_stage1.JumpTests.test_single_branch_and_skipped_required",
+      "outcome": "passed",
+      "seconds": 0.0001
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_aggregation_exact_counts_and_average",
+      "outcome": "passed",
+      "seconds": 0.1866
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_anonymous_visibility_and_permissions",
+      "outcome": "passed",
+      "seconds": 0.343
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_concurrent_nonrepeat_submission",
+      "outcome": "passed",
+      "seconds": 0.2182
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_deadline_and_invalid_publication",
+      "outcome": "passed",
+      "seconds": 0.1741
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_empty_statistics_and_legacy_migration",
+      "outcome": "passed",
+      "seconds": 0.1764
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_publish_share_close_and_freeze",
+      "outcome": "passed",
+      "seconds": 0.3298
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_server_path_and_no_invalid_writes",
+      "outcome": "passed",
+      "seconds": 0.1685
+    },
+    {
+      "test": "test_stage1.Stage1Tests.test_submission_repeat_and_idempotency",
+      "outcome": "passed",
+      "seconds": 0.3861
+    },
+    {
+      "test": "test_statistics_boundaries.StatisticsBoundaryTests.test_request_above_limit_is_rejected",
+      "outcome": "passed",
+      "seconds": 0.1686
+    },
+    {
+      "test": "test_statistics_boundaries.StatisticsBoundaryTests.test_statistics_stay_coherent_when_submission_arrives_between_reads",
+      "outcome": "passed",
+      "seconds": 0.1778
+    },
+    {
+      "test": "test_statistics_boundaries.StatisticsBoundaryTests.test_valid_long_chinese_progress_and_submission",
+      "outcome": "passed",
+      "seconds": 0.2176
+    },
+    {
+      "test": "test_validation.ValidationTests.test_invalid_question_definitions",
+      "outcome": "passed",
+      "seconds": 0.0002
+    },
+    {
+      "test": "test_validation.ValidationTests.test_number_boundaries",
+      "outcome": "passed",
+      "seconds": 0.0001
+    },
+    {
+      "test": "test_validation.ValidationTests.test_optional_empty",
+      "outcome": "passed",
+      "seconds": 0.0
+    },
+    {
+      "test": "test_validation.ValidationTests.test_selection_constraints",
+      "outcome": "passed",
+      "seconds": 0.0001
+    },
+    {
+      "test": "test_validation.ValidationTests.test_text_limits",
+      "outcome": "passed",
+      "seconds": 0.0
+    }
+  ]
+}

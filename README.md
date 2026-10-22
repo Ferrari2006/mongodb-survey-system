@@ -2,9 +2,9 @@
 
 数据管理系统课程大作业：使用 MongoDB 实现支持账号、问卷管理、题目校验、条件跳转、答卷提交和统计的问卷系统。
 
-当前优先级与后续衔接见[项目上下文](docs/项目上下文与交接.md)。2026-10-22收到[第二阶段课堂补充](第二阶段/课堂补充核对-2026-10-22.md)，先完成第一阶段提交；第二阶段扩展尚未开发。
+当前优先级与后续衔接见[项目上下文](docs/项目上下文与交接.md)。用户于2026-10-23确认已提交第一阶段PDF；当前开始第二阶段，在原系统上加入题库、共享、历史版本、恢复和跨卷统计。见[实施设计](第二阶段/实施设计-2026-10-23.md)与[新增API及测试](第二阶段/API与测试说明.md)。
 
-当前状态：已实现初始需求对应的注册登录、本人问卷管理、题型和校验、可配置跳转、发布与截止/关闭、分享填写、匿名/重复控制及统计。38项自动化测试（含真实MongoDB集成测试）通过，并完成浏览器流程。文件未明确的规则已在[需求核对](docs/需求与进度.md)说明，后续课堂补充可继续调整。
+当前状态：保留初始需求对应的注册登录、本人问卷管理、题型和校验、可配置跳转、发布与截止/关闭、分享填写、匿名/重复控制及统计。第一阶段38项记录和报告保持原样；第二阶段新增题库及权限隔离、工作稿、不可变版本、分支/恢复、导入来源追踪及跨卷分组统计。当前47项自动化测试（含真实MongoDB集成测试）通过，并完成题库浏览器流程。阶段二尚未生成最终报告，不能将本轮开发记录当作最终提交。未明确的细节为项目设计选择，见实施设计。
 
 ## 两阶段提交
 
@@ -12,7 +12,7 @@
 
 - 第一阶段：完成初始需求对应的可运行系统、数据库设计、API 和关键逻辑说明、测试用例、AI 使用日志及报告。
 - 第二阶段：根据后续需求变更，在第一阶段代码上修改，保留核心结构、旧数据及主要功能，记录兼容性处理和回归测试。
-- 两阶段共用本仓库。第一阶段代码可保留为阶段一基线；用户验收并准备提交时再标记stage1-submission。第二阶段完成后标记stage2-submission。
+- 两阶段共用本仓库。第一阶段提交快照为stage1-submission-20261023（0cdfefd）；第二阶段在main继续开发，完成后再标记阶段二提交快照。
 
 当前仓库已按本人要求公开，教师无需协作者邀请即可读取。可直接提交的[第一阶段PDF](第一阶段/提交材料/AI过程修订版/2026_ECNU_PJ1_1_温正泽.pdf)与下述报告源文件对应。
 
@@ -25,11 +25,17 @@
 - `skills/mongodb-course-project/`：开发和学习辅助规范，包含需求基线、AI 记录及不同读者的表达规则；不是项目完成报告。
 - `ai_logs/`：真实 AI 协作记录，从已有可核实的工作开始记录。
 
-目录包括backend、frontend、database、tests、docs、reports、ai_logs和scripts。Schema与索引以backend/database.py为准，database/schema.json是导出结构。第二阶段课堂转写及正式需求Word均已读取，8项扩展要求已记录，尚未开发。
+目录包括backend、frontend、database、tests、docs、reports、ai_logs和scripts。Schema与索引以backend/database.py为准，database/schema.json保留第一阶段结构，database/schema-stage2.json导出当前七集合结构。第二阶段八项需求已有对应后端实现和题库页面，最终验收和阶段二报告仍待整理。
+
+## 第二阶段开发检查
+
+沿用下方环境与启动步骤，直接执行 `python run.py`，题库入口在登录后的“管理我的题库与共享题目”；问卷编辑页可从题库导入特定版本，也可把已有题目存入题库。工作稿仅自己可见，提交版本后才用于复用；共享账号只能读取和导入，不能修改原题。
+
+`python tests/run_tests.py` 当前结果写入tests/results/stage2-latest.json。第一阶段tests/results/latest.json保留38项原始结果。新增API见第二阶段/API与测试说明.md。`python scripts/check_stage2.py` 核对当前材料；原check_submission.py针对已提交第一阶段快照，不用于检查第二阶段工作树。
 
 ## 批阅导航
 
-从[批阅与验收入口](docs/批阅与验收入口.md)查看“设计→实现→操作→测试证据”的对应关系。环境只读检查为 `python scripts/check_environment.py`，材料一致性检查为 `python scripts/check_submission.py`，业务测试为 `python tests/run_tests.py`；三者验证范围不同。
+第一阶段从[批阅与验收入口](docs/批阅与验收入口.md)查看“设计→实现→操作→测试证据”的对应关系。环境只读检查为 `python scripts/check_environment.py`，当前阶段材料一致性检查为 `python scripts/check_stage2.py`，业务测试为 `python tests/run_tests.py`；三者验证范围不同。
 
 ## 本地运行
 
@@ -105,7 +111,7 @@ tests/ 保存自动化与浏览器测试，docs/测试说明.md 列出步骤、�
 .\.venv\Scripts\python.exe tests/run_tests.py
 ```
 
-测试须连接MongoDB，会创建随机测试库并在结束时清理，结果写入 `tests/results/latest.json`；不要用Python的-O参数。手工测试步骤、API和设计理由分别见：
+测试须连接MongoDB，会创建随机测试库并在结束时清理，当前结果写入 `tests/results/stage2-latest.json`，阶段一latest.json保留；不要用Python的-O参数。手工测试步骤、API和设计理由分别见：
 
 - [数据库与系统设计](docs/数据库与系统设计.md)
 - [API说明](docs/API说明.md)
@@ -114,11 +120,11 @@ tests/ 保存自动化与浏览器测试，docs/测试说明.md 列出步骤、�
 - [操作与演示](docs/操作与演示.md)
 - [第一阶段完成报告](reports/第一阶段完成报告.md)及[可打印HTML](reports/第一阶段完成报告.html)
 
-HTML可直接用浏览器打印为PDF。当前正式报告从已保存的编辑稿统一同步，避免旧Markdown生成器覆盖用户的新稿。编辑后需重新核对Word、Schema、API及测试记录，再运行python scripts/align_stage1_delivery.py --sync-only --source "已保存的HTML路径"同步正式HTML和Markdown，并运行python scripts/check_submission.py；Word也有改动时须同时更新对应副本。Schema单独导出使用python scripts/export_materials.py --schema-only，不影响报告。旧版mistune生成方式只保留用于未建立统一清单前的历史流程。
+HTML可直接用浏览器打印为PDF。第一阶段报告已交，原同步工具align_stage1_delivery.py和check_submission.py仅在第一阶段快照使用；第二阶段开发不覆盖该报告。Schema单独导出使用 `python scripts/export_materials.py --schema-only`，当前写入schema-stage2.json，不影响原报告及schema.json。
 
 ## 提交材料
 
-具体上传范围、PDF命名及最后操作见[提交前说明](第一阶段/提交材料/提交前说明.md)。可运行 `python scripts/check_submission.py` 只读核对材料是否齐全、Schema是否与代码一致、报告及保存的测试结果是否对应。它不重新执行测试，也不代替PDF排版、教师访问权限及平台提交状态检查。
+第一阶段的上传范围、PDF命名及最后操作见[提交前说明](第一阶段/提交材料/提交前说明.md)，用户已确认上传。第二阶段使用check_stage2.py检查当前材料，报告仍待编写；材料检查不代替PDF排版、教师访问权限及平台提交状态检查。
 
 两个阶段均须提供可运行代码及配置说明、MongoDB Schema、系统和数据库设计、API 与关键逻辑说明、测试步骤和实际结果、完整报告以及真实 AI 使用说明。设计决定及未确认事项须注明依据。
 

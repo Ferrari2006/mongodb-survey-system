@@ -19,6 +19,7 @@ from backend.database import initialize
 from backend.validation import DomainError, question, require, string
 from backend.logic import evaluate, validate_jumps
 from backend.statistics import statistics
+from backend.library import register_library
 
 
 def now():
@@ -245,6 +246,9 @@ def create_app(config=None):
         item = question(data.get("question"))
         require(item["id"] == qid, "编辑时不能改变题目ID")
         require(any(q["id"] == qid for q in survey["questions"]), "题目不存在")
+        original = next(q for q in survey["questions"] if q["id"] == qid)
+        if "source" in original:
+            item["source"] = original["source"]
         survey["questions"] = [item if q["id"] == qid else q for q in survey["questions"]]
         return save(survey, data.get("revision"))
 
@@ -431,4 +435,5 @@ def create_app(config=None):
                 item["respondent"] = "匿名"
         return jsonify(items=items, page=page, total=db.responses.count_documents({"survey_id": sid}))
 
+    register_library(app, db, login_required, payload, owned, save)
     return app
