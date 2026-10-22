@@ -21,7 +21,7 @@
 - `skills/mongodb-course-project/`：开发和学习辅助规范，包含需求基线、AI 记录及不同读者的表达规则；不是项目完成报告。
 - `ai_logs/`：真实 AI 协作记录，从已有可核实的工作开始记录。
 
-目录包括backend、frontend、database、tests、docs、reports、ai_logs和scripts。Schema与索引以backend/database.py为准，database/schema.json是导出结构。第二阶段现有课堂转写，完整需求文件尚未收到，转写缺项已注明。
+目录包括backend、frontend、database、tests、docs、reports、ai_logs和scripts。Schema与索引以backend/database.py为准，database/schema.json是导出结构。第二阶段课堂转写及正式需求Word均已读取，8项扩展要求已记录，尚未开发。
 
 ## 本地运行
 
