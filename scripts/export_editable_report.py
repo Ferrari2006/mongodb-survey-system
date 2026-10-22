@@ -112,7 +112,8 @@ def make_word(body, destination):
             data = (ROOT / "reports" / "images" / "stage1-data-model-word.png").read_bytes()
         else:
             data = base64.b64decode(encoded)
-        picture = paragraph.add_run().add_picture(io.BytesIO(data), width=Cm(16.9 if "image/svg+xml" in element.attrs["src"] else 14.8))
+        width = float(element.attrs.get("data-word-width-cm", 16.9 if "image/svg+xml" in element.attrs["src"] else 14.8))
+        picture = paragraph.add_run().add_picture(io.BytesIO(data), width=Cm(width))
         picture._inline.docPr.set("descr", element.attrs.get("alt", ""))
         paragraph.paragraph_format.keep_with_next = True
 
