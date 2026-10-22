@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "editor": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-仓库一致编辑版.html",
+  "word": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-仓库一致可编辑.docx",
+  "markdown": "reports/第一阶段完成报告.md",
+  "printable": "reports/第一阶段完成报告.html",
+  "submission": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽.html",
+  "normalized_body_sha256": "3ff32d6486b469eac3c72d5b36bbd16da8e4bc207b0108e02f39294e318691a4",
+  "files_sha256": {
+    "reports/第一阶段完成报告.md": "5883ef6f8dd5eeabfbdb00997fdee91d05be9c4a958b1010accd685001d90377",
+    "reports/第一阶段完成报告.html": "616e9f02e84e3b6d11db10de119192500d35ee53e5598c0c6ddfffe7c552d927",
+    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽.html": "616e9f02e84e3b6d11db10de119192500d35ee53e5598c0c6ddfffe7c552d927",
+    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-仓库一致编辑版.html": "0ba14ca39e36773f40a1426908315934065964ec0f198cfb97b7e3bb1dbe824b",
+    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-仓库一致可编辑.docx": "3375e04c79cb510c91028daa0ded67fe8088666a82da8647a584be93602b7c82"
+  },
+  "evidence_sha256": {
+    "backend/app.py": "3f4fb0b5b6bd805ebc0a9feb16f9172fcb7b04012e26e309f2daa97c032a477e",
+    "backend/database.py": "5f16da8e80042ad7538d17e068fe060cc3629ae50959d663fc8c78e2cf5d2a30",
+    "backend/logic.py": "762254b384c66961501ec265c731a6fed0da508045fd3468664af0ebd0e513d3",
+    "backend/validation.py": "3b7f9ca7f8b8dce098d48b9d55b126694356cee809da87aac6959122526fba1c",
+    "backend/statistics.py": "9306b2de6478180f8fbc8c01a0e5177de5dbed355e2052b46d2a59e0618e49d5",
+    "database/schema.json": "e8996343cbc5f628691f9b1946c85aa8dfb20ddda0739b320e4b35230636abaa",
+    "tests/results/latest.json": "8439abded3e36ac72cddbc60b664fe794b2c4ed49165d7bbaca40b9dddb10f54",
+    "docs/API说明.md": "c784fd78ffba758d86b54d08d833fcfa14b515177564431a31388c9783419452",
+    "docs/数据库与系统设计.md": "ac3198303e92329feb32aef303f3afb5b9d4440085e2a2e62b87cb2389cbb9a7"
+  },
+  "recorded_tests": 38,
+  "backend_tests_rerun": false
+}

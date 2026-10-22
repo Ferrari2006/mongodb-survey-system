@@ -16,6 +16,8 @@
 
 ## 当前文件
 
+当前报告统一入口为[可打印HTML](reports/第一阶段完成报告.html)、[对应Markdown](reports/第一阶段完成报告.md)，正文与[仓库一致编辑稿](第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-仓库一致编辑版.html)及提交目录同名正式HTML一致；[Word副本](第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-仓库一致可编辑.docx)供编辑。旧版保存在第一阶段/历史材料及带版本后缀的原文件中，不代表当前交付入口。报告与实现的逐项对应见[核对表](docs/报告与仓库对应.md)，一致性清单见reports/stage1-report-manifest.json。
+
 - `大作业一.docx`：课程要求。
 - `第一阶段/大作业一第一阶段.docx`：第一阶段提供的要求，当前核对正文与总要求一致。
 - `skills/mongodb-course-project/`：开发和学习辅助规范，包含需求基线、AI 记录及不同读者的表达规则；不是项目完成报告。
@@ -106,7 +108,7 @@ tests/ 保存自动化与浏览器测试，docs/测试说明.md 列出步骤、�
 - [操作与演示](docs/操作与演示.md)
 - [第一阶段完成报告](reports/第一阶段完成报告.md)及[可打印HTML](reports/第一阶段完成报告.html)
 
-可选重导出报告HTML需mistune，执行python scripts/export_materials.py；应用运行和自动化测试不依赖它。HTML可直接用浏览器打印为PDF。
+HTML可直接用浏览器打印为PDF。当前正式报告从已保存的编辑稿统一同步，避免旧Markdown生成器覆盖用户的新稿。编辑后需重新核对Word、Schema、API及测试记录，再运行python scripts/align_stage1_delivery.py --sync-only --source "已保存的HTML路径"同步正式HTML和Markdown，并运行python scripts/check_submission.py；Word也有改动时须同时更新对应副本。Schema单独导出使用python scripts/export_materials.py --schema-only，不影响报告。旧版mistune生成方式只保留用于未建立统一清单前的历史流程。
 
 ## 提交材料
 

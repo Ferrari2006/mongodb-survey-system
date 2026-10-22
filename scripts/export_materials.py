@@ -12,9 +12,14 @@ from backend.database import SCHEMAS
 
 
 def main():
+    if (ROOT/'reports/stage1-report-manifest.json').exists() and '--schema-only' not in sys.argv:
+        raise SystemExit('Current report is aligned from its saved editing copy. Review and use scripts/align_stage1_delivery.py --sync-only; use --schema-only for a schema-only export.')
     schema_dir = ROOT / "database"
     schema_dir.mkdir(exist_ok=True)
     (schema_dir / "schema.json").write_text(json.dumps(SCHEMAS, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
+    if '--schema-only' in sys.argv:
+        print(schema_dir/'schema.json')
+        return
     try:
         import mistune
     except ImportError:
