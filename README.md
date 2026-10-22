@@ -2,6 +2,8 @@
 
 数据管理系统课程大作业：使用 MongoDB 实现支持账号、问卷管理、题目校验、条件跳转、答卷提交和统计的问卷系统。
 
+当前优先级与后续衔接见[项目上下文](docs/项目上下文与交接.md)。2026-10-22收到[第二阶段课堂补充](第二阶段/课堂补充核对-2026-10-22.md)，先完成第一阶段提交；第二阶段扩展尚未开发。
+
 当前状态：已实现初始需求对应的注册登录、本人问卷管理、题型和校验、可配置跳转、发布与截止/关闭、分享填写、匿名/重复控制及统计。31项真实MongoDB自动化测试通过，并完成浏览器流程。文件未明确的规则已在[需求核对](docs/需求与进度.md)说明，后续课堂补充可继续调整。
 
 ## 两阶段提交
@@ -19,7 +21,7 @@
 - `skills/mongodb-course-project/`：开发和学习辅助规范，包含需求基线、AI 记录及不同读者的表达规则；不是项目完成报告。
 - `ai_logs/`：真实 AI 协作记录，从已有可核实的工作开始记录。
 
-目录包括backend、frontend、database、tests、docs、reports、ai_logs和scripts。Schema与索引以backend/database.py为准，database/schema.json是导出结构。第二阶段需求尚未收到。
+目录包括backend、frontend、database、tests、docs、reports、ai_logs和scripts。Schema与索引以backend/database.py为准，database/schema.json是导出结构。第二阶段现有课堂转写，完整需求文件尚未收到，转写缺项已注明。
 
 ## 本地运行
 
