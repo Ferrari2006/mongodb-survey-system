@@ -42,3 +42,7 @@ output/playwright/
 /参考/
 /第一阶段/参考/
 /阶段二补充.txt
+
+# Local delivery ZIPs are generated from the tracked project, not nested in Git.
+/output/第一阶段交付包*/
+/output/第一阶段交付包*.zip

@@ -86,7 +86,7 @@ def main():
         return 1
     print(f"PASS: required files, schema, {len(defined)} API routes, report copies and {count} recorded test results agree.")
     print("This checks saved evidence, not current code execution or PDF layout.")
-    print("Still verify teacher repository access, print PDF, and confirm platform submission.")
+    print("Still review the final PDF and confirm platform submission; repository visibility is checked separately.")
     return 0
 
 
