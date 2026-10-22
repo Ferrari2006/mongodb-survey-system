@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "editor": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-提交润色编辑版.html",
+  "editor": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-字体优化编辑版.html",
   "word": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-提交润色可编辑.docx",
   "markdown": "reports/第一阶段完成报告.md",
   "printable": "reports/第一阶段完成报告.html",
@@ -8,11 +8,11 @@
   "normalized_body_sha256": "1b3fe854676cb11baeeac972699158ce70e53594cf8c26ac78a2ab6c1cb7441d",
   "files_sha256": {
     "reports/第一阶段完成报告.md": "3349ff38a5944e0bcbdda3b808d89bc135cdd09319488d716552df206b7e0a20",
-    "reports/第一阶段完成报告.html": "38252537a3a9e2e331033c1f16de4b350b3e06d97b1f8c49a162495f6c984a44",
-    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽.html": "38252537a3a9e2e331033c1f16de4b350b3e06d97b1f8c49a162495f6c984a44",
-    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-提交润色编辑版.html": "24d45a8a61196fdfaeb14fb0ce7eb82fd7bd068e55df68e6ce0758754493d309",
+    "reports/第一阶段完成报告.html": "3548e284c816ea38acb1cd57933a559fd3a885d8314ed40f60f6606763712719",
+    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽.html": "3548e284c816ea38acb1cd57933a559fd3a885d8314ed40f60f6606763712719",
+    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-字体优化编辑版.html": "98b0fdc300b7f04980e9b6128e7c88eaca3c697ec8879df851da8231cb9e28ab",
     "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽-提交润色可编辑.docx": "49d9e8a8c28cff895e027f39d8932f06370cd2e286e94938c770d45c41f1c0b3",
-    "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽.pdf": "07cc5a42d45b6b9a6379063c277e7ec842f5748ff59ed6fea37f3f2af1b80343"
+    "第一阶段/提交材料/字体优化版/2026_ECNU_PJ1_1_温正泽.pdf": "abba84f5c7b4c213478b73dde5747f7d60d8e72bb3a30c0436ce3a0b57f2a6b5"
   },
   "evidence_sha256": {
     "backend/app.py": "3f4fb0b5b6bd805ebc0a9feb16f9172fcb7b04012e26e309f2daa97c032a477e",
@@ -27,6 +27,7 @@
   },
   "recorded_tests": 38,
   "backend_tests_rerun": false,
-  "pdf": "第一阶段/提交材料/2026_ECNU_PJ1_1_温正泽.pdf",
-  "pdf_pages": 9
+  "pdf": "第一阶段/提交材料/字体优化版/2026_ECNU_PJ1_1_温正泽.pdf",
+  "pdf_pages": 9,
+  "word_note": "Same saved content; previous Word typography retained. Current typography deliverables are HTML and PDF."
 }
