@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-22",
+  "source_unchanged": true,
+  "source_sha256": "8e9fc9439d2637e7dbd93c5fd3795c49e90bb956f0b7c08f689e269403163941",
+  "body_rewrites": 16,
+  "headings": 7,
+  "tables": 8,
+  "figures": 2,
+  "word_pages": 9,
+  "html_pages": 9,
+  "backend_tests_rerun": false,
+  "last_recorded_tests": 38,
+  "palette_text_contrast_pass": true,
+  "grayscale_pair_review_count": 1,
+  "grayscale_review": "direct labels and numbers preserve meaning; not accessibility certification",
+  "figure_effective_dpi_at_168mm": 454,
+  "keyboard_save_and_reopen": true,
+  "chapter_navigation_options": 7,
+  "skill_paper_metadata_checked": "https://arxiv.org/abs/2609.00065"
+}

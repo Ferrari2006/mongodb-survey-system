@@ -138,7 +138,7 @@ def make_word(body, destination):
             if element.text().startswith("课程："):
                 p.alignment = WD_ALIGN_PARAGRAPH.CENTER
                 for r in p.runs: font(r, 9)
-            if element.text().startswith(("图1", "图2")):
+            if re.match(r"图\d+\s", element.text()):
                 for r in p.runs: font(r, 9)
         elif tag in ("ul", "ol"):
             for child in element.children:

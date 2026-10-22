@@ -101,14 +101,14 @@ def configure_word(path):
         pf = paragraph.paragraph_format
         pf.widow_control = True
         text = paragraph.text.strip()
-        if text.startswith("表") and re.match(r"表\d", text):
+        if re.match(r"表\d+\s", text):
             paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
             pf.keep_with_next = True
             pf.space_before, pf.space_after = Pt(6), Pt(4)
             for r in paragraph.runs:
                 r.font.size = Pt(10)
                 r.bold = True
-        elif text.startswith(("图1", "图2")):
+        elif re.match(r"图\d+\s", text):
             pf.space_after = Pt(7)
             pf.line_spacing = 1.35
         elif text.startswith("GitHub 仓库"):
