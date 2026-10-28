@@ -10,6 +10,14 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 
+def matches_digest(path,expected):
+    raw=path.read_bytes()
+    candidates=[raw]
+    if path.suffix.lower() in ('.py','.js','.css','.html','.json','.md','.txt','.example'):
+        lf=raw.replace(b'\r\n',b'\n')
+        candidates.extend([lf,lf.replace(b'\n',b'\r\n')])
+    return any(hashlib.sha256(content).hexdigest()==expected for content in candidates)
+
 def routes(file):
     result=set()
     for n in ast.walk(ast.parse((ROOT/file).read_text(encoding='utf-8'))):
@@ -43,11 +51,25 @@ def main():
     if draft.exists():
         manifest=json.loads(draft.read_text(encoding='utf-8'))
         source=ROOT/'第二阶段/第二阶段完成报告草稿.md'
-        assert hashlib.sha256(source.read_bytes()).hexdigest()==manifest['source_sha256'],'Draft source changed; regenerate drafts'
+        assert matches_digest(source,manifest['source_sha256']),'Draft source changed; regenerate drafts'
         assert manifest['recorded_tests']==observed['tests_run'],'Draft test count is stale'
         for name,digest in manifest['files_sha256'].items():
-            assert hashlib.sha256((draft.parent/name).read_bytes()).hexdigest()==digest,'Draft changed: '+name
+            assert matches_digest(draft.parent/name,digest),'Draft changed: '+name
         print(f'Stage-two draft: {manifest["pdf_pages"]} pages; HTML/Word/PDF hashes match reviewed copies.')
+    submission=ROOT/'第二阶段/提交材料/submission-manifest.json'
+    if submission.exists():
+        manifest=json.loads(submission.read_text(encoding='utf-8'))
+        assert matches_digest(ROOT/manifest['source'],manifest['source_sha256']),'Submission source changed'
+        assert manifest['recorded_tests']==observed['tests_run']
+        for name,digest in manifest['files_sha256'].items():
+            assert matches_digest(submission.parent/name,digest),'Submission changed: '+name
+        for name,digest in manifest['evidence_sha256'].items():
+            assert matches_digest(ROOT/name,digest),'Evidence changed: '+name
+        for name,digest in manifest['application_sha256'].items():
+            assert matches_digest(ROOT/name,digest),'Tested application changed: '+name
+        for name in ('stage2-acceptance.json','stage2-reproduction.json'):
+            assert json.loads((ROOT/'tests/results'/name).read_text(encoding='utf-8'))['successful']
+        print(f'Stage-two submission: {manifest["pdf_pages"]} pages; source, artifacts, evidence and tested application match.')
     print(f'{len(SCHEMAS)} collections; {len(defined)} API routes; {observed["tests_run"]} observed tests passed; browser passed; stage-one report unchanged.')
 
 if __name__=='__main__':main()

@@ -1,0 +1,17 @@
+{
+  "successful": true,
+  "executed_at_utc": "2026-10-28T04:01:22.594Z",
+  "scope": "two independent browser sessions on isolated MongoDB",
+  "flows": [
+    "UI register/login",
+    "UI share",
+    "UI old-version import and publish",
+    "UI numeric submission",
+    "source update preserves published snapshot",
+    "external usage privacy",
+    "owner/receiver statistics isolated",
+    "revoke preserves snapshot",
+    "UI restore preserves history"
+  ],
+  "pageErrors": []
+}

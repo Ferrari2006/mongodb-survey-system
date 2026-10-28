@@ -46,3 +46,7 @@ output/playwright/
 # Local delivery ZIPs are generated from the tracked project, not nested in Git.
 /output/第一阶段交付包*/
 /output/第一阶段交付包*.zip
+
+# Stage-two local delivery backups
+/output/第二阶段交付包*/
+/output/第二阶段交付包*.zip

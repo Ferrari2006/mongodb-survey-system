@@ -1,5 +1,5 @@
 {
-  "executed_at_utc": "2026-10-22T17:41:29.196660+00:00",
+  "executed_at_utc": "2026-10-28T04:01:27.793376+00:00",
   "python": "3.13.7",
   "dependencies": {
     "Flask": "3.1.2",
@@ -14,162 +14,162 @@
     {
       "test": "test_api.ApiTests.test_auth_password_and_logout",
       "outcome": "passed",
-      "seconds": 0.2878
+      "seconds": 0.3873
     },
     {
       "test": "test_api.ApiTests.test_create_edit_and_owner_isolation",
       "outcome": "passed",
-      "seconds": 0.2824
+      "seconds": 0.2938
     },
     {
       "test": "test_api.ApiTests.test_invalid_question_does_not_write",
       "outcome": "passed",
-      "seconds": 0.1414
+      "seconds": 0.1568
     },
     {
       "test": "test_api.ApiTests.test_malformed_requests_and_schema",
       "outcome": "passed",
-      "seconds": 0.14
+      "seconds": 0.16
     },
     {
       "test": "test_api.ApiTests.test_optimistic_concurrent_edit",
       "outcome": "passed",
-      "seconds": 0.1657
+      "seconds": 0.1564
     },
     {
       "test": "test_api.ApiTests.test_question_crud_and_preview",
       "outcome": "passed",
-      "seconds": 0.1448
+      "seconds": 0.1556
     },
     {
       "test": "test_api.ApiTests.test_unauthenticated_and_expired",
       "outcome": "passed",
-      "seconds": 0.1356
+      "seconds": 0.1469
     },
     {
       "test": "test_library.LibraryTests.test_bank_move_source_jump_removal_and_invalid_ids",
       "outcome": "passed",
-      "seconds": 0.1485
+      "seconds": 0.1608
     },
     {
       "test": "test_library.LibraryTests.test_conflicting_writes_reject_stale_revision",
       "outcome": "passed",
-      "seconds": 0.1459
+      "seconds": 0.1547
     },
     {
       "test": "test_library.LibraryTests.test_cross_survey_same_version_aggregation_and_zero",
       "outcome": "passed",
-      "seconds": 0.1561
+      "seconds": 0.1686
     },
     {
       "test": "test_library.LibraryTests.test_distinct_versions_not_silently_merged",
       "outcome": "passed",
-      "seconds": 0.1595
+      "seconds": 0.1679
     },
     {
       "test": "test_library.LibraryTests.test_empty_numeric_distribution",
       "outcome": "passed",
-      "seconds": 0.145
+      "seconds": 0.1519
     },
     {
       "test": "test_library.LibraryTests.test_invalid_import_and_unknown_sharing_leave_data_unchanged",
       "outcome": "passed",
-      "seconds": 0.1511
+      "seconds": 0.1557
     },
     {
       "test": "test_library.LibraryTests.test_local_edit_keeps_provenance_and_separates_statistics",
       "outcome": "passed",
-      "seconds": 0.158
+      "seconds": 0.1668
     },
     {
       "test": "test_library.LibraryTests.test_multiple_choice_counts_use_answer_occurrences",
       "outcome": "passed",
-      "seconds": 0.1501
+      "seconds": 0.1587
     },
     {
       "test": "test_library.LibraryTests.test_numeric_distribution_and_optional_skipped_answers",
       "outcome": "passed",
-      "seconds": 0.1657
+      "seconds": 0.1768
     },
     {
       "test": "test_library.LibraryTests.test_published_snapshot_and_old_version_reuse",
       "outcome": "passed",
-      "seconds": 0.159
+      "seconds": 0.1644
     },
     {
       "test": "test_library.LibraryTests.test_share_read_only_revoke_and_privacy",
       "outcome": "passed",
-      "seconds": 0.301
+      "seconds": 0.3071
     },
     {
       "test": "test_library.LibraryTests.test_shared_user_sees_only_own_cross_survey_answers",
       "outcome": "passed",
-      "seconds": 0.3047
+      "seconds": 0.313
     },
     {
       "test": "test_library.LibraryTests.test_text_answers_are_paged_and_ordered",
       "outcome": "passed",
-      "seconds": 0.2133
+      "seconds": 0.203
     },
     {
       "test": "test_library.LibraryTests.test_working_copy_version_branch_and_restore",
       "outcome": "passed",
-      "seconds": 0.1549
+      "seconds": 0.1533
     },
     {
       "test": "test_progress.ProgressTests.test_concurrent_progress_and_survey_availability",
       "outcome": "passed",
-      "seconds": 0.1618
+      "seconds": 0.1832
     },
     {
       "test": "test_progress.ProgressTests.test_integer_range_must_contain_an_integer",
       "outcome": "passed",
-      "seconds": 0.1415
+      "seconds": 0.141
     },
     {
       "test": "test_progress.ProgressTests.test_repeat_attempts_keep_distinct_submissions",
       "outcome": "passed",
-      "seconds": 0.1591
+      "seconds": 0.1611
     },
     {
       "test": "test_progress.ProgressTests.test_restore_prefix_isolation_and_no_statistics",
       "outcome": "passed",
-      "seconds": 0.3008
+      "seconds": 0.2998
     },
     {
       "test": "test_progress.ProgressTests.test_validation_branch_changes_and_submit_cleanup",
       "outcome": "passed",
-      "seconds": 0.1665
+      "seconds": 0.1648
     },
     {
       "test": "test_progress.ProgressTests.test_zero_numeric_jump",
       "outcome": "passed",
-      "seconds": 0.1423
+      "seconds": 0.1426
     },
     {
       "test": "test_recording.RecordingTests.test_class_setup_failure_is_recorded",
       "outcome": "passed",
-      "seconds": 0.0011
+      "seconds": 0.0029
     },
     {
       "test": "test_revision_boundaries.RevisionBoundaryTests.test_future_edit_revision_cannot_overwrite_competing_write",
       "outcome": "passed",
-      "seconds": 0.1454
+      "seconds": 0.1457
     },
     {
       "test": "test_revision_boundaries.RevisionBoundaryTests.test_future_publish_revision_cannot_publish_unvalidated_questions",
       "outcome": "passed",
-      "seconds": 0.1464
+      "seconds": 0.1473
     },
     {
       "test": "test_revision_boundaries.RevisionBoundaryTests.test_matching_revision_still_cas_rejects_write_after_snapshot",
       "outcome": "passed",
-      "seconds": 0.1578
+      "seconds": 0.1567
     },
     {
       "test": "test_revision_boundaries.RevisionBoundaryTests.test_revision_type_and_state_errors_keep_existing_priority",
       "outcome": "passed",
-      "seconds": 0.1587
+      "seconds": 0.1582
     },
     {
       "test": "test_stage1.JumpTests.test_missing_and_optional_answers",
@@ -194,57 +194,57 @@
     {
       "test": "test_stage1.Stage1Tests.test_aggregation_exact_counts_and_average",
       "outcome": "passed",
-      "seconds": 0.1627
+      "seconds": 0.16
     },
     {
       "test": "test_stage1.Stage1Tests.test_anonymous_visibility_and_permissions",
       "outcome": "passed",
-      "seconds": 0.3008
+      "seconds": 0.3057
     },
     {
       "test": "test_stage1.Stage1Tests.test_concurrent_nonrepeat_submission",
       "outcome": "passed",
-      "seconds": 0.1537
+      "seconds": 0.1541
     },
     {
       "test": "test_stage1.Stage1Tests.test_deadline_and_invalid_publication",
       "outcome": "passed",
-      "seconds": 0.1533
+      "seconds": 0.1523
     },
     {
       "test": "test_stage1.Stage1Tests.test_empty_statistics_and_legacy_migration",
       "outcome": "passed",
-      "seconds": 0.1522
+      "seconds": 0.1528
     },
     {
       "test": "test_stage1.Stage1Tests.test_publish_share_close_and_freeze",
       "outcome": "passed",
-      "seconds": 0.27
+      "seconds": 0.246
     },
     {
       "test": "test_stage1.Stage1Tests.test_server_path_and_no_invalid_writes",
       "outcome": "passed",
-      "seconds": 0.1538
+      "seconds": 0.1523
     },
     {
       "test": "test_stage1.Stage1Tests.test_submission_repeat_and_idempotency",
       "outcome": "passed",
-      "seconds": 0.3217
+      "seconds": 0.3176
     },
     {
       "test": "test_statistics_boundaries.StatisticsBoundaryTests.test_request_above_limit_is_rejected",
       "outcome": "passed",
-      "seconds": 0.1476
+      "seconds": 0.1469
     },
     {
       "test": "test_statistics_boundaries.StatisticsBoundaryTests.test_statistics_stay_coherent_when_submission_arrives_between_reads",
       "outcome": "passed",
-      "seconds": 0.155
+      "seconds": 0.1547
     },
     {
       "test": "test_statistics_boundaries.StatisticsBoundaryTests.test_valid_long_chinese_progress_and_submission",
       "outcome": "passed",
-      "seconds": 0.1855
+      "seconds": 0.1847
     },
     {
       "test": "test_validation.ValidationTests.test_invalid_question_definitions",
@@ -264,7 +264,7 @@
     {
       "test": "test_validation.ValidationTests.test_selection_constraints",
       "outcome": "passed",
-      "seconds": 0.0004
+      "seconds": 0.0001
     },
     {
       "test": "test_validation.ValidationTests.test_text_limits",

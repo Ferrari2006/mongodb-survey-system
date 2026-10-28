@@ -59,4 +59,4 @@ revision是并发控制修订号；versions[].id是题目业务版本。工作�
 
 执行 `python scripts/check_stage2.py` 核对集合导出、全部API、真实测试记录、页面结果及第一阶段报告不变。原scripts/check_submission.py用于第一阶段提交快照；第二阶段使用check_stage2.py检查当前工作树。
 
-当前已有第二阶段报告草稿及需求实现与验收对应表，尚需本人核对与正式定稿。已提交的阶段一PDF不因本次开发更新。
+第二阶段报告已生成正式PDF与可编辑源，入口为提交材料目录。2026-10-28在新虚拟环境再次完整执行52项测试通过，另完成双账号连续浏览器验收与独立源码启动复现。记录在stage2-latest.json、stage2-acceptance.json和stage2-reproduction.json。已提交的阶段一PDF保持原样。
