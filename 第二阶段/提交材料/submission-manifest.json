@@ -49,5 +49,13 @@
     "template_styles_preserved": true,
     "renderer": "Word read-only export; LibreOffice unavailable",
     "html_checked": true
+  },
+  "stage1_preserved_sha256": {
+    "reports/第一阶段完成报告.md": "6d4e00ab9fc8e315dd8ad784452dd8b164cee6c567266f3ae200a4dbe7ac7bcf",
+    "reports/第一阶段完成报告.html": "3faedfef16476e38ff830d807506b5906cd2a17b3ea4e81f0025cb73db49c75c",
+    "reports/stage1-report-manifest.json": "898468b8d3ba36a289dbb86869a985357b64e5a3d45320e75bc7eea5a60e9a0b",
+    "第一阶段/提交材料/AI过程修订版/2026_ECNU_PJ1_1_温正泽.pdf": "9c7715bb59afb6bdb013f217b68ff0d0892dd75315ec173429c88583aea71ae3",
+    "database/schema.json": "e8996343cbc5f628691f9b1946c85aa8dfb20ddda0739b320e4b35230636abaa",
+    "tests/results/latest.json": "8439abded3e36ac72cddbc60b664fe794b2c4ed49165d7bbaca40b9dddb10f54"
   }
 }

@@ -44,9 +44,12 @@ def main():
     browser=json.loads((ROOT/'tests/results/stage2-browser.json').read_text(encoding='utf-8'))
     assert browser['successful'] and not browser['pageErrors']
     # The submission tag is the source of truth for the already submitted report.
-    result=subprocess.run(['git','-c','safe.directory='+ROOT.as_posix(),'diff','--name-only','stage1-submission-20261023','--',
-        'reports/','第一阶段/提交材料/','database/schema.json','tests/results/latest.json'],cwd=ROOT,capture_output=True,text=True,encoding='utf-8',check=True)
-    assert not result.stdout.strip(),'Stage-one evidence changed: '+result.stdout
+    if (ROOT/'.git').exists():
+        result=subprocess.run(['git','-c','safe.directory='+ROOT.as_posix(),'diff','--name-only','stage1-submission-20261023','--',
+            'reports/','第一阶段/提交材料/','database/schema.json','tests/results/latest.json'],cwd=ROOT,capture_output=True,text=True,encoding='utf-8',check=True)
+        assert not result.stdout.strip(),'Stage-one evidence changed: '+result.stdout
+    else:
+        print('Source archive without Git metadata; checking retained stage-one file digests.')
     draft=ROOT/'第二阶段/报告草稿/draft-manifest.json'
     if draft.exists():
         manifest=json.loads(draft.read_text(encoding='utf-8'))
@@ -59,6 +62,8 @@ def main():
     submission=ROOT/'第二阶段/提交材料/submission-manifest.json'
     if submission.exists():
         manifest=json.loads(submission.read_text(encoding='utf-8'))
+        for name,digest in manifest['stage1_preserved_sha256'].items():
+            assert matches_digest(ROOT/name,digest),'Stage-one preserved file changed: '+name
         assert matches_digest(ROOT/manifest['source'],manifest['source_sha256']),'Submission source changed'
         assert manifest['recorded_tests']==observed['tests_run']
         for name,digest in manifest['files_sha256'].items():
