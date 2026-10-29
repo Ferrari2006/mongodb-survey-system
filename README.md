@@ -4,6 +4,31 @@
 
 后端使用Flask和PyMongo，前端为原生HTML/CSS/JavaScript，业务数据保存在MongoDB。前端无需构建，应用运行不需要AI API Key。
 
+## 第二阶段导览
+
+第二阶段在第一阶段基础上增加题库、题目版本、共享、来源追踪与跨问卷统计。原有账号、题型、跳转、进度、提交和单卷统计继续保留。
+
+| 查看内容 | 入口 |
+|---|---|
+| 从哪里开始运行 | [本地运行](#本地运行)、[配置示例](.env.example) |
+| 两个阶段之间改了什么 | [阶段变化与设计取舍](第二阶段/仓库导览.md#阶段变化) |
+| 八项需求在哪里实现和验证 | [需求实现与验收对应](第二阶段/需求实现与验收对应.md) |
+| 数据怎么存、为什么这样存 | [七集合Schema](database/schema-stage2.json)、[第二阶段设计](第二阶段/实施设计-2026-10-23.md) |
+| 接口如何调用 | [基础API](docs/API说明.md)、[题库与版本API](第二阶段/API与测试说明.md) |
+| 测试输入、预期与实际结果 | [证据索引](第二阶段/仓库导览.md#验证证据)、[测试用例](第二阶段/API与测试说明.md#实际测试记录) |
+| AI参与、问题与修正 | [报告第六节](第二阶段/第二阶段完成报告.md#六-ai使用过程与问题修正)、[开发记录](ai_logs/2026-10-23-stage2-review.md) |
+| 完成报告与当前限制 | [PDF报告](第二阶段/提交材料/2026_ECNU_PJ1_2_温正泽.pdf)、[实现边界](第二阶段/仓库导览.md#实现边界与后续验证) |
+
+### 页面展示
+
+以下为2026年10月29日双账号浏览器验收的页面局部截图，使用独立测试库及合成账号，数字为验收样本。
+
+| 题库历史与版本预览 | 本人问卷的跨卷统计 |
+|---|---|
+| ![题目第二版的父版本、内容预览和恢复入口](第二阶段/images/stage2-version-page.png) | ![本人问卷中的一次有效回答8及数字分布](第二阶段/images/stage2-statistics-page.png) |
+
+接收者另一份问卷中的回答2单独统计，不混入右图结果。题目共享不授予读取对方答卷的权限。完整流程见[双账号验收记录](tests/results/stage2-acceptance.json)。
+
 ## 功能
 
 | 模块 | 功能 |
@@ -95,7 +120,7 @@ ID采用字符串，时间使用BSON Date。revision是整数并发修订号，�
 
 浏览器检查覆盖题库创建、工作稿、版本提交与恢复、旧版本导入、引用位置、数字分布、文本翻页和390px宽度布局，记录见[stage2-browser.json](tests/results/stage2-browser.json)。测试范围和输入输出见[API与测试说明](第二阶段/API与测试说明.md)。尚未进行大规模性能和全浏览器兼容性验证。
 
-2026-10-28另完成[双账号连续验收](tests/results/stage2-acceptance.json)和[新环境复现](tests/results/stage2-reproduction.json)。独立源码副本在新虚拟环境安装并启动，两个浏览器账号走通共享、导入、发布填写、改版、撤销和恢复。复现环境的完整依赖版本保存在结果JSON中。
+2026-10-28完成[新环境复现](tests/results/stage2-reproduction.json)，[双账号连续验收](tests/results/stage2-acceptance.json)于10月29日再次执行通过。独立源码副本在新虚拟环境安装并启动，两个浏览器账号走通共享、导入、发布填写、改版、撤销和恢复。复现环境的完整依赖版本保存在结果JSON中。
 
 check_stage2.py检查Schema、API、保存的测试结果及报告文件是否一致，不重新执行业务测试。启动环境可用 `python scripts/check_environment.py` 检查；未启动MongoDB时可加--skip-mongo。第一阶段38项原始记录在[latest.json](tests/results/latest.json)，旧材料检查脚本check_submission.py适用于第一阶段提交快照。
 
