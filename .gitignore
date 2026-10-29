@@ -50,3 +50,6 @@ output/playwright/
 # Stage-two local delivery backups
 /output/第二阶段交付包*/
 /output/第二阶段交付包*.zip
+
+# Personal working notes are not part of the course repository.
+/本地工作笔记/
