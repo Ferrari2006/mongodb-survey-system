@@ -36,6 +36,11 @@ def main():
             if heading:run.bold=False
     image_index=0
     for paragraph in doc.paragraphs:
+        indent=paragraph._p.get_or_add_pPr().find(qn('w:ind'))
+        if indent is not None:
+            for key in ('firstLineChars','hangingChars','hanging'):
+                indent.attrib.pop(qn('w:'+key),None)
+        paragraph.paragraph_format.first_line_indent=Pt(0)
         if paragraph._p.xpath('.//w:drawing'):
             image_index+=1
             paragraph.alignment=WD_ALIGN_PARAGRAPH.CENTER
@@ -58,8 +63,9 @@ def main():
             if caption:paragraph.alignment=WD_ALIGN_PARAGRAPH.CENTER
             else:
                 paragraph.paragraph_format.line_spacing=1.45
-                paragraph.paragraph_format.first_line_indent=Pt(23)
-                paragraph.paragraph_format.space_after=Pt(2)
+                paragraph.alignment=WD_ALIGN_PARAGRAPH.JUSTIFY
+                paragraph.paragraph_format.first_line_indent=Pt(0)
+                paragraph.paragraph_format.space_after=Pt(5)
         if paragraph.text.startswith('附录 页面'):paragraph.paragraph_format.page_break_before=True
     widths=[(3.2,13.8),(4.2,6.3,6.5),(3.4,6.2,7.4),(5,8,4)]
     for table_index,(table,columns) in enumerate(zip(doc.tables,widths)):
@@ -84,7 +90,7 @@ def main():
     html=p.read_text(encoding='utf-8').replace('报告草稿编辑版','报告编辑版').replace('第二阶段报告草稿','第二阶段项目报告')
     html=html.replace('</style>','''#report{font-family:"Times New Roman","SimSun",serif;}
 #report h1,#report h2,#report h3,#report th{font-family:"Times New Roman","SimHei",sans-serif;font-weight:400;}
-#report p{font-size:11.5pt;line-height:1.45;text-indent:2em;}
+#report p{font-size:11.5pt;line-height:1.45;text-indent:0;text-align:justify;margin-top:0;margin-bottom:5pt;}
 #report h1{font-size:16pt;text-align:center;}#report h2{font-size:13.5pt;}#report h3{font-size:12pt;}
 #report table{font-size:10.2pt;line-height:1.25;}#report table p{font-size:inherit;text-indent:0;}
 #report .table-caption{font-size:10pt;text-align:center;text-indent:0;}
