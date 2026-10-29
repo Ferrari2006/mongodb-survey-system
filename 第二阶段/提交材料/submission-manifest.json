@@ -9,9 +9,9 @@
     "2026_ECNU_PJ1_2_温正泽.pdf"
   ],
   "files_sha256": {
-    "2026_ECNU_PJ1_2_温正泽-可编辑.html": "990efaf74b258f99dd7bb4dde131aac4a5e39d08ee7301732c71da889d2414ec",
-    "2026_ECNU_PJ1_2_温正泽-可编辑.docx": "6f0760f1c66c7b854e2283e63e32912c4cd1e899ea0502484d06cf483116021b",
-    "2026_ECNU_PJ1_2_温正泽.pdf": "3cd3927f7de6d0110ffbde56a55408411d778a36c7e9736033d752892fcf3018"
+    "2026_ECNU_PJ1_2_温正泽-可编辑.html": "a9c811acdffa4abb36b7aaccad77b52d55237e621259749c6e00ac65906aad66",
+    "2026_ECNU_PJ1_2_温正泽-可编辑.docx": "5232cdef7cae26e2a225814b512f5d9dc978d3ec28504404e667c616c3b34e73",
+    "2026_ECNU_PJ1_2_温正泽.pdf": "cff9cec5495d244129083c470381027e1c387758529985b29940ed00abf29572"
   },
   "pdf_pages": 8,
   "evidence_sha256": {
@@ -25,10 +25,10 @@
     "ai_logs/阶段二引导与产物.md": "9924a482fa1fcb548c6be5fdf7ef3db5d5173be1837588c5a3ed66504962823d",
     "第二阶段/images/stage2-version-page.png": "43699279ddd77b7d5410b9119e013fe78997caa0bbe334859a044de91b2788d5",
     "第二阶段/images/stage2-statistics-page.png": "4c02ff21f06840d04452e20385aee4f95a16ace81754f9a5626163019adcc2e6",
-    "第二阶段/images/stage2-data-flow-refined.svg": "365d99236d27d5d6eae01bd4c3c973e52eed640c1992c53e0359ef9620671473",
-    "第二阶段/images/stage2-data-flow-refined.png": "b0ce6f7c3222b19c372267923020c4820e8e2a6b2228259b97fe86ff0a1f4516",
-    "第二阶段/images/stage2-version-flow-refined.svg": "95570ab0402f2ef2f7ccd562e322605683f9d6b9decea3806167395c56aeee18",
-    "第二阶段/images/stage2-version-flow-refined.png": "f7b260c7a61c7790ad5c8ac74df2289efc4759235e2e7df9b2a37512b58beffe"
+    "第二阶段/images/stage2-data-flow-refined.svg": "ceb8626ca5eac9f9c95236e39538d367f62adbc781e448691b8a02c95f84ca97",
+    "第二阶段/images/stage2-data-flow-refined.png": "3dbebf4025905a90a50841366f58a2331f7023b0d234f9e4850e070a7781ff8f",
+    "第二阶段/images/stage2-version-flow-refined.svg": "55f3cf6ef086971217f32c6e12f08b602506913b02ab5007898924af9644fa20",
+    "第二阶段/images/stage2-version-flow-refined.png": "1fbe4a0ca06c759b072bf7ce0b05eafa8fcb66d1066405bdeb43b4cfe474e2f5"
   },
   "application_sha256": {
     "backend/app.py": "6527391aa2377025f9f8ee6a7dbba2456f7040a2b0d59e340b334ffaf7f0b79a",

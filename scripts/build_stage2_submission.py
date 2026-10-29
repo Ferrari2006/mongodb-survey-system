@@ -38,6 +38,10 @@ def main():
     for paragraph in doc.paragraphs:
         if paragraph._p.xpath('.//w:drawing'):
             image_index+=1
+            paragraph.alignment=WD_ALIGN_PARAGRAPH.CENTER
+            paragraph.paragraph_format.line_spacing=1
+            paragraph.paragraph_format.space_before=Pt(4)
+            paragraph.paragraph_format.space_after=Pt(5)
             if image_index>=3:paragraph.paragraph_format.keep_with_next=True
         style=paragraph.style.name
         set_fonts(paragraph,style in ('Title','Heading 1','Heading 2'))
@@ -56,7 +60,7 @@ def main():
                 paragraph.paragraph_format.line_spacing=1.45
                 paragraph.paragraph_format.first_line_indent=Pt(23)
                 paragraph.paragraph_format.space_after=Pt(2)
-        if paragraph.text.startswith('附录 页面'):paragraph.paragraph_format.page_break_before=False
+        if paragraph.text.startswith('附录 页面'):paragraph.paragraph_format.page_break_before=True
     widths=[(3.2,13.8),(4.2,6.3,6.5),(3.4,6.2,7.4),(5,8,4)]
     for table_index,(table,columns) in enumerate(zip(doc.tables,widths)):
         for column,width in zip(table.columns,columns):column.width=Cm(width)
@@ -85,6 +89,7 @@ def main():
 #report table{font-size:10.2pt;line-height:1.25;}#report table p{font-size:inherit;text-indent:0;}
 #report .table-caption{font-size:10pt;text-align:center;text-indent:0;}
 #report>p:first-child,#report .report-meta{text-indent:0;font-size:9.5pt;}
+#report h2:last-of-type{break-before:page;page-break-before:always;}
 </style>''',1)
     import re
     column_sets=iter(widths)
