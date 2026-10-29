@@ -1,7 +1,7 @@
 {
   "stage": "stage2-submission",
   "source": "第二阶段/第二阶段完成报告.md",
-  "source_sha256": "780ccd0f46a92aeb60a15eb11bc97007b8ead680b7a94e9e32d9e53889e0fc75",
+  "source_sha256": "895cebbde6af676173b61e7b3ec46d5823d283671c04d1ac85556ffe385fc61a",
   "recorded_tests": 52,
   "files": [
     "2026_ECNU_PJ1_2_温正泽-可编辑.html",
@@ -9,9 +9,9 @@
     "2026_ECNU_PJ1_2_温正泽.pdf"
   ],
   "files_sha256": {
-    "2026_ECNU_PJ1_2_温正泽-可编辑.html": "b9a45053c39093da514bf4a268bb685254bcfdfd79f61bd9815bb0c2212f7c8b",
-    "2026_ECNU_PJ1_2_温正泽-可编辑.docx": "085ef98fd04e7be7fe3a3e840189bd3a327f44a38a56d808648f9a7ffe18da56",
-    "2026_ECNU_PJ1_2_温正泽.pdf": "c72b1d5b5fb43a56722122bcc2d4b00c5bfb19cbfd4e10442316285022ac4336"
+    "2026_ECNU_PJ1_2_温正泽-可编辑.html": "877947831eec6955d40c77aef6c45fe5405c20a8a3ed452aaabe213c419fb88e",
+    "2026_ECNU_PJ1_2_温正泽-可编辑.docx": "afc05530a744a1620b626d3acefc9cbb5270a76768d991306f996c4ec6acc39c",
+    "2026_ECNU_PJ1_2_温正泽.pdf": "ab28bd57ca88e7202b0a8a3dbaa6cffcc6500290893c4065b4d9a368b085ff95"
   },
   "pdf_pages": 7,
   "evidence_sha256": {
@@ -23,7 +23,11 @@
     "第二阶段/API与测试说明.md": "2f78a49d89b007093f70bd55d222e5ac1b45d4afef8e35b74ab938a19a108a6d",
     "第二阶段/实施设计-2026-10-23.md": "30e203377662d5ea7ca93b8e781fe3e8f4f711f5b517f5a77c7c7c23432c7c6b",
     "第二阶段/images/stage2-version-page.png": "43699279ddd77b7d5410b9119e013fe78997caa0bbe334859a044de91b2788d5",
-    "第二阶段/images/stage2-statistics-page.png": "4c02ff21f06840d04452e20385aee4f95a16ace81754f9a5626163019adcc2e6"
+    "第二阶段/images/stage2-statistics-page.png": "4c02ff21f06840d04452e20385aee4f95a16ace81754f9a5626163019adcc2e6",
+    "第二阶段/images/stage2-data-flow-refined.svg": "cb5af1f334e593a63a9e2938afb5a373753c126bb525b9d9c29398696c82fa48",
+    "第二阶段/images/stage2-data-flow-refined.png": "db3c01b9d2148e97603dc6a81ad3155d962f39b5c36be75636dd2375cb41848a",
+    "第二阶段/images/stage2-version-flow-refined.svg": "883a1215154295675aad9f4e71ea2859b915823f9583f40e7210722bd43c3ed2",
+    "第二阶段/images/stage2-version-flow-refined.png": "50149941dc773d8188383e59b4e19090eba243bd5523e8fcaceac66719a7ae31"
   },
   "application_sha256": {
     "backend/app.py": "6527391aa2377025f9f8ee6a7dbba2456f7040a2b0d59e340b334ffaf7f0b79a",
