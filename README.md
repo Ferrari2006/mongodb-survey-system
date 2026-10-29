@@ -150,11 +150,11 @@ ID采用字符串，时间使用BSON Date。revision是整数并发修订号，�
 ## 测试与检查
 
 ```powershell
-.\.venv\Scripts\python.exe tests/run_tests.py
+.\.venv\Scripts\python.exe tests/run_tests.py --output tests/results/stage2-patch-20261030.json
 .\.venv\Scripts\python.exe scripts/check_stage2.py
 ```
 
-自动化测试使用真实MongoDB，创建随机survey_test_数据库并在结束后清理。请勿使用Python的-O参数，测试依赖assert。最近一次完整运行通过58项，结果保存在[stage2-latest.json](tests/results/stage2-latest.json)。其中包括第一阶段38项回归，以及题库版本、权限、并发、旧问卷保护、数字分布和文本分页等20项测试。
+自动化测试使用真实MongoDB，创建随机survey_test_数据库并在结束后清理。请勿使用Python的-O参数，测试依赖assert。提交时的完整运行通过58项，结果保存在[stage2-latest.json](tests/results/stage2-latest.json)。其中包括第一阶段38项回归，以及题库版本、权限、并发、旧问卷保护、数字分布和文本分页等20项测试。
 
 浏览器检查覆盖题库创建、工作稿、版本提交与恢复、旧版本导入、引用位置、数字分布、文本翻页和390px宽度布局，记录见[stage2-browser.json](tests/results/stage2-browser.json)。测试范围和输入输出见[API与测试说明](第二阶段/API与测试说明.md)。尚未进行大规模性能和全浏览器兼容性验证。
 
@@ -187,3 +187,9 @@ GitHub保存可运行的前后端、配置说明、README、Schema、系统设�
 | 第二阶段 | 2026_ECNU_PJ1_2_温正泽.pdf | 2026-10-30 00:00 |
 
 第二阶段应在10月29日结束前提交，正式PDF已按规定名称保存。完整规则见[网页提交要求](docs/网页提交要求.md)。仓库不保存真实凭据、本地数据库文件或未脱敏业务数据。
+
+## 提交后补丁 2026年10月30日
+
+已修复授权更新导致填写进度失效，以及删除后重新导入继承旧授权的两个边界问题。当前完整回归62项通过，结果另存[补丁测试](tests/results/stage2-patch-20261030.json)，不覆盖提交时的58项记录。修复原因、字段兼容及新增用例见[补丁说明](docs/提交后修复-2026-10-30.md)。
+
+当前Schema见[补丁结构](database/schema-stage2-patch.json)，增加可选content_revision；原schema-stage2.json与提交报告保留为提交时状态。check_stage2.py检测补丁回执后，分别验证当前代码及原提交材料，不把提交PDF当成补丁版报告。已提交PDF不变，源码历史中的99cc77a为原交付点。

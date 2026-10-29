@@ -298,3 +298,62 @@ class LibraryTests(unittest.TestCase):
         survey=self.authorize(other,survey,False,True)
         assert self.call('GET',url+'/usage').json['external_items']==[]
         assert self.call('GET',url+'/statistics?scope=all').json['groups'][0]['answer_count']==1
+
+    def test_permission_changes_preserve_progress_and_submission_content_version(self):
+        item=self.library('number');survey=self.import_to(item)
+        survey=self.call('POST',f"/api/surveys/{survey['_id']}/publish",{'revision':survey['revision']}).json
+        questions=deepcopy(survey['questions']);content_revision=survey['revision']
+        url=f"/api/public/surveys/{survey['_id']}/progress";rid=uuid4().hex
+        assert self.call('PUT',url,{'answers':{'q1':0},'revision':0,'request_id':rid}).status_code==200
+        for enabled in (True,False):
+            survey=self.call('PATCH',f"/api/surveys/{survey['_id']}/library-permissions/q1",
+                {'revision':survey['revision'],'usage':enabled,'statistics':enabled}).json
+            assert survey['questions']==questions and survey['content_revision']==content_revision
+            resumed=self.call('GET',url)
+            assert resumed.status_code==200 and resumed.json['progress']['answers']=={'q1':0}
+        assert self.call('PUT',url,{'answers':{'q1':8},'revision':1,'request_id':rid}).status_code==200
+        result=self.call('POST',f"/api/public/surveys/{survey['_id']}/responses",{'answers':{'q1':8},'request_id':rid})
+        assert result.status_code==201,result.json
+        response=self.db.responses.find_one({'_id':result.json['id']})
+        assert response['survey_revision']==content_revision
+
+    def test_legacy_published_progress_survives_first_permission_update(self):
+        item=self.library('number');survey=self.import_to(item)
+        survey=self.call('POST',f"/api/surveys/{survey['_id']}/publish",{'revision':survey['revision']}).json
+        self.db.surveys.update_one({'_id':survey['_id']},{'$unset':{'content_revision':''}})
+        url=f"/api/public/surveys/{survey['_id']}/progress"
+        assert self.call('PUT',url,{'answers':{'q1':0},'revision':0,'request_id':uuid4().hex}).status_code==200
+        grant=self.call('PATCH',f"/api/surveys/{survey['_id']}/library-permissions/q1",
+            {'revision':survey['revision'],'usage':True,'statistics':True})
+        assert grant.status_code==200 and grant.json['content_revision']==survey['revision']
+        assert self.call('GET',url).status_code==200
+
+    def test_delete_and_reimport_clears_policy_for_same_or_other_source(self):
+        item=self.library();other_item=self.library();survey=self.import_to(item)
+        path=f"/api/surveys/{survey['_id']}"
+        for source in (item,other_item):
+            survey=self.call('PATCH',path+'/library-permissions/q1',
+                {'revision':survey['revision'],'usage':True,'statistics':True}).json
+            before=deepcopy(survey)
+            stale=self.call('DELETE',path+'/questions/q1',{'revision':survey['revision']-1})
+            assert stale.status_code==409
+            assert self.call('GET',path).json==before
+            deleted=self.call('DELETE',path+'/questions/q1',{'revision':survey['revision']})
+            assert deleted.status_code==200,deleted.json
+            survey=deleted.json
+            assert 'q1' not in survey.get('library_permissions',{})
+            survey=self.call('POST',path+'/library-import',{'revision':survey['revision'],
+                'library_id':source['_id'],'version':source['current_version'],'question_id':'q1'}).json
+            assert 'q1' not in survey.get('library_permissions',{})
+
+    def test_import_clears_legacy_orphan_policy_without_touching_other_questions(self):
+        item=self.library();survey=self.import_to(item)
+        survey=self.call('PATCH',f"/api/surveys/{survey['_id']}/library-permissions/q1",
+            {'revision':survey['revision'],'usage':True,'statistics':True}).json
+        policy={'library_id':item['_id'],'usage':True,'statistics':True}
+        self.db.surveys.update_one({'_id':survey['_id']},{'$set':{'library_permissions.reused':policy}})
+        imported=self.call('POST',f"/api/surveys/{survey['_id']}/library-import",{'revision':survey['revision'],
+            'library_id':item['_id'],'version':item['current_version'],'question_id':'reused'})
+        assert imported.status_code==200,imported.json
+        assert 'reused' not in imported.json['library_permissions']
+        assert imported.json['library_permissions']['q1']==policy

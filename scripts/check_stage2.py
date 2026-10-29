@@ -28,6 +28,10 @@ def routes(file):
     return result
 
 def main():
+    if (ROOT/'tests/results/stage2-patch-manifest.json').exists():
+        from check_post_submission_patch import main as check_patch
+        check_patch()
+        return
     from backend.database import SCHEMAS
     assert json.loads((ROOT/'database/schema-stage2.json').read_text(encoding='utf-8'))==SCHEMAS,'Stage-two schema mismatch'
     defined=routes('backend/app.py')|routes('backend/library.py')

@@ -191,6 +191,7 @@ def register_library(app, db, login_required, payload, owned, save):
         require(q['id'] not in {q['id'] for q in survey['questions']},'本卷题目ID重复')
         q['source']={'library_id':item['_id'],'version':v['id'],'definition_hash':definition_hash(q)}
         survey['questions'].append(q)
+        survey.get('library_permissions', {}).pop(q['id'], None)
         return save(survey,data.get('revision'))
 
     def permission(survey, q, field):
@@ -211,7 +212,8 @@ def register_library(app, db, login_required, payload, owned, save):
         policy = {'library_id': q['source']['library_id'], 'usage': data['usage'], 'statistics': data['statistics']}
         # Authorization metadata is separate from the frozen question definition.
         result = db.surveys.update_one({'_id':sid, 'owner_id':g.user_id, 'revision':survey['revision']},
-            {'$set':{'library_permissions.'+qid:policy, 'updated_at':now()}, '$inc':{'revision':1}})
+            {'$set':{'library_permissions.'+qid:policy, 'updated_at':now(),
+                     'content_revision':survey.get('content_revision',survey['revision'])}, '$inc':{'revision':1}})
         if not result.matched_count:
             raise DomainError('问卷已修改，请刷新后重试', 409, 'revision_conflict')
         return jsonify(owned(sid))

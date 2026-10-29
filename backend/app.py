@@ -259,6 +259,7 @@ def create_app(config=None):
         survey = owned(sid)
         require(any(q["id"] == qid for q in survey["questions"]), "题目不存在")
         survey["questions"] = [q for q in survey["questions"] if q["id"] != qid]
+        survey.get("library_permissions", {}).pop(qid, None)
         return save(survey, data.get("revision"))
 
     @app.post("/api/surveys/<sid>/questions/<qid>/validate")
@@ -285,7 +286,7 @@ def create_app(config=None):
         validate_jumps(survey["questions"], publishing=True)
         require(not survey.get("deadline") or survey["deadline"] > now(), "截止时间必须晚于当前时间")
         result = db.surveys.update_one({"_id": sid, "owner_id": g.user_id, "status": "draft", "revision": snapshot_revision},
-                                      {"$set": {"status": "published", "published_at": now(), "updated_at": now()}, "$inc": {"revision": 1}})
+                                      {"$set": {"status": "published", "published_at": now(), "updated_at": now(), "content_revision": snapshot_revision + 1}, "$inc": {"revision": 1}})
         if not result.matched_count:
             raise DomainError("问卷已被修改，请刷新", 409, "revision_conflict")
         return jsonify(owned(sid))
@@ -328,7 +329,7 @@ def create_app(config=None):
             db.fill_progress.delete_one({"_id": progress["_id"], "revision": progress["revision"]})
             progress = None
         if progress:
-            require(progress["survey_revision"] == survey["revision"], "问卷版本已变化，原填写进度不可继续")
+            require(progress["survey_revision"] == survey.get("content_revision", survey["revision"]), "问卷版本已变化，原填写进度不可继续")
         return jsonify(progress={k: progress[k] for k in ("answers", "revision", "anonymous", "request_id", "updated_at")} if progress else None)
 
     @app.put("/api/public/surveys/<sid>/progress")
@@ -347,7 +348,7 @@ def create_app(config=None):
         if db.responses.find_one({"survey_id": sid, "user_id": g.user_id,
                                   **({"request_id": request_id} if survey.get("allow_repeat") else {})}):
             raise DomainError("本次填写已提交，不能保存旧进度", 409, "already_submitted")
-        progress = {"survey_id": sid, "user_id": g.user_id, "survey_revision": survey["revision"],
+        progress = {"survey_id": sid, "user_id": g.user_id, "survey_revision": survey.get("content_revision", survey["revision"]),
                     "revision": revision + 1, "answers": data["answers"], "anonymous": anonymous,
                     "request_id": request_id, "updated_at": now()}
         if revision == 0:
@@ -390,7 +391,7 @@ def create_app(config=None):
             raise DomainError("问卷已关闭或截止，请刷新", 409, "not_available")
         response = {"_id": uuid4().hex, "survey_id": sid, "user_id": g.user_id, "anonymous": anonymous,
                     "request_id": request_id, "submission_key": request_id if survey.get("allow_repeat") else "once",
-                    "answers": result["answers"], "path": result["path"], "survey_revision": survey["revision"], "created_at": now()}
+                    "answers": result["answers"], "path": result["path"], "survey_revision": survey.get("content_revision", survey["revision"]), "created_at": now()}
         try:
             db.responses.insert_one(response)
         except DuplicateKeyError:

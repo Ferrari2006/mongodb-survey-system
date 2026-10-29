@@ -1,0 +1,34 @@
+{
+  "submitted_commit": "99cc77a870334c6d8a1e4514b573d1da8b76c567",
+  "test_result": "tests/results/stage2-patch-20261030.json",
+  "tests_run": 62,
+  "files_sha256": {
+    "backend/app.py": "b92860e4bf26e87eb496d185c54219f65b4c6e7bec8f2749db4f32f523263e24",
+    "backend/database.py": "9348bd9dc63681d7e415c5ae6f78ba50a223febccde4f2a2a5412d685642a31e",
+    "backend/library.py": "3fe47c644f6ff5a868bb26695c96e8fa2b1f60e1eb2ac32f5bf95c7356410acc",
+    "backend/logic.py": "762254b384c66961501ec265c731a6fed0da508045fd3468664af0ebd0e513d3",
+    "backend/statistics.py": "9306b2de6478180f8fbc8c01a0e5177de5dbed355e2052b46d2a59e0618e49d5",
+    "backend/validation.py": "3b7f9ca7f8b8dce098d48b9d55b126694356cee809da87aac6959122526fba1c",
+    "backend/__init__.py": "44e5516969829f9c53c19ca63df81321a1142645145443ab9e8771e4883433af",
+    "frontend/app.js": "facf47458d07f2f7987b8edb5b3b54439348d4a9eb63e4e2ce0d38499f6b7ae8",
+    "frontend/index.html": "b2ee171db0bb91e04490919c921467e36b3f7a3eb23dead43aa1e522cdcf286a",
+    "frontend/library.js": "8b46fff6e273e5eb07c9db7e78b7bbdfb063b28b65f6ab3de510484b74231b15",
+    "frontend/style.css": "d1b55b6ba05d509865f748e5a9588b34b9ec3cf81405bc6271257f0f1f5b8016",
+    "requirements.txt": "f14356e0abbbb91ec39507dac972f45803b4c948f10da725e4efe5bb11ce8b13",
+    "run.py": "571ed980b06d01dc236771566bdd4b852c26ecb8090424949b19a6bdf79a53c5",
+    ".env.example": "794a6017459c21126ff9292210bd7f2e29fb03c4079b6ca4f8bb55a2cb435f43",
+    "tests/test_library.py": "aee0bb882bfd63bf0984b45e192a4c6adbfc92e38f834b87ac0b6c59747a0c9e",
+    "tests/results/stage2-patch-20261030.json": "15d233b3d751e28fd4b770cd8b1bc9eb887e0bdd9eac0292691c28e0c833fc7f",
+    "database/schema-stage2-patch.json": "c1722aab8ba369322e772219239e1952561a68e09392a9e7ab32c512376feb98"
+  },
+  "submitted_sha256": {
+    "第二阶段/提交材料/2026_ECNU_PJ1_2_温正泽-可编辑.docx": "4da78f5da70f90670087f0ac81d6d55c3679e69579c833b50673ac797770d818",
+    "第二阶段/提交材料/2026_ECNU_PJ1_2_温正泽-可编辑.html": "3dc11989a8079d6dc67b9e0aead74aa3243cddacdd09005b9c6c5a4164f4cfec",
+    "第二阶段/提交材料/2026_ECNU_PJ1_2_温正泽.pdf": "b7df4bf7874fdac10291fb1a1cddf20c901811789fa9615165d822c9be43a65b",
+    "第二阶段/提交材料/submission-manifest.json": "4bdc576466e085dd3fc4bf4174a2191e2b27aabf56a4b01655f70616de3bda2e",
+    "第二阶段/提交材料/提交说明.md": "236fd73a784beb338070e82f53e16182f5807536e185d4f429040ca3e01bdcf6",
+    "第二阶段/第二阶段完成报告.md": "19575f8c6a0989f25b0a3592e3ded45d771a7239585a151da573a48807fb7dff",
+    "tests/results/stage2-latest.json": "982e1bc7b112872855c3248ce9bec1a17a96bcdd3b8927cc5361ea9e996ccccc",
+    "database/schema-stage2.json": "0019ef8897a3e909577e66672a050e584b72aee91be8553c2031743680783c23"
+  }
+}
