@@ -34,7 +34,11 @@ def main():
             for attr in ('ascii','hAnsi','cs'):fonts.set(qn('w:'+attr),'Times New Roman')
             fonts.set(qn('w:eastAsia'),'黑体' if heading else '宋体')
             if heading:run.bold=False
+    image_index=0
     for paragraph in doc.paragraphs:
+        if paragraph._p.xpath('.//w:drawing'):
+            image_index+=1
+            if image_index>=3:paragraph.paragraph_format.keep_with_next=True
         style=paragraph.style.name
         set_fonts(paragraph,style in ('Title','Heading 1','Heading 2'))
         if style=='Title':
