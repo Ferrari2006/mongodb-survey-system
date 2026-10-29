@@ -1,6 +1,16 @@
 """Draw the stage-two relationships using the established course report palette."""
 from pathlib import Path
-from draw_layered_architecture import SVG
+from draw_layered_architecture import SVG as BaseSVG
+
+
+class SVG(BaseSVG):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.items=[s.replace('Microsoft YaHei,SimHei,sans-serif', 'Arial,Microsoft YaHei,sans-serif') for s in self.items]
+
+    def text(self, x, y, s, size=18, weight=400, anchor='middle', fill='#253B3D'):
+        # Avoid simulated heavy bold when a renderer has no matching 600 face.
+        super().text(x,y,s,size,400,anchor,fill)
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / '第二阶段/images'
