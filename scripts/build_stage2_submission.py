@@ -20,8 +20,14 @@ def main():
         assert json.loads((ROOT/'tests/results'/name).read_text(encoding='utf-8'))['successful']
     template.SOURCE=SOURCE;template.OUT=OUT;template.NAME=NAME
     blocks=template.blocks();template.build_html(blocks);template.build_word(blocks)
+    from docx import Document
+    doc=Document(OUT/(NAME+'-可编辑.docx'))
+    for paragraph in doc.paragraphs:
+        if paragraph.text.startswith('附录 页面'):paragraph.paragraph_format.page_break_before=True
+    doc.save(OUT/(NAME+'-可编辑.docx'))
     p=OUT/(NAME+'-可编辑.html')
     html=p.read_text(encoding='utf-8').replace('报告草稿编辑版','报告编辑版').replace('第二阶段报告草稿','第二阶段项目报告')
+    html=html.replace('</style>','#report h2:last-of-type{break-before:page;page-break-before:always}</style>',1)
     p.write_text(html,encoding='utf-8')
     manifest={'stage':'stage2-submission','source':SOURCE.relative_to(ROOT).as_posix(),
         'source_sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),'recorded_tests':observed['tests_run'],

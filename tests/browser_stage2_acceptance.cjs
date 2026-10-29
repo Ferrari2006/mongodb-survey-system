@@ -63,6 +63,11 @@ async function importPublishFill(page,version,value){
     await owner.getByText('新版本已提交，旧版本与旧问卷保持原样',{exact:true}).waitFor();
     const second=await owner.locator('#library-version').inputValue();
     if(first===second)throw Error('Version did not advance');
+    await owner.locator('#library-heading').scrollIntoViewIfNeeded();
+    const detailBox=await owner.locator('#library-detail').boundingBox();
+    const formBox=await owner.locator('#library-form').boundingBox();
+    await owner.screenshot({path:'output/playwright/stage2-version-panel.png',clip:{
+      x:detailBox.x,y:detailBox.y,width:detailBox.width,height:formBox.y-detailBox.y}});
     const unchanged=await api(receiver,'GET','/surveys/'+receiverSid);
     if(JSON.stringify(before.questions)!==JSON.stringify(unchanged.questions))throw Error('Published snapshot changed');
     await owner.locator('#library-usage').click();await owner.locator('#library-result').getByText(/其他用户问卷中的题目引用数：1/).waitFor();
@@ -73,6 +78,7 @@ async function importPublishFill(page,version,value){
     await receiver.locator('#library-stats').click();await receiver.locator('#library-result').getByText('平均值：2；最小值：2；最大值：2',{exact:true}).waitFor();
     await owner.goto(base);await owner.locator('#open-library').click();await openQuestion(owner,'课程满意度新版评分');
     await owner.locator('#library-stats').click();await owner.locator('#library-result').getByText('平均值：8；最小值：8；最大值：8',{exact:true}).waitFor();
+    await owner.locator('#library-result').screenshot({path:'output/playwright/stage2-cross-statistics.png'});
     await owner.screenshot({path:'output/playwright/stage2-owner-acceptance.png',fullPage:true});
     await owner.locator('#library-users').fill('');await owner.locator('#library-share').click();
     await owner.getByText('共享权限已更新；对方可读取版本并导入，不能修改原题',{exact:true}).waitFor();

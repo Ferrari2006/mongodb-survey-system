@@ -1,6 +1,6 @@
 {
   "successful": true,
-  "executed_at_utc": "2026-10-28T04:01:22.594Z",
+  "executed_at_utc": "2026-10-29T11:49:50.532Z",
   "scope": "two independent browser sessions on isolated MongoDB",
   "flows": [
     "UI register/login",

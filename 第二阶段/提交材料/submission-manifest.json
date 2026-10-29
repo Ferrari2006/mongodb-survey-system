@@ -1,7 +1,7 @@
 {
   "stage": "stage2-submission",
   "source": "第二阶段/第二阶段完成报告.md",
-  "source_sha256": "1098062b6e588553dd3032bdd2e7463a8ac7f4635dba2fe4fcf8732e71d5ca29",
+  "source_sha256": "780ccd0f46a92aeb60a15eb11bc97007b8ead680b7a94e9e32d9e53889e0fc75",
   "recorded_tests": 52,
   "files": [
     "2026_ECNU_PJ1_2_温正泽-可编辑.html",
@@ -9,19 +9,21 @@
     "2026_ECNU_PJ1_2_温正泽.pdf"
   ],
   "files_sha256": {
-    "2026_ECNU_PJ1_2_温正泽-可编辑.html": "30e9d8e824013a8e908e8c6319c417e5df878f955e8fc594544d651e8466572d",
-    "2026_ECNU_PJ1_2_温正泽-可编辑.docx": "ca45896bb54e1cc045b77315db3d7f4306d46b9c2429b219101532760b0d3d02",
-    "2026_ECNU_PJ1_2_温正泽.pdf": "a07289a1b861ff230ef42fcc39ad48c8a76b2bbc4a40e86170c8fdfa24f2d24c"
+    "2026_ECNU_PJ1_2_温正泽-可编辑.html": "b9a45053c39093da514bf4a268bb685254bcfdfd79f61bd9815bb0c2212f7c8b",
+    "2026_ECNU_PJ1_2_温正泽-可编辑.docx": "085ef98fd04e7be7fe3a3e840189bd3a327f44a38a56d808648f9a7ffe18da56",
+    "2026_ECNU_PJ1_2_温正泽.pdf": "c72b1d5b5fb43a56722122bcc2d4b00c5bfb19cbfd4e10442316285022ac4336"
   },
-  "pdf_pages": 6,
+  "pdf_pages": 7,
   "evidence_sha256": {
     "tests/results/stage2-latest.json": "a8301342098cec9b12a78054bc99b51b0ed6fac7077165fc8478f316ea7974c1",
     "tests/results/stage2-browser.json": "f9c5d3e75a616196efd21a27c4c3f65703681fcfa5fdd199c37e0be4737d278d",
-    "tests/results/stage2-acceptance.json": "f3b4e68bf6899996311f7efb3c05425faa82087a5a799bfae8a5ffc1431736e5",
+    "tests/results/stage2-acceptance.json": "c76335c3249ffca06dec8d3a392b4e89e5dc8d621104a6fb0171df3b88562eba",
     "tests/results/stage2-reproduction.json": "5ff989ab3c9fd3ea32d4585cecfd54e1960b827b3ab68fb9fc954c9c62b3306c",
     "database/schema-stage2.json": "f9d11e6fcbe0b6e3e1bc599d544ad9524a20dcbddc1250b9cc140bc64d0850a6",
     "第二阶段/API与测试说明.md": "2f78a49d89b007093f70bd55d222e5ac1b45d4afef8e35b74ab938a19a108a6d",
-    "第二阶段/实施设计-2026-10-23.md": "30e203377662d5ea7ca93b8e781fe3e8f4f711f5b517f5a77c7c7c23432c7c6b"
+    "第二阶段/实施设计-2026-10-23.md": "30e203377662d5ea7ca93b8e781fe3e8f4f711f5b517f5a77c7c7c23432c7c6b",
+    "第二阶段/images/stage2-version-page.png": "43699279ddd77b7d5410b9119e013fe78997caa0bbe334859a044de91b2788d5",
+    "第二阶段/images/stage2-statistics-page.png": "4c02ff21f06840d04452e20385aee4f95a16ace81754f9a5626163019adcc2e6"
   },
   "application_sha256": {
     "backend/app.py": "6527391aa2377025f9f8ee6a7dbba2456f7040a2b0d59e340b334ffaf7f0b79a",
@@ -41,6 +43,14 @@
   },
   "application_comparison": "UTF-8 text matched exported checkout with CRLF/LF normalization",
   "tested_application_commit": "452aa9c27a1ddc390d4aba1a75595f9438f60f49",
+  "stage1_preserved_sha256": {
+    "reports/第一阶段完成报告.md": "6d4e00ab9fc8e315dd8ad784452dd8b164cee6c567266f3ae200a4dbe7ac7bcf",
+    "reports/第一阶段完成报告.html": "3faedfef16476e38ff830d807506b5906cd2a17b3ea4e81f0025cb73db49c75c",
+    "reports/stage1-report-manifest.json": "898468b8d3ba36a289dbb86869a985357b64e5a3d45320e75bc7eea5a60e9a0b",
+    "第一阶段/提交材料/AI过程修订版/2026_ECNU_PJ1_1_温正泽.pdf": "9c7715bb59afb6bdb013f217b68ff0d0892dd75315ec173429c88583aea71ae3",
+    "database/schema.json": "e8996343cbc5f628691f9b1946c85aa8dfb20ddda0739b320e4b35230636abaa",
+    "tests/results/latest.json": "8439abded3e36ac72cddbc60b664fe794b2c4ed49165d7bbaca40b9dddb10f54"
+  },
   "qa": {
     "all_source_paragraphs_and_table_cells_present": true,
     "each_page_reviewed": true,
@@ -49,13 +59,5 @@
     "template_styles_preserved": true,
     "renderer": "Word read-only export; LibreOffice unavailable",
     "html_checked": true
-  },
-  "stage1_preserved_sha256": {
-    "reports/第一阶段完成报告.md": "6d4e00ab9fc8e315dd8ad784452dd8b164cee6c567266f3ae200a4dbe7ac7bcf",
-    "reports/第一阶段完成报告.html": "3faedfef16476e38ff830d807506b5906cd2a17b3ea4e81f0025cb73db49c75c",
-    "reports/stage1-report-manifest.json": "898468b8d3ba36a289dbb86869a985357b64e5a3d45320e75bc7eea5a60e9a0b",
-    "第一阶段/提交材料/AI过程修订版/2026_ECNU_PJ1_1_温正泽.pdf": "9c7715bb59afb6bdb013f217b68ff0d0892dd75315ec173429c88583aea71ae3",
-    "database/schema.json": "e8996343cbc5f628691f9b1946c85aa8dfb20ddda0739b320e4b35230636abaa",
-    "tests/results/latest.json": "8439abded3e36ac72cddbc60b664fe794b2c4ed49165d7bbaca40b9dddb10f54"
   }
 }

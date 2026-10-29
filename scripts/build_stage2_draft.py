@@ -77,7 +77,8 @@ def build_html(data):
             body.append('<section class="table-block"><table><thead>'+rows[0]+'</thead><tbody>'+''.join(rows[1:])+'</tbody></table></section>')
         elif kind=='image':
             alt,path=value;encoded=base64.b64encode((ROOT/'第二阶段'/path).read_bytes()).decode()
-            body.append(f'<figure class="report-figure"><img src="data:image/svg+xml;base64,{encoded}" alt="{html.escape(alt)}" style="width:100%" contenteditable="false"></figure>')
+            mime='image/png' if Path(path).suffix.lower()=='.png' else 'image/svg+xml'
+            body.append(f'<figure class="report-figure"><img src="data:{mime};base64,{encoded}" alt="{html.escape(alt)}" style="width:100%" contenteditable="false"></figure>')
         elif kind=='p' and index==0:
             url=value.split('：',1)[1];body.append(f'<p class="repo-link">GitHub 仓库：<a href="{url}">{url}</a></p>')
         else:
