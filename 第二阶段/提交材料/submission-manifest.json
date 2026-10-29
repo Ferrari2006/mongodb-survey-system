@@ -9,11 +9,11 @@
     "2026_ECNU_PJ1_2_温正泽.pdf"
   ],
   "files_sha256": {
-    "2026_ECNU_PJ1_2_温正泽-可编辑.html": "2ec9c3f64818de795367d1e79874bd812bb6e9b5c8ffd089973b11611571a214",
-    "2026_ECNU_PJ1_2_温正泽-可编辑.docx": "b518048e48ff70dd2b04601d63fac4581499fd4e778dd89503a4b8bc89adba23",
-    "2026_ECNU_PJ1_2_温正泽.pdf": "f19ef8dcad971b1ccd574d60ecc6796e62bf4aee6ce7ad57a756b260a81fde83"
+    "2026_ECNU_PJ1_2_温正泽-可编辑.html": "675e51236020e0c391b8378850cc13754147ffc0d4869ef7443cc8699a720f0f",
+    "2026_ECNU_PJ1_2_温正泽-可编辑.docx": "5a77c23f0a22e749b195f0b56185e426256f8844219442208b399199679675c8",
+    "2026_ECNU_PJ1_2_温正泽.pdf": "3cadda90637cfafbd470e91967876cb28b255da35671e5ca84406899a283ce9e"
   },
-  "pdf_pages": 7,
+  "pdf_pages": 8,
   "evidence_sha256": {
     "tests/results/stage2-latest.json": "a8301342098cec9b12a78054bc99b51b0ed6fac7077165fc8478f316ea7974c1",
     "tests/results/stage2-browser.json": "f9c5d3e75a616196efd21a27c4c3f65703681fcfa5fdd199c37e0be4737d278d",
