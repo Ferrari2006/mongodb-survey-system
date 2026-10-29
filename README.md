@@ -4,6 +4,8 @@
 
 后端使用Flask和PyMongo，前端为原生HTML/CSS/JavaScript，业务数据保存在MongoDB。前端无需构建，应用运行不需要AI API Key。
 
+当前代码包含10月30日提交后的修复，完整回归62项通过。已提交报告及58项结果保留，原提交点为`99cc77a`；补丁内容见[修复说明](docs/提交后修复-2026-10-30.md)。
+
 ## 第二阶段导览
 
 第二阶段在第一阶段基础上增加题库、题目版本、共享、来源追踪与跨问卷统计。原有账号、题型、跳转、进度、提交和单卷统计继续保留。
@@ -13,7 +15,7 @@
 | 从哪里开始运行 | [本地运行](#本地运行)、[配置示例](.env.example) |
 | 两个阶段之间改了什么 | [阶段变化与设计取舍](第二阶段/仓库导览.md#阶段变化) |
 | 八项需求在哪里实现和验证 | [需求实现与验收对应](第二阶段/需求实现与验收对应.md) |
-| 数据怎么存、为什么这样存 | [七集合Schema](database/schema-stage2.json)、[第二阶段设计](第二阶段/实施设计-2026-10-23.md) |
+| 数据怎么存、为什么这样存 | [当前七集合Schema](database/schema-stage2-patch.json)、[第二阶段设计](第二阶段/实施设计-2026-10-23.md) |
 | 接口如何调用 | [基础API](docs/API说明.md)、[题库与版本API](第二阶段/API与测试说明.md) |
 | 测试输入、预期与实际结果 | [证据索引](第二阶段/仓库导览.md#验证证据)、[测试用例](第二阶段/API与测试说明.md#实际测试记录) |
 | AI参与、问题与修正 | [报告第六节](第二阶段/第二阶段完成报告.md#六-ai使用过程与问题修正)、[引导与产物](ai_logs/阶段二引导与产物.md)、[开发记录](ai_logs/2026-10-23-stage2-review.md) |
@@ -56,7 +58,7 @@
 
 </details>
 
-三张补充预览通过实际浏览器生成，使用API准备独立样例数据，未修改页面内容。见[截图脚本](scripts/capture_readme_previews.cjs)和[本次记录](tests/results/readme-preview-capture.json)。这些页面检查单独记录，不增加58项自动测试的数量。
+三张补充预览来自实际浏览器，样例数据通过API写入独立测试库。见[截图脚本](scripts/capture_readme_previews.cjs)和[本次记录](tests/results/readme-preview-capture.json)。这些页面检查单独记录，不增加58项自动测试的数量。
 
 <details>
 <summary>跨用户授权汇总页面</summary>
@@ -113,19 +115,19 @@ $env:MONGO_DB = "mongodb_survey_course"
 
 ## 数据库设计
 
-当前使用七个集合，完整字段与约束见[Schema](database/schema-stage2.json)，初始化和索引见[backend/database.py](backend/database.py)。
+当前使用七个集合，完整字段与约束见[当前Schema](database/schema-stage2-patch.json)，初始化和索引见[backend/database.py](backend/database.py)。
 
 | 集合 | 主要字段 | 作用与组织方式 |
 |---|---|---|
 | users | _id、username、password_hash、created_at | 账号与密码哈希 |
 | sessions | _id、user_id、expires_at | 令牌摘要、用户引用和过期时间 |
-| surveys | owner_id、title、status、questions、revision、schema_version | 题目、选项、校验和跳转规则嵌入问卷；来源题另记source |
+| surveys | owner_id、title、status、questions、revision、content_revision、schema_version | 题目、选项、校验和跳转规则嵌入问卷；来源题另记source |
 | fill_progress | survey_id、user_id、survey_revision、revision、answers、request_id | 每账号每问卷一份有效进度，与正式答卷分开 |
 | responses | survey_id、user_id、anonymous、submission_key、request_id、answers、path、created_at | 每次提交独立保存，answers嵌入题目ID和回答值 |
 | question_banks | owner_id、title、description、created_at | 题库分组及所有者 |
 | library_questions | owner_id、bank_id、shared_with、working_copy、versions、current_version、revision | 题目权限、工作稿与不可变历史版本 |
 
-ID采用字符串，时间使用BSON Date。revision是整数并发修订号，题库版本使用独立字符串ID。题目随问卷一起读取，因此保留嵌入副本；答卷持续增长，独立存储。题库历史与当前指针同文档条件更新，每题最多100个已提交版本。
+ID采用字符串，时间使用BSON Date。revision用于管理操作的并发校验，content_revision标识已发布题目内容，授权调整不改变内容版本；题库版本使用独立字符串ID。题目随问卷一起读取，因此保留嵌入副本；答卷持续增长，独立存储。题库历史与当前指针同文档条件更新，每题最多100个已提交版本。
 
 第一阶段五集合设计见[数据库与系统设计](docs/数据库与系统设计.md)；第二阶段的扩展理由、版本语义及权限范围见[实施设计](第二阶段/实施设计-2026-10-23.md)。[database/schema.json](database/schema.json)保留第一阶段结构。
 
@@ -143,6 +145,7 @@ ID采用字符串，时间使用BSON Date。revision是整数并发修订号，�
 | 答卷列表 | /surveys/{sid}/responses |
 | 题库 | /banks、/banks/{bid}、/library/questions |
 | 题目版本与共享 | /library/questions/{lid}及其/restore、/sharing |
+| 授权与撤回 | /surveys/{sid}/library-permissions/{qid} |
 | 导入与跨卷查询 | /surveys/{sid}/library-import、/library/questions/{lid}/usage、/library/questions/{lid}/statistics |
 
 上表为分组摘要。36个接口的完整路径、方法、输入、响应及错误码见[基础API](docs/API说明.md)和[题库API](第二阶段/API与测试说明.md)。
@@ -150,11 +153,13 @@ ID采用字符串，时间使用BSON Date。revision是整数并发修订号，�
 ## 测试与检查
 
 ```powershell
-.\.venv\Scripts\python.exe tests/run_tests.py --output tests/results/stage2-patch-20261030.json
+.\.venv\Scripts\python.exe tests/run_tests.py --output tests/results/stage2-local-run.json
 .\.venv\Scripts\python.exe scripts/check_stage2.py
 ```
 
-自动化测试使用真实MongoDB，创建随机survey_test_数据库并在结束后清理。请勿使用Python的-O参数，测试依赖assert。提交时的完整运行通过58项，结果保存在[stage2-latest.json](tests/results/stage2-latest.json)。其中包括第一阶段38项回归，以及题库版本、权限、并发、旧问卷保护、数字分布和文本分页等20项测试。
+上述命令将本次运行另存为stage2-local-run.json，不覆盖已保存的提交记录或补丁结果。材料检查核对的是留存记录及对应源码，不会把新运行自动登记为历史证据。
+
+自动化测试使用真实MongoDB，创建随机survey_test_数据库并在结束后清理。请勿使用Python的-O参数，测试依赖assert。当前补丁的完整回归为62项，见[补丁结果](tests/results/stage2-patch-20261030.json)。提交时的完整运行为58项，结果保存在[stage2-latest.json](tests/results/stage2-latest.json)。其中包括第一阶段38项回归，以及题库版本、权限、并发、旧问卷保护、数字分布和文本分页等20项测试。
 
 浏览器检查覆盖题库创建、工作稿、版本提交与恢复、旧版本导入、引用位置、数字分布、文本翻页和390px宽度布局，记录见[stage2-browser.json](tests/results/stage2-browser.json)。测试范围和输入输出见[API与测试说明](第二阶段/API与测试说明.md)。尚未进行大规模性能和全浏览器兼容性验证。
 
@@ -186,10 +191,10 @@ GitHub保存可运行的前后端、配置说明、README、Schema、系统设�
 | 第一阶段 | 2026_ECNU_PJ1_1_温正泽.pdf | 2026-10-23 00:00 |
 | 第二阶段 | 2026_ECNU_PJ1_2_温正泽.pdf | 2026-10-30 00:00 |
 
-第二阶段应在10月29日结束前提交，正式PDF已按规定名称保存。完整规则见[网页提交要求](docs/网页提交要求.md)。仓库不保存真实凭据、本地数据库文件或未脱敏业务数据。
+第二阶段应在10月29日结束前提交，用户已确认上传PDF，仓库保留该报告。完整规则见[网页提交要求](docs/网页提交要求.md)。仓库不保存真实凭据、本地数据库文件或未脱敏业务数据。
 
 ## 提交后补丁 2026年10月30日
 
 已修复授权更新导致填写进度失效，以及删除后重新导入继承旧授权的两个边界问题。当前完整回归62项通过，结果另存[补丁测试](tests/results/stage2-patch-20261030.json)，不覆盖提交时的58项记录。修复原因、字段兼容及新增用例见[补丁说明](docs/提交后修复-2026-10-30.md)。
 
-当前Schema见[补丁结构](database/schema-stage2-patch.json)，增加可选content_revision；原schema-stage2.json与提交报告保留为提交时状态。check_stage2.py检测补丁回执后，分别验证当前代码及原提交材料，不把提交PDF当成补丁版报告。已提交PDF不变，源码历史中的99cc77a为原交付点。
+当前Schema见[补丁结构](database/schema-stage2-patch.json)，增加可选content_revision；原schema-stage2.json与提交报告保留为提交时状态。check_stage2.py分别核对当前补丁代码、测试结果和原提交材料。已提交PDF不变，源码历史中的99cc77a为原交付点。
