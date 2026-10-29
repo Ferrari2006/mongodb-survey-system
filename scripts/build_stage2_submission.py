@@ -15,7 +15,7 @@ def main():
     if (OUT/(NAME+'-可编辑.docx')).exists() and '--refresh' not in sys.argv:
         raise SystemExit('Existing submission preserved. Pass --refresh only for generated artifacts, not saved user edits.')
     observed=json.loads((ROOT/'tests/results/stage2-latest.json').read_text(encoding='utf-8'))
-    assert observed['successful'] and observed['tests_run']==52
+    assert observed['successful'] and observed['tests_run']==58
     for name in ('stage2-acceptance.json','stage2-reproduction.json'):
         assert json.loads((ROOT/'tests/results'/name).read_text(encoding='utf-8'))['successful']
     template.SOURCE=SOURCE;template.OUT=OUT;template.NAME=NAME

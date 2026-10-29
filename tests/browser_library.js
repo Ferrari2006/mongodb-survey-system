@@ -1,7 +1,7 @@
 // Browser smoke check: pass a Playwright Page connected to the isolated test server.
 async (page) => {
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto('http://127.0.0.1:5052/');
+  await page.goto((process.env.SURVEY_TEST_BASE||'http://127.0.0.1:5052')+'/');
   const name='browser_lib_'+Date.now();
   await page.locator('#username').fill(name);
   await page.locator('#password').fill('Browser-test-123');
@@ -43,7 +43,7 @@ async (page) => {
   // API fixtures prepare submitted answers; the assertions below exercise rendered UI.
   const token=await page.evaluate(()=>sessionStorage.getItem('survey_token'));
   const request=async(method,path,data)=>{
-    const r=await page.request.fetch('http://127.0.0.1:5052/api'+path,{method,data,headers:{Authorization:'Bearer '+token}});
+    const r=await page.request.fetch((process.env.SURVEY_TEST_BASE||'http://127.0.0.1:5052')+'/api'+path,{method,data,headers:{Authorization:'Bearer '+token}});
     const result=await r.json();if(!r.ok())throw Error(JSON.stringify(result));return result;
   };
   const bank=await page.locator('#library-bank option').nth(1).getAttribute('value');

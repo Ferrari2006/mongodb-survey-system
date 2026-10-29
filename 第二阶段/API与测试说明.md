@@ -18,8 +18,10 @@
 | POST | /library/questions/{lid}/restore | revision、version | 仅作者；新增恢复版本，返回完整题目 |
 | PUT | /library/questions/{lid}/sharing | revision、usernames数组 | 仅作者；替换共享名单，不存在的账号拒绝；空数组撤销 |
 | POST | /surveys/{sid}/library-import | revision、library_id、version、question_id | 本人草稿问卷加入指定版本副本，返回问卷 |
-| GET | /library/questions/{lid}/usage | 无 | 仅作者；本人引用位置与他人引用次数，不披露他人标题/答卷 |
-| GET | /library/questions/{lid}/statistics | version可选、page为文本页码 | 本人问卷中的跨卷分组统计，不跨越答卷所有权；文本每组每页20条，数字含分布 |
+| GET | /library/questions/{lid}/usage | 无 | 仅题主；本人位置、获授权外部名称及题号；未授权部分只计数，不返回链接或账号 |
+| GET | /library/questions/{lid}/statistics | scope=mine/all、version可选、page为文本页码 | 默认本人；all仅题主汇总获授权的跨用户问卷，不返回使用位置ID和文本原文；本人文本每页20条，数字含分布 |
+
+| PATCH | /surveys/{sid}/library-permissions/{qid} | revision、usage布尔、statistics布尔 | 仅问卷作者；设置或撤回该来源题的两项授权，支持已发布问卷；不改变题目或答卷，revision条件更新；全卷汇总越权403 |
 
 ## 版本语义与统计口径
 
@@ -33,7 +35,7 @@ revision是并发控制修订号；versions[].id是题目业务版本。工作�
 
 ## 实际测试记录
 
-运行 `python tests/run_tests.py`，结果写入tests/results/stage2-latest.json。最近一次完整运行通过52项，其中第一阶段38项回归、第二阶段14项扩展。第一阶段原始结果保留在tests/results/latest.json。以下为题库主要用例，对应tests/test_library.py。
+运行 `python tests/run_tests.py`，结果写入tests/results/stage2-latest.json。最近一次完整运行通过58项，其中第一阶段38项回归、第二阶段20项扩展。第一阶段原始结果保留在tests/results/latest.json。以下为题库主要用例，对应tests/test_library.py。
 
 | 场景 | 输入与步骤 | 预期及实测 |
 |---|---|---|
@@ -59,4 +61,12 @@ revision是并发控制修订号；versions[].id是题目业务版本。工作�
 
 执行 `python scripts/check_stage2.py` 核对集合导出、全部API、真实测试记录、页面结果及第一阶段报告不变。原scripts/check_submission.py用于第一阶段提交快照；第二阶段使用check_stage2.py检查当前工作树。
 
-第二阶段报告已生成正式PDF与可编辑源，入口为提交材料目录。2026-10-28在新虚拟环境再次完整执行52项测试通过，另完成双账号连续浏览器验收与独立源码启动复现。记录在stage2-latest.json、stage2-acceptance.json和stage2-reproduction.json。已提交的阶段一PDF保持原样。
+第二阶段报告已生成正式PDF与可编辑源，入口为提交材料目录。2026-10-28独立环境执行52项通过；10月29日授权扩展后完整执行58项通过，另完成双账号连续浏览器验收与独立源码启动复现。记录在stage2-latest.json、stage2-acceptance.json和stage2-reproduction.json。已提交的阶段一PDF保持原样。
+
+## 跨用户授权协议
+
+来源题导入后默认不对外开放。问卷管理页的题目卡片有两个独立复选框：向题主公开本卷名称和使用位置、允许题主汇总该题统计。设置与撤回都调用library-permissions接口；usage与statistics不能互相替代。授权绑定来源题ID，旧问卷缺失library_permissions时为关闭。发布后仅更新授权元数据和管理修订号，不改变questions、responses或题目版本。
+
+题主请求statistics?scope=all时纳入本人及获得statistics授权的引用；共享接收者不能请求all。数字和选项只返回分组聚合，文本只返回作答次数；全部范围移除instances，不提供账号、链接或原始答卷。usage接口对usage授权的位置返回名称、题号及版本，用稳定usage_ref区分外部问卷，不返回其survey_id。撤回影响后续请求，不承诺擦除已经查看过的结果或为并发请求提供事务隔离。
+
+新增六项实际用例覆盖授权及撤回、两账号0与8汇总均值4、默认不授权、文本原文不泄露、权限/类型/旧修订号拒绝、两类授权独立。对应tests/test_library.py中的test_explicit_usage_grant_and_revoke_without_question_changes等六项。浏览器通过真实复选框完成授权和撤回，初次脚本读取旧DOM过早，改为等待旧结果移除后再次通过；当前结果为58项回归及双账号验收。

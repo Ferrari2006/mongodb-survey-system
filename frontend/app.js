@@ -71,6 +71,16 @@ function render() {
     for(const rule of q.jumps||[])row.append(node("p",jumpText(rule,q)));
     if(!q.jumps?.length)row.append(node("p","按顺序进入下一题","muted"));
     if(q.source)row.append(node("p",`来源：题库版本 ${q.source.version.slice(0,8)}；本卷修改独立保存`,"muted"));
+    if(q.source){
+      const policy=survey.library_permissions?.[q.id]||{};
+      const usage=node("input"),statistics=node("input");usage.type=statistics.type="checkbox";
+      usage.checked=policy.library_id===q.source.library_id&&policy.usage===true;
+      statistics.checked=policy.library_id===q.source.library_id&&policy.statistics===true;
+      const ul=node("label",undefined,"check"),sl=node("label",undefined,"check");
+      ul.append(usage,document.createTextNode("向题主公开本卷名称及题目使用位置"));
+      sl.append(statistics,document.createTextNode("允许题主汇总本题统计（不含身份、链接及文本原文）"));
+      row.append(ul,sl,button("保存题目共享范围",async()=>{survey=await api(`/surveys/${survey._id}/library-permissions/${q.id}`,"PATCH",{revision:survey.revision,usage:usage.checked,statistics:statistics.checked});render();message("题目共享范围已保存");}));
+    }
     row.append(button("存入我的题库",()=>saveQuestionToLibrary(q)));
     if(draft){const acts=node("div",undefined,"actions");acts.append(button("编辑",()=>edit(q)),button("删除",async()=>{if(!confirm(`删除题目“${q.title}”？`))return;survey=await api(`/surveys/${survey._id}/questions/${q.id}`,"DELETE",{revision:survey.revision});render();resetQuestion();}));row.append(acts);}$("question-list").append(row);
     const opt=node("option",q.title);opt.value=q.id;$("validation-question").append(opt);

@@ -1,6 +1,6 @@
 {
   "successful": true,
-  "executed_at_utc": "2026-10-29T11:49:50.532Z",
+  "executed_at_utc": "2026-10-29T15:48:14.008Z",
   "scope": "two independent browser sessions on isolated MongoDB",
   "flows": [
     "UI register/login",
@@ -11,7 +11,9 @@
     "external usage privacy",
     "owner/receiver statistics isolated",
     "revoke preserves snapshot",
-    "UI restore preserves history"
+    "UI restore preserves history",
+    "UI consent grants and revocation",
+    "authorized cross-user aggregates by version"
   ],
   "pageErrors": []
 }

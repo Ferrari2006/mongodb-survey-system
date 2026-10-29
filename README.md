@@ -27,7 +27,7 @@
 |---|---|
 | ![题目第二版的父版本、内容预览和恢复入口](第二阶段/images/stage2-version-page.png) | ![本人问卷中的一次有效回答8及数字分布](第二阶段/images/stage2-statistics-page.png) |
 
-接收者另一份问卷中的回答2单独统计，不混入右图结果。题目共享不授予读取对方答卷的权限。完整流程见[双账号验收记录](tests/results/stage2-acceptance.json)。
+接收者另一份问卷中的回答2单独统计，不混入右图结果。题目共享不直接授予答卷权限；问卷作者另行授权后，题主可查看使用位置及汇总结果。完整流程见[双账号验收记录](tests/results/stage2-acceptance.json)。
 
 <details>
 <summary>问卷编辑与条件跳转</summary>
@@ -56,7 +56,16 @@
 
 </details>
 
-三张补充预览通过实际浏览器生成，使用API准备独立样例数据，未修改页面内容。见[截图脚本](scripts/capture_readme_previews.cjs)和[本次记录](tests/results/readme-preview-capture.json)。这些页面检查单独记录，不增加52项自动测试的数量。
+三张补充预览通过实际浏览器生成，使用API准备独立样例数据，未修改页面内容。见[截图脚本](scripts/capture_readme_previews.cjs)和[本次记录](tests/results/readme-preview-capture.json)。这些页面检查单独记录，不增加58项自动测试的数量。
+
+<details>
+<summary>跨用户授权汇总页面</summary>
+
+问卷作者在题目卡片上分别授权使用位置和统计。题主选择“全部已授权问卷”，不同版本仍分组展示；撤回后后续请求不再纳入该外部引用。
+
+![双账号授权后跨用户分版本汇总的实际页面](第二阶段/images/stage2-authorized-statistics.png)
+
+</details>
 
 ## 功能
 
@@ -68,7 +77,7 @@
 | 发布与填写 | 分享链接、发布冻结、截止与关闭；已确认进度保存和恢复，提交时后端重新校验 |
 | 答卷与统计 | 匿名展示、重复控制、请求重试防重；整卷和单题统计 |
 | 题库与版本 | 新建题库、保存和复用题目、指定账号共享、工作稿、历史版本、分支及恢复 |
-| 使用追踪 | 查看本人问卷的引用位置和版本；其他账号的引用仅显示数量 |
+| 使用追踪 | 查看本人问卷的引用位置和版本；可显示明确授权的外部问卷名称及题号；未授权仅计数 |
 | 跨问卷统计 | 按来源版本及实际定义分组，统计选项次数、数字均值和分布，文本回答分页 |
 
 发布后的问卷保持原题目内容。题库更新不会自动改动已导入的问卷。共享题目授予读取和使用权，接收者不能编辑源题，也不能因此读取他人的问卷或答卷。
@@ -136,7 +145,7 @@ ID采用字符串，时间使用BSON Date。revision是整数并发修订号，�
 | 题目版本与共享 | /library/questions/{lid}及其/restore、/sharing |
 | 导入与跨卷查询 | /surveys/{sid}/library-import、/library/questions/{lid}/usage、/library/questions/{lid}/statistics |
 
-上表为分组摘要。35个接口的完整路径、方法、输入、响应及错误码见[基础API](docs/API说明.md)和[题库API](第二阶段/API与测试说明.md)。
+上表为分组摘要。36个接口的完整路径、方法、输入、响应及错误码见[基础API](docs/API说明.md)和[题库API](第二阶段/API与测试说明.md)。
 
 ## 测试与检查
 
@@ -145,7 +154,7 @@ ID采用字符串，时间使用BSON Date。revision是整数并发修订号，�
 .\.venv\Scripts\python.exe scripts/check_stage2.py
 ```
 
-自动化测试使用真实MongoDB，创建随机survey_test_数据库并在结束后清理。请勿使用Python的-O参数，测试依赖assert。最近一次完整运行通过52项，结果保存在[stage2-latest.json](tests/results/stage2-latest.json)。其中包括第一阶段38项回归，以及题库版本、权限、并发、旧问卷保护、数字分布和文本分页等14项测试。
+自动化测试使用真实MongoDB，创建随机survey_test_数据库并在结束后清理。请勿使用Python的-O参数，测试依赖assert。最近一次完整运行通过58项，结果保存在[stage2-latest.json](tests/results/stage2-latest.json)。其中包括第一阶段38项回归，以及题库版本、权限、并发、旧问卷保护、数字分布和文本分页等20项测试。
 
 浏览器检查覆盖题库创建、工作稿、版本提交与恢复、旧版本导入、引用位置、数字分布、文本翻页和390px宽度布局，记录见[stage2-browser.json](tests/results/stage2-browser.json)。测试范围和输入输出见[API与测试说明](第二阶段/API与测试说明.md)。尚未进行大规模性能和全浏览器兼容性验证。
 

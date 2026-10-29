@@ -146,6 +146,28 @@
       },
       "updated_at": {
         "bsonType": "date"
+      },
+      "library_permissions": {
+        "bsonType": "object",
+        "additionalProperties": {
+          "bsonType": "object",
+          "required": [
+            "library_id",
+            "usage",
+            "statistics"
+          ],
+          "properties": {
+            "library_id": {
+              "bsonType": "string"
+            },
+            "usage": {
+              "bsonType": "bool"
+            },
+            "statistics": {
+              "bsonType": "bool"
+            }
+          }
+        }
       }
     }
   },

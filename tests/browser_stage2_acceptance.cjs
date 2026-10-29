@@ -70,7 +70,7 @@ async function importPublishFill(page,version,value){
       x:detailBox.x,y:detailBox.y,width:detailBox.width,height:formBox.y-detailBox.y}});
     const unchanged=await api(receiver,'GET','/surveys/'+receiverSid);
     if(JSON.stringify(before.questions)!==JSON.stringify(unchanged.questions))throw Error('Published snapshot changed');
-    await owner.locator('#library-usage').click();await owner.locator('#library-result').getByText(/其他用户问卷中的题目引用数：1/).waitFor();
+    await owner.locator('#library-usage').click();await owner.locator('#library-result').getByText(/外部引用数：1/).waitFor();
     if((await owner.locator('#library-result').textContent()).includes('接收者旧版本问卷'))throw Error('External title leaked');
     await owner.locator('#library-back').click();await newSurvey(owner,'作者新版问卷');await openQuestion(owner,'课程满意度新版评分');
     const ownerSid=await importPublishFill(owner,second,8);
@@ -80,6 +80,26 @@ async function importPublishFill(page,version,value){
     await owner.locator('#library-stats').click();await owner.locator('#library-result').getByText('平均值：8；最小值：8；最大值：8',{exact:true}).waitFor();
     await owner.locator('#library-result').screenshot({path:'output/playwright/stage2-cross-statistics.png'});
     await owner.screenshot({path:'output/playwright/stage2-owner-acceptance.png',fullPage:true});
+    await receiver.goto(base);
+    await receiver.locator('#survey-list article').filter({hasText:'接收者旧版本问卷'}).getByRole('button',{name:'管理问卷',exact:true}).click();
+    await receiver.getByLabel('向题主公开本卷名称及题目使用位置',{exact:true}).check();
+    await receiver.getByLabel('允许题主汇总本题统计（不含身份、链接及文本原文）',{exact:true}).check();
+    await receiver.getByRole('button',{name:'保存题目共享范围',exact:true}).click();
+    await receiver.getByText('题目共享范围已保存',{exact:true}).waitFor();
+    await owner.locator('#library-usage').click();
+    await owner.locator('#library-result').getByText(/已授权外部问卷：接收者旧版本问卷/).waitFor();
+    await owner.locator('#library-stat-scope').selectOption('all');
+    await owner.locator('#library-result').getByRole('heading',{name:'全部已授权问卷的跨卷统计',exact:true}).waitFor();
+    await owner.locator('#library-result').getByText('平均值：2；最小值：2；最大值：2',{exact:true}).waitFor();
+    await owner.locator('#library-result').getByText('平均值：8；最小值：8；最大值：8',{exact:true}).waitFor();
+    await owner.locator('#library-result').screenshot({path:'output/playwright/stage2-authorized-statistics.png'});
+    await receiver.getByLabel('向题主公开本卷名称及题目使用位置',{exact:true}).uncheck();
+    await receiver.getByLabel('允许题主汇总本题统计（不含身份、链接及文本原文）',{exact:true}).uncheck();
+    await receiver.getByRole('button',{name:'保存题目共享范围',exact:true}).click();
+    await receiver.getByText('题目共享范围已保存',{exact:true}).waitFor();
+    await owner.locator('#library-stats').click();
+    await owner.locator('#library-result').getByText('平均值：8；最小值：8；最大值：8',{exact:true}).waitFor();
+    await owner.locator('#library-result').getByText('平均值：2；最小值：2；最大值：2',{exact:true}).waitFor({state:'detached'});
     await owner.locator('#library-users').fill('');await owner.locator('#library-share').click();
     await owner.getByText('共享权限已更新；对方可读取版本并导入，不能修改原题',{exact:true}).waitFor();
     const receiverToken=await receiver.evaluate(()=>sessionStorage.getItem('survey_token'));
@@ -95,7 +115,7 @@ async function importPublishFill(page,version,value){
     if(errors.length)throw Error(errors.join('\n'));
     fs.writeFileSync('tests/results/stage2-acceptance.json',JSON.stringify({successful:true,executed_at_utc:new Date().toISOString(),
       scope:'two independent browser sessions on isolated MongoDB',flows:['UI register/login','UI share','UI old-version import and publish','UI numeric submission',
-      'source update preserves published snapshot','external usage privacy','owner/receiver statistics isolated','revoke preserves snapshot','UI restore preserves history'],
+      'source update preserves published snapshot','external usage privacy','owner/receiver statistics isolated','revoke preserves snapshot','UI restore preserves history','UI consent grants and revocation','authorized cross-user aggregates by version'],
       pageErrors:errors},null,2)+'\n');
     console.log('Two-account continuous browser acceptance passed');
   }finally{await browser.close();}

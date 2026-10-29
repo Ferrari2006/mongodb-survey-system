@@ -45,6 +45,12 @@ SCHEMAS = {
 }
 
 # Additive stage-two collections. Existing business documents and validators stay intact.
+SCHEMAS["surveys"]["properties"]["library_permissions"] = {
+    "bsonType": "object", "additionalProperties": {
+        "bsonType": "object", "required": ["library_id", "usage", "statistics"],
+        "properties": {"library_id": {"bsonType": "string"},
+                       "usage": {"bsonType": "bool"}, "statistics": {"bsonType": "bool"}}}}
+
 SCHEMAS["question_banks"] = {
     "bsonType": "object", "required": ["_id", "owner_id", "title", "description", "created_at"],
     "properties": {"_id": {"bsonType": "string"}, "owner_id": {"bsonType": "string"},

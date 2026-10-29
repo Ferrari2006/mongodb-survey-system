@@ -217,3 +217,84 @@ class LibraryTests(unittest.TestCase):
         r=self.call('PUT',url+'/sharing',{'revision':item['revision'],'usernames':['nobody_'+uuid4().hex[:10]]})
         assert r.status_code==400
         assert self.call('GET',url).json['revision']==item['revision']
+
+    def external_fixture(self, kind='number'):
+        item=self.library(kind);name,other=self.other();url=f"/api/library/questions/{item['_id']}"
+        shared=self.call('PUT',url+'/sharing',{'revision':item['revision'],'usernames':[name]})
+        assert shared.status_code==200
+        survey=other('POST','/api/surveys',{'title':'授权的外部问卷'}).json
+        survey=other('POST',f"/api/surveys/{survey['_id']}/library-import",{'revision':survey['revision'],'library_id':item['_id'],'version':item['current_version'],'question_id':'external'}).json
+        return item,other,survey,url
+
+    def authorize(self, other, survey, usage=True, statistics=True):
+        result=other('PATCH',f"/api/surveys/{survey['_id']}/library-permissions/external",
+            {'revision':survey['revision'],'usage':usage,'statistics':statistics})
+        assert result.status_code==200,result.json
+        return result.json
+
+    def external_answer(self, other, survey, value):
+        survey=other('POST',f"/api/surveys/{survey['_id']}/publish",{'revision':survey['revision']}).json
+        result=other('POST',f"/api/public/surveys/{survey['_id']}/responses",{'answers':{'external':value},'request_id':uuid4().hex})
+        assert result.status_code==201,result.json
+        return survey
+
+    def test_explicit_usage_grant_and_revoke_without_question_changes(self):
+        item,other,survey,url=self.external_fixture()
+        assert self.call('GET',url+'/usage').json['external_items']==[]
+        original=deepcopy(survey['questions']);survey=self.authorize(other,survey)
+        usage=self.call('GET',url+'/usage').json
+        assert usage['external_items'][0]['title']=='授权的外部问卷'
+        assert 'survey_id' not in usage['external_items'][0]
+        assert survey['_id'] not in str(usage) and survey['owner_id'] not in str(usage)
+        survey=self.external_answer(other,survey,8)
+        survey=self.authorize(other,survey,False,False)
+        assert survey['questions']==original
+        assert self.call('GET',url+'/usage').json['external_items']==[]
+        assert self.call('GET',url+'/statistics?scope=all').json['groups']==[]
+
+    def test_consented_cross_user_statistics_and_default_isolation(self):
+        item,other,survey,url=self.external_fixture()
+        self.submit(self.import_to(item),{'q1':0})
+        survey=self.authorize(other,survey,False,True);self.external_answer(other,survey,8)
+        own=self.call('GET',url+'/statistics').json['groups'][0]
+        all_result=self.call('GET',url+'/statistics?scope=all').json
+        group=all_result['groups'][0]
+        assert own['answer_count']==1 and own['average']==0
+        assert group['answer_count']==2 and group['average']==4
+        assert sum(b['count'] for b in group['distribution'])==2
+        assert group['occurrence_count']==2 and 'instances' not in group
+        assert survey['_id'] not in str(all_result) and survey['owner_id'] not in str(all_result)
+        assert other('GET',url+'/statistics?scope=all').status_code==403
+
+    def test_cross_user_text_content_never_returned(self):
+        item,other,survey,url=self.external_fixture('text')
+        survey=self.authorize(other,survey);self.external_answer(other,survey,'不得对外返回的原文')
+        result=self.call('GET',url+'/statistics?scope=all').json
+        group=result['groups'][0]
+        assert group['answer_count']==1 and group['values']==[] and group['text_withheld']
+        assert '不得对外返回' not in str(result)
+
+    def test_ungranted_external_answers_excluded_from_all_scope(self):
+        item,other,survey,url=self.external_fixture();self.external_answer(other,survey,8)
+        assert self.call('GET',url+'/statistics?scope=all').json['groups']==[]
+        assert self.call('GET',url+'/usage').json['external_hidden_occurrences']==1
+
+    def test_permission_input_owner_and_revision_boundaries(self):
+        item,other,survey,url=self.external_fixture()
+        path=f"/api/surveys/{survey['_id']}/library-permissions/external"
+        body={'revision':survey['revision'],'usage':True,'statistics':True}
+        assert self.call('PATCH',path,body).status_code==404
+        assert other('PATCH',path,{**body,'usage':'true'}).status_code==400
+        assert other('PATCH',path,{**body,'revision':0}).status_code==409
+        assert other('PATCH',path.replace('/external','/absent'),body).status_code==400
+        assert self.call('GET',url+'/statistics?scope=invalid').status_code==400
+        assert other('GET',f"/api/surveys/{survey['_id']}").json['revision']==survey['revision']
+
+    def test_usage_and_statistics_grants_are_independent(self):
+        item,other,survey,url=self.external_fixture()
+        survey=self.authorize(other,survey,True,False);survey=self.external_answer(other,survey,8)
+        assert len(self.call('GET',url+'/usage').json['external_items'])==1
+        assert self.call('GET',url+'/statistics?scope=all').json['groups']==[]
+        survey=self.authorize(other,survey,False,True)
+        assert self.call('GET',url+'/usage').json['external_items']==[]
+        assert self.call('GET',url+'/statistics?scope=all').json['groups'][0]['answer_count']==1

@@ -193,20 +193,48 @@ def register_library(app, db, login_required, payload, owned, save):
         survey['questions'].append(q)
         return save(survey,data.get('revision'))
 
+    def permission(survey, q, field):
+        policy = survey.get('library_permissions', {}).get(q['id'], {})
+        return policy.get('library_id') == q['source']['library_id'] and policy.get(field) is True
+
+    @app.patch('/api/surveys/<sid>/library-permissions/<qid>')
+    @login_required
+    def set_library_permissions(sid, qid):
+        survey = owned(sid)
+        data = payload({'revision', 'usage', 'statistics'})
+        require(type(data.get('revision')) is int, '须提供整数revision')
+        require(all(type(data.get(k)) is bool for k in ('usage', 'statistics')), '授权须为布尔值')
+        q = next((q for q in survey['questions'] if q['id'] == qid and q.get('source')), None)
+        require(q is not None, '题目没有题库来源')
+        if data['revision'] != survey['revision']:
+            raise DomainError('问卷已修改，请刷新后重试', 409, 'revision_conflict')
+        policy = {'library_id': q['source']['library_id'], 'usage': data['usage'], 'statistics': data['statistics']}
+        # Authorization metadata is separate from the frozen question definition.
+        result = db.surveys.update_one({'_id':sid, 'owner_id':g.user_id, 'revision':survey['revision']},
+            {'$set':{'library_permissions.'+qid:policy, 'updated_at':now()}, '$inc':{'revision':1}})
+        if not result.matched_count:
+            raise DomainError('问卷已修改，请刷新后重试', 409, 'revision_conflict')
+        return jsonify(owned(sid))
+
     @app.get('/api/library/questions/<lid>/usage')
     @login_required
     def library_usage(lid):
         accessible(lid,True)
-        pipeline=[{'$match':{'questions.source.library_id':lid}},{'$unwind':'$questions'},
-                  {'$match':{'questions.source.library_id':lid}},
-                  {'$group':{'_id':'$owner_id','count':{'$sum':1}}}]
-        counts=list(db.surveys.aggregate(pipeline))
-        own=list(db.surveys.find({'owner_id':g.user_id,'questions.source.library_id':lid}))
-        items=[{'survey_id':s['_id'],'title':s['title'],'status':s['status'],'question_id':q['id'],
-                'version':q['source']['version'],'locally_changed':definition_hash(q)!=q['source']['definition_hash']}
-               for s in own for q in s['questions'] if q.get('source',{}).get('library_id')==lid]
-        return jsonify(items=items,external_occurrences=sum(r['count'] for r in counts if r['_id']!=g.user_id),
-                       counting_unit='question_occurrence')
+        surveys = list(db.surveys.find({'questions.source.library_id':lid}))
+        items=[];external=[];external_count=0
+        for survey in surveys:
+            for q in survey['questions']:
+                if q.get('source',{}).get('library_id') != lid: continue
+                entry={'title':survey['title'],'status':survey['status'],'question_id':q['id'],
+                       'version':q['source']['version'],'locally_changed':definition_hash(q)!=q['source']['definition_hash']}
+                if survey['owner_id']==g.user_id:
+                    items.append(dict(entry,survey_id=survey['_id']))
+                else:
+                    external_count+=1
+                    if permission(survey,q,'usage'):
+                        external.append(dict(entry,usage_ref=hashlib.sha256((lid+':'+survey['_id']).encode()).hexdigest()))
+        return jsonify(items=items,external_items=external,external_occurrences=external_count,
+                       external_hidden_occurrences=external_count-len(external),counting_unit='question_occurrence')
 
     @app.get('/api/library/questions/<lid>/statistics')
     @login_required
@@ -216,13 +244,20 @@ def register_library(app, db, login_required, payload, owned, save):
         text_offset=(text_page-1)*20
         selected=request.args.get('version')
         if selected:version(item,selected)
-        surveys=list(db.surveys.find({'owner_id':g.user_id,'questions.source.library_id':lid}))
+        scope=request.args.get('scope','mine')
+        require(scope in ('mine','all'), 'scope须为mine或all')
+        if scope=='all' and item['owner_id']!=g.user_id:
+            raise DomainError('仅题主可查看授权的全卷汇总',403,'forbidden')
+        query={'questions.source.library_id':lid}
+        if scope=='mine':query['owner_id']=g.user_id
+        surveys=list(db.surveys.find(query))
         groups={}
         branches=[];match=[]
         for survey in surveys:
             for q in survey['questions']:
                 source=q.get('source',{})
                 if source.get('library_id')!=lid or selected and source['version']!=selected:continue
+                if survey['owner_id']!=g.user_id and not permission(survey,q,'statistics'):continue
                 key=source['version']+':'+definition_hash(q)
                 groups.setdefault(key,{'key':key,'version':source['version'],'definition_hash':definition_hash(q),
                     'title':q['title'],'type':q['type'],'question':q,'instances':[],
@@ -244,7 +279,7 @@ def register_library(app, db, login_required, payload, owned, save):
             if group['type']=='number':
                 facets[f'distribution_{i}']=[{'$match':{'_group':key}},
                     {'$bucketAuto':{'groupBy':'$answers.value','buckets':10}}]
-            elif group['type']=='text':
+            elif group['type']=='text' and scope=='mine':
                 facets[f'text_{i}']=[{'$match':{'_group':key}},
                     {'$sort':{'created_at':1,'_id':1}}, {'$skip':text_offset},{'$limit':20},
                     {'$project':{'_id':0,'value':'$answers.value'}}]
@@ -260,6 +295,8 @@ def register_library(app, db, login_required, payload, owned, save):
         numbers={r['_id']:r for r in data['numbers']}
         for i,(key,group) in enumerate(groups.items()):
             q=group.pop('question');group['answer_count']=counts.get(key,0)
+            group['occurrence_count']=len(group['instances'])
+            if scope=='all':group.pop('instances')
             if q['type'] in ('single','multiple'):group['options']=[{**o,'count':options.get((key,o['id']),0)} for o in q['options']]
             elif q['type']=='number':
                 summary=numbers.get(key,{})
@@ -269,6 +306,7 @@ def register_library(app, db, login_required, payload, owned, save):
                     for j,b in enumerate(data[f'distribution_{i}'])]
                 group['distribution_method']='automatic_buckets_up_to_10'
             else:
-                group['values']=[r['value'] for r in data[f'text_{i}']]
-                group['page']=text_page;group['page_size']=20
-        return jsonify(library_id=lid,scope='owned_surveys_only',counting_unit='answered_question_occurrence',groups=list(groups.values()))
+                group['values']=[r['value'] for r in data[f'text_{i}']] if scope=='mine' else []
+                group['text_withheld']=scope=='all'
+                if scope=='mine':group['page']=text_page;group['page_size']=20
+        return jsonify(library_id=lid,scope='owned_surveys_only' if scope=='mine' else 'consenting_surveys_aggregate',counting_unit='answered_question_occurrence',groups=list(groups.values()))

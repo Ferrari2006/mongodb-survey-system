@@ -1,6 +1,6 @@
 "use strict";
 // Reuse the existing authenticated API and safe textContent DOM helpers.
-let libraryItem=null,libraryTarget=null,libraryPage=1,libraryScope="mine",libraryBase=null;
+let libraryItem=null,libraryTarget=null,libraryPage=1,libraryScope="mine",libraryBase=null,libraryStatsRequest=0;
 const librarySection=node("section");librarySection.id="library";librarySection.hidden=true;
 librarySection.innerHTML=`<button id="library-back" class="secondary">← 返回</button>
 <h1>题库与版本</h1><p class="muted">题库保存可复用的题目。问卷导入的是指定版本的副本，后续改题不会影响已经导入的问卷。</p>
@@ -16,7 +16,7 @@ librarySection.innerHTML=`<button id="library-back" class="secondary">← 返回
 <label id="library-integer-label" class="check"><input id="library-integer" type="checkbox">仅允许整数</label>
 <div class="actions"><button id="library-save" type="submit">仅保存工作稿</button><button type="button" id="library-commit">提交新版本</button></div><p class="muted">工作稿仅自己可见，不能被问卷引用。选择历史版本编辑后提交，可以从旧版本分支。提交的版本保留不覆盖。</p></form>
 <div id="library-sharing"><label>共享给已有账号（逗号分隔，留空取消共享）<input id="library-users"></label><button id="library-share" class="secondary">保存共享权限</button></div>
-<div id="library-result" aria-live="polite"></div></section>`;
+<label>统计范围<select id="library-stat-scope"><option value="mine">本人问卷</option><option value="all">全部已授权问卷（题主）</option></select></label><div id="library-result" aria-live="polite"></div></section>`;
 document.querySelector("main").append(librarySection);
 function libraryFields(){const t=$("library-type").value;$("library-options-label").hidden=!["single","multiple"].includes(t);$("library-bounds").hidden=t==="single";$("library-integer-label").hidden=t!=="number";$("library-min-label").textContent=t==="multiple"?"最少选择数":t==="text"?"最短字数":"最小值";$("library-max-label").textContent=t==="multiple"?"最多选择数":t==="text"?"最长字数":"最大值";}
 function loadLibraryFields(q){$("library-title").value=q.title;$("library-type").value=q.type;$("library-required").checked=q.required;$("library-options").value=(q.options||[]).map(o=>`${o.id} | ${o.label}`).join("\n");const v=q.validation||{};$("library-min").value=v.min_choices??v.min_length??v.min??"";$("library-max").value=v.max_choices??v.max_length??v.max??"";$("library-integer").checked=!!v.integer;libraryFields();}
@@ -24,7 +24,7 @@ function libraryQuestion(){const type=$("library-type").value,q={title:$("librar
 async function loadBanks(){const select=$("library-bank"),old=select.value;select.replaceChildren(new Option("全部题库",""));let p=1;while(true){const data=await api(`/banks?page=${p}`);for(const b of data.items)select.append(new Option(b.title,b._id));if(p*20>=data.total)break;p++;}select.value=old;}
 async function showLibrary(target=null){libraryTarget=target;libraryPage=1;libraryScope="mine";libraryItem=null;$("library-detail").hidden=true;await loadBanks();show("library");await listLibrary();}
 async function listLibrary(){const bank=$("library-bank").value,qs=new URLSearchParams({scope:libraryScope,page:libraryPage});if(bank&&libraryScope==="mine")qs.set("bank_id",bank);const data=await api(`/library/questions?${qs}`);$("library-list").replaceChildren();for(const item of data.items){const row=node("article",undefined,"card");row.append(node("h3",item.title),node("p",`${item.is_owner?"本人题目":"共享题目"} · 当前版本 ${item.current_version.slice(0,8)}`,"muted"),button("查看版本与使用",()=>openLibraryItem(item._id)));$("library-list").append(row);}if(!data.items.length)$("library-list").append(node("p","暂无题目。可新建题目，或从问卷的题目卡片存入题库。"));$("library-page").textContent=`第 ${libraryPage} 页，共 ${data.total} 题`;$ ("library-prev").disabled=libraryPage===1;$("library-next").disabled=libraryPage*20>=data.total;$("library-new").hidden=libraryScope!=="mine";}
-async function openLibraryItem(id){libraryItem=await api(`/library/questions/${id}`);libraryBase=libraryItem.current_version;$("library-heading").textContent=libraryItem.title;$("library-detail").hidden=false;$("library-result").replaceChildren();const select=$("library-version");select.replaceChildren();for(const v of libraryItem.versions)select.append(new Option(`第 ${v.number} 版 · ${v.id.slice(0,8)}`,v.id));select.value=libraryBase;selectLibraryVersion();if(libraryItem.is_owner)loadLibraryFields(libraryItem.working_copy);$("library-form").hidden=!libraryItem.is_owner;$("library-sharing").hidden=!libraryItem.is_owner;$("library-restore").hidden=!libraryItem.is_owner;$("library-usage").hidden=!libraryItem.is_owner;$("library-users").value=(libraryItem.shared_usernames||[]).join(", ");$("library-use").disabled=!libraryTarget||libraryTarget.status!=="draft";}
+async function openLibraryItem(id){libraryItem=await api(`/library/questions/${id}`);libraryBase=libraryItem.current_version;$("library-heading").textContent=libraryItem.title;$("library-detail").hidden=false;$("library-result").replaceChildren();const select=$("library-version");select.replaceChildren();for(const v of libraryItem.versions)select.append(new Option(`第 ${v.number} 版 · ${v.id.slice(0,8)}`,v.id));select.value=libraryBase;selectLibraryVersion();if(libraryItem.is_owner)loadLibraryFields(libraryItem.working_copy);$("library-form").hidden=!libraryItem.is_owner;$("library-sharing").hidden=!libraryItem.is_owner;$("library-restore").hidden=!libraryItem.is_owner;$("library-usage").hidden=!libraryItem.is_owner;$("library-stat-scope").value="mine";$("library-stat-scope").options[1].disabled=!libraryItem.is_owner;$("library-users").value=(libraryItem.shared_usernames||[]).join(", ");$("library-use").disabled=!libraryTarget||libraryTarget.status!=="draft";}
 function selectLibraryVersion(){if(!libraryItem)return;const v=libraryItem.versions.find(v=>v.id===$("library-version").value);libraryBase=v.id;loadLibraryFields(v.question);const preview=$("library-preview");preview.replaceChildren(node("h3",v.question.title),node("p",constraintText(v.question)));for(const o of v.question.options||[])preview.append(node("p",`${o.id} · ${o.label}`));$("library-lineage").textContent=`第 ${v.number} 版；父版本 ${v.parent_version?.slice(0,8)||"无"}${v.restored_from?`；恢复自 ${v.restored_from.slice(0,8)}`:""}。${libraryTarget?"将导入返回前正在编辑的问卷。":"从问卷编辑页进入题库，才能导入题目。"}`;}
 async function saveLibraryVersion(commit){if(!$("library-form").reportValidity())return;const q=libraryQuestion();if(!libraryItem){const bid=$("library-bank").value;if(!bid)throw Error("请先选择一个题库（没有时先新建）");const r=await api("/library/questions","POST",{bank_id:bid,question:q});await listLibrary();await openLibraryItem(r.item._id);message("已创建题目及首个版本");return;}const r=await api(`/library/questions/${libraryItem._id}`,"PATCH",{revision:libraryItem.revision,question:q,create_version:commit,base_version:libraryBase});await listLibrary();await openLibraryItem(r._id);message(commit?"新版本已提交，旧版本与旧问卷保持原样":"工作稿已保存，现有版本未改变");}
 async function saveQuestionToLibrary(q){const banks=[];let p=1;while(true){const d=await api(`/banks?page=${p++}`);banks.push(...d.items);if(banks.length>=d.total)break;}if(!banks.length)throw Error("请先返回列表，在题库管理中新建一个题库");const choice=prompt("选择存入的题库编号：\n"+banks.map((b,i)=>`${i+1}. ${b.title}`).join("\n"),"1");if(choice===null)return;const b=banks[Number(choice)-1];if(!b)throw Error("题库编号无效");const r=await api("/library/questions","POST",{bank_id:b._id,survey_id:survey._id,question_id:q.id});message(r.jumps_removed?"题目已存入题库；跳转依赖本卷结构，未随题目保存":"题目已存入题库");}
@@ -40,14 +40,16 @@ $("library-form").onsubmit=action(()=>saveLibraryVersion(false));$("library-comm
 $("library-use").onclick=action(async()=>{if(!libraryItem||!libraryTarget)throw Error("请先从问卷编辑页进入题库");const qid=prompt("该题在问卷中的ID（英文字母开头）",`q${libraryTarget.questions.length+1}`);if(qid===null)return;libraryTarget=await api(`/surveys/${libraryTarget._id}/library-import`,"POST",{revision:libraryTarget.revision,library_id:libraryItem._id,version:$("library-version").value,question_id:qid});message("指定版本已加入问卷，可返回调整顺序与跳转");});
 $("library-restore").onclick=action(async()=>{if(!libraryItem||!confirm("将选定版本恢复为一个新版本，保留全部历史？"))return;const r=await api(`/library/questions/${libraryItem._id}/restore`,"POST",{revision:libraryItem.revision,version:$("library-version").value});await listLibrary();await openLibraryItem(r._id);message("已恢复并生成新版本");});
 $("library-share").onclick=action(async()=>{const r=await api(`/library/questions/${libraryItem._id}/sharing`,"PUT",{revision:libraryItem.revision,usernames:$("library-users").value.split(/[,，]/).map(s=>s.trim()).filter(Boolean)});await openLibraryItem(r._id);message("共享权限已更新；对方可读取版本并导入，不能修改原题");});
-$("library-usage").onclick=action(async()=>{const r=await api(`/library/questions/${libraryItem._id}/usage`),out=$("library-result");out.replaceChildren(node("h3","题目使用位置"));for(const i of r.items)out.append(node("p",`${i.title} · ${i.status} · ${i.question_id} · ${i.version.slice(0,8)}${i.locally_changed?" · 本卷内容已调整":""}`));out.append(node("p",`其他用户问卷中的题目引用数：${r.external_occurrences}（不显示其问卷名称或答卷）`));});
+$("library-usage").onclick=action(async()=>{const r=await api(`/library/questions/${libraryItem._id}/usage`),out=$("library-result");out.replaceChildren(node("h3","题目使用位置"));for(const i of r.items)out.append(node("p",`${i.title} · ${i.status} · ${i.question_id} · ${i.version.slice(0,8)}${i.locally_changed?" · 本卷内容已调整":""}`));for(const i of r.external_items||[])out.append(node("p",`已授权外部问卷：${i.title} · ${i.question_id} · ${i.version.slice(0,8)}`));out.append(node("p",`外部引用数：${r.external_occurrences}，其中 ${r.external_hidden_occurrences} 处未授权公开名称。授权记录不包含访问链接或填写者身份。`));});
 async function renderLibraryStatistics(page=1){
   if(!libraryItem)throw Error("请先保存题目");
-  const r=await api(`/library/questions/${libraryItem._id}/statistics?page=${page}`),out=$("library-result");
-  out.replaceChildren(node("h3","本人问卷中的跨卷统计"),node("p","按来源版本与实际题目定义分组；同一题在两份问卷中各回答一次，计为两次作答。"));
+  const scope=$("library-stat-scope").value,id=libraryItem._id,request=++libraryStatsRequest;
+  const r=await api(`/library/questions/${id}/statistics?page=${page}&scope=${scope}`),out=$("library-result");
+  if(request!==libraryStatsRequest||libraryItem?._id!==id||$("library-stat-scope").value!==scope)return;
+  out.replaceChildren(node("h3",scope==="all"?"全部已授权问卷的跨卷统计":"本人问卷中的跨卷统计"),node("p","按来源版本与实际题目定义分组；同一题在两份问卷中各回答一次，计为两次作答。"));
   for(const g of r.groups){
     const card=node("article",undefined,"card");
-    card.append(node("h3",g.title),node("p",`版本 ${g.version.slice(0,8)} · ${g.instances.length} 个题目位置 · ${g.answer_count} 次有效作答${g.locally_changed?" · 本卷已调整，单独统计":""}`));
+    card.append(node("h3",g.title),node("p",`版本 ${g.version.slice(0,8)} · ${g.occurrence_count??g.instances.length} 个题目位置 · ${g.answer_count} 次有效作答${g.locally_changed?" · 本卷已调整，单独统计":""}`));
     if(g.options)for(const o of g.options)card.append(node("p",`${o.label}：${o.count} 次（${g.answer_count?(100*o.count/g.answer_count).toFixed(1):0}%）`));
     else if(g.type==="number"){
       card.append(node("p",`平均值：${g.average??"暂无"}；最小值：${g.minimum??"暂无"}；最大值：${g.maximum??"暂无"}`));
@@ -56,12 +58,15 @@ async function renderLibraryStatistics(page=1){
       for(const b of g.distribution||[]){const row=node("tr");row.append(node("td",`[${b.minimum}, ${b.maximum}${b.upper_inclusive?"]":")"}`),node("td",String(b.count)));table.append(row);}
       card.append(table);if(!g.answer_count)card.append(node("p","尚无有效数字回答"));
     }else{
+      if(g.text_withheld){card.append(node("p","文本仅汇总作答次数，不返回跨用户原文。"));out.append(card);continue;}
       for(const v of g.values)card.append(node("p",v));
       const nav=node("div",undefined,"actions"),previous=button("上一页文本",()=>renderLibraryStatistics(page-1)),next=button("下一页文本",()=>renderLibraryStatistics(page+1));
       previous.disabled=page===1;next.disabled=page*20>=g.answer_count;nav.append(previous,node("span",`第 ${page} 页 / 共 ${g.answer_count} 条`),next);card.append(nav);
     }
     out.append(card);
   }
-  if(!r.groups.length)out.append(node("p","本人问卷中尚未引用该题。"));
+  if(!r.groups.length)out.append(node("p","所选范围尚无可统计的题目。"));
 }
 $("library-stats").onclick=action(()=>renderLibraryStatistics());
+
+$("library-stat-scope").onchange=action(()=>renderLibraryStatistics());

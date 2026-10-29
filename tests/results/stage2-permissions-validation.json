@@ -1,0 +1,29 @@
+{
+  "successful": true,
+  "executed_at_utc": "2026-10-29T15:52:19.510303+00:00",
+  "source": "current working tree; actual MongoDB regression and Chrome browser flows",
+  "database": "isolated MongoDB port 27019; random survey_test_ regression databases",
+  "tests_run": 58,
+  "test_result": "tests/results/stage2-latest.json",
+  "browser_result": "tests/results/stage2-acceptance.json",
+  "application_sha256": {
+    "backend/app.py": "6527391aa2377025f9f8ee6a7dbba2456f7040a2b0d59e340b334ffaf7f0b79a",
+    "backend/database.py": "cb7fc2a609aefd02fea5c34f06850a287870c4bb9f4d4de8b6ded92b68079ee1",
+    "backend/library.py": "238c28348730b5c7da5451c59ec2d355732bdd9c147649f15475578f525db9fb",
+    "backend/logic.py": "762254b384c66961501ec265c731a6fed0da508045fd3468664af0ebd0e513d3",
+    "backend/statistics.py": "9306b2de6478180f8fbc8c01a0e5177de5dbed355e2052b46d2a59e0618e49d5",
+    "backend/validation.py": "3b7f9ca7f8b8dce098d48b9d55b126694356cee809da87aac6959122526fba1c",
+    "backend/__init__.py": "44e5516969829f9c53c19ca63df81321a1142645145443ab9e8771e4883433af",
+    "frontend/app.js": "f9874da168fc4ddd2fd2ebb7427be033eda8f6627d1f299d851ae2d575a9865c",
+    "frontend/index.html": "b2ee171db0bb91e04490919c921467e36b3f7a3eb23dead43aa1e522cdcf286a",
+    "frontend/library.js": "fb4740c73a376583594dfc1b5041183a229ad84e29c7be12c9704dc88a0732b8",
+    "frontend/style.css": "d1b55b6ba05d509865f748e5a9588b34b9ec3cf81405bc6271257f0f1f5b8016",
+    "requirements.txt": "f14356e0abbbb91ec39507dac972f45803b4c948f10da725e4efe5bb11ce8b13",
+    "run.py": "571ed980b06d01dc236771566bdd4b852c26ecb8090424949b19a6bdf79a53c5",
+    ".env.example": "794a6017459c21126ff9292210bd7f2e29fb03c4079b6ca4f8bb55a2cb435f43"
+  },
+  "limits": [
+    "Explicit author grants; no unconditional disclosure",
+    "No cross-document transaction isolation or production load claim"
+  ]
+}
