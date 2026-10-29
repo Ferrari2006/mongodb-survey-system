@@ -1,7 +1,7 @@
 {
   "stage": "stage2-submission",
   "source": "第二阶段/第二阶段完成报告.md",
-  "source_sha256": "a04a4fa8c16b327c35da9d9f4755cd5c6716661669e6a04a2591a46ace28f524",
+  "source_sha256": "e24a660db41a9193633384c6767d2c24206a53a2c456335546545bf6b3953413",
   "recorded_tests": 52,
   "files": [
     "2026_ECNU_PJ1_2_温正泽-可编辑.html",
@@ -9,9 +9,9 @@
     "2026_ECNU_PJ1_2_温正泽.pdf"
   ],
   "files_sha256": {
-    "2026_ECNU_PJ1_2_温正泽-可编辑.html": "98ec5a06c6e988d4b57e75767827211edde05ea3ec313fd9a9dab1dfe1d52454",
-    "2026_ECNU_PJ1_2_温正泽-可编辑.docx": "8039e1df3565e481ab14fd3f66b58212873edc1fefbee047d46073a1e1af8075",
-    "2026_ECNU_PJ1_2_温正泽.pdf": "c1bb7c24e1cd0526ec4716bf78b85d0db5f2eb028621b28222a722bc81aea459"
+    "2026_ECNU_PJ1_2_温正泽-可编辑.html": "990efaf74b258f99dd7bb4dde131aac4a5e39d08ee7301732c71da889d2414ec",
+    "2026_ECNU_PJ1_2_温正泽-可编辑.docx": "6f0760f1c66c7b854e2283e63e32912c4cd1e899ea0502484d06cf483116021b",
+    "2026_ECNU_PJ1_2_温正泽.pdf": "3cd3927f7de6d0110ffbde56a55408411d778a36c7e9736033d752892fcf3018"
   },
   "pdf_pages": 8,
   "evidence_sha256": {
@@ -22,7 +22,7 @@
     "database/schema-stage2.json": "f9d11e6fcbe0b6e3e1bc599d544ad9524a20dcbddc1250b9cc140bc64d0850a6",
     "第二阶段/API与测试说明.md": "2f78a49d89b007093f70bd55d222e5ac1b45d4afef8e35b74ab938a19a108a6d",
     "第二阶段/实施设计-2026-10-23.md": "30e203377662d5ea7ca93b8e781fe3e8f4f711f5b517f5a77c7c7c23432c7c6b",
-    "ai_logs/阶段二引导与产物.md": "61422ecd5afe7e35ba3046e4a1d91b5f72d1db2776bfee14a8847119868b1323",
+    "ai_logs/阶段二引导与产物.md": "9924a482fa1fcb548c6be5fdf7ef3db5d5173be1837588c5a3ed66504962823d",
     "第二阶段/images/stage2-version-page.png": "43699279ddd77b7d5410b9119e013fe78997caa0bbe334859a044de91b2788d5",
     "第二阶段/images/stage2-statistics-page.png": "4c02ff21f06840d04452e20385aee4f95a16ace81754f9a5626163019adcc2e6",
     "第二阶段/images/stage2-data-flow-refined.svg": "365d99236d27d5d6eae01bd4c3c973e52eed640c1992c53e0359ef9620671473",

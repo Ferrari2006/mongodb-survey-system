@@ -1,0 +1,68 @@
+{
+  "stage": "stage2-submission",
+  "source": "第二阶段/第二阶段完成报告.md",
+  "source_sha256": "a04a4fa8c16b327c35da9d9f4755cd5c6716661669e6a04a2591a46ace28f524",
+  "recorded_tests": 52,
+  "files": [
+    "2026_ECNU_PJ1_2_温正泽-可编辑.html",
+    "2026_ECNU_PJ1_2_温正泽-可编辑.docx",
+    "2026_ECNU_PJ1_2_温正泽.pdf"
+  ],
+  "files_sha256": {
+    "2026_ECNU_PJ1_2_温正泽-可编辑.html": "98ec5a06c6e988d4b57e75767827211edde05ea3ec313fd9a9dab1dfe1d52454",
+    "2026_ECNU_PJ1_2_温正泽-可编辑.docx": "8039e1df3565e481ab14fd3f66b58212873edc1fefbee047d46073a1e1af8075",
+    "2026_ECNU_PJ1_2_温正泽.pdf": "c1bb7c24e1cd0526ec4716bf78b85d0db5f2eb028621b28222a722bc81aea459"
+  },
+  "pdf_pages": 8,
+  "evidence_sha256": {
+    "tests/results/stage2-latest.json": "a8301342098cec9b12a78054bc99b51b0ed6fac7077165fc8478f316ea7974c1",
+    "tests/results/stage2-browser.json": "f9c5d3e75a616196efd21a27c4c3f65703681fcfa5fdd199c37e0be4737d278d",
+    "tests/results/stage2-acceptance.json": "c76335c3249ffca06dec8d3a392b4e89e5dc8d621104a6fb0171df3b88562eba",
+    "tests/results/stage2-reproduction.json": "5ff989ab3c9fd3ea32d4585cecfd54e1960b827b3ab68fb9fc954c9c62b3306c",
+    "database/schema-stage2.json": "f9d11e6fcbe0b6e3e1bc599d544ad9524a20dcbddc1250b9cc140bc64d0850a6",
+    "第二阶段/API与测试说明.md": "2f78a49d89b007093f70bd55d222e5ac1b45d4afef8e35b74ab938a19a108a6d",
+    "第二阶段/实施设计-2026-10-23.md": "30e203377662d5ea7ca93b8e781fe3e8f4f711f5b517f5a77c7c7c23432c7c6b",
+    "ai_logs/阶段二引导与产物.md": "61422ecd5afe7e35ba3046e4a1d91b5f72d1db2776bfee14a8847119868b1323",
+    "第二阶段/images/stage2-version-page.png": "43699279ddd77b7d5410b9119e013fe78997caa0bbe334859a044de91b2788d5",
+    "第二阶段/images/stage2-statistics-page.png": "4c02ff21f06840d04452e20385aee4f95a16ace81754f9a5626163019adcc2e6",
+    "第二阶段/images/stage2-data-flow-refined.svg": "365d99236d27d5d6eae01bd4c3c973e52eed640c1992c53e0359ef9620671473",
+    "第二阶段/images/stage2-data-flow-refined.png": "b0ce6f7c3222b19c372267923020c4820e8e2a6b2228259b97fe86ff0a1f4516",
+    "第二阶段/images/stage2-version-flow-refined.svg": "95570ab0402f2ef2f7ccd562e322605683f9d6b9decea3806167395c56aeee18",
+    "第二阶段/images/stage2-version-flow-refined.png": "f7b260c7a61c7790ad5c8ac74df2289efc4759235e2e7df9b2a37512b58beffe"
+  },
+  "application_sha256": {
+    "backend/app.py": "6527391aa2377025f9f8ee6a7dbba2456f7040a2b0d59e340b334ffaf7f0b79a",
+    "backend/database.py": "2371bac1dc662c0c6d63304765e4e9933fac09c10782b654a7da1924641f1756",
+    "backend/library.py": "0f6ca0f2ac5b22bc602fe3c675452cbad23a242c0d0fd4d0b49e94610790d9c2",
+    "backend/logic.py": "762254b384c66961501ec265c731a6fed0da508045fd3468664af0ebd0e513d3",
+    "backend/statistics.py": "9306b2de6478180f8fbc8c01a0e5177de5dbed355e2052b46d2a59e0618e49d5",
+    "backend/validation.py": "3b7f9ca7f8b8dce098d48b9d55b126694356cee809da87aac6959122526fba1c",
+    "backend/__init__.py": "44e5516969829f9c53c19ca63df81321a1142645145443ab9e8771e4883433af",
+    "frontend/app.js": "0950e9239faf944c3405d5bff1e524c5cc6c4ff7f04a1bfd1de616945615fd52",
+    "frontend/index.html": "b2ee171db0bb91e04490919c921467e36b3f7a3eb23dead43aa1e522cdcf286a",
+    "frontend/library.js": "027d6c53c6f9c4454428dd6af79a15d676edaaafb9e2d27c5daafbe9c32d009e",
+    "frontend/style.css": "d1b55b6ba05d509865f748e5a9588b34b9ec3cf81405bc6271257f0f1f5b8016",
+    "requirements.txt": "f14356e0abbbb91ec39507dac972f45803b4c948f10da725e4efe5bb11ce8b13",
+    "run.py": "571ed980b06d01dc236771566bdd4b852c26ecb8090424949b19a6bdf79a53c5",
+    ".env.example": "794a6017459c21126ff9292210bd7f2e29fb03c4079b6ca4f8bb55a2cb435f43"
+  },
+  "application_comparison": "UTF-8 text matched exported checkout with CRLF/LF normalization",
+  "tested_application_commit": "452aa9c27a1ddc390d4aba1a75595f9438f60f49",
+  "stage1_preserved_sha256": {
+    "reports/第一阶段完成报告.md": "6d4e00ab9fc8e315dd8ad784452dd8b164cee6c567266f3ae200a4dbe7ac7bcf",
+    "reports/第一阶段完成报告.html": "3faedfef16476e38ff830d807506b5906cd2a17b3ea4e81f0025cb73db49c75c",
+    "reports/stage1-report-manifest.json": "898468b8d3ba36a289dbb86869a985357b64e5a3d45320e75bc7eea5a60e9a0b",
+    "第一阶段/提交材料/AI过程修订版/2026_ECNU_PJ1_1_温正泽.pdf": "9c7715bb59afb6bdb013f217b68ff0d0892dd75315ec173429c88583aea71ae3",
+    "database/schema.json": "e8996343cbc5f628691f9b1946c85aa8dfb20ddda0739b320e4b35230636abaa",
+    "tests/results/latest.json": "8439abded3e36ac72cddbc60b664fe794b2c4ed49165d7bbaca40b9dddb10f54"
+  },
+  "qa": {
+    "all_source_paragraphs_and_table_cells_present": true,
+    "each_page_reviewed": true,
+    "no_missing_glyphs": true,
+    "repeated_headers": true,
+    "template_styles_preserved": true,
+    "renderer": "Word read-only export; LibreOffice unavailable",
+    "html_checked": true
+  }
+}
