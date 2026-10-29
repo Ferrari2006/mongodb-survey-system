@@ -1,7 +1,7 @@
 {
   "stage": "stage2-submission",
   "source": "第二阶段/第二阶段完成报告.md",
-  "source_sha256": "e24a660db41a9193633384c6767d2c24206a53a2c456335546545bf6b3953413",
+  "source_sha256": "9f99c1e99b5c1a32f48ff634f17df25c5dbaebdf2a028e5b8d80b8c7c8a1c0ec",
   "recorded_tests": 52,
   "files": [
     "2026_ECNU_PJ1_2_温正泽-可编辑.html",
@@ -9,9 +9,9 @@
     "2026_ECNU_PJ1_2_温正泽.pdf"
   ],
   "files_sha256": {
-    "2026_ECNU_PJ1_2_温正泽-可编辑.html": "3309efad170d055c88f6de5523beb22c7b9497e2f6d844ebbdf26a28d5db69b6",
-    "2026_ECNU_PJ1_2_温正泽-可编辑.docx": "5490e42d88e9c8638e0ac6c8277a98e81e993ecd5989470c9f85c5ffc4a72249",
-    "2026_ECNU_PJ1_2_温正泽.pdf": "a7f5ccbe2c190230b8ac73f0cec0c68e81c7e11f43eba569d22ab2f22d5afcd9"
+    "2026_ECNU_PJ1_2_温正泽-可编辑.html": "6c9327aa993b992faaf080b9d38fe2deb1c737d41f59d9bd1935a461a3973b32",
+    "2026_ECNU_PJ1_2_温正泽-可编辑.docx": "57ca87ddebed0d7b43034c2d106d19638b723bb6aea1ff3ca122b64370d01e84",
+    "2026_ECNU_PJ1_2_温正泽.pdf": "b955e6c2ccf14687fd95f397992171b170b9c8b137f0b3c10b3508913064b969"
   },
   "pdf_pages": 8,
   "evidence_sha256": {

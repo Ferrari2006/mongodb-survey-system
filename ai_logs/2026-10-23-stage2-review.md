@@ -6,7 +6,7 @@
 
 修正：保留均值并增加最小值、最大值与$bucketAuto分布，按来源版本及实际定义分别计算。自动区间最多10个，左闭右开、末项右闭，不解释为固定年龄段。
 
-验证：test_numeric_distribution_and_optional_empty检查0与8的均值及分桶次数合计，空答不计；test_empty_numeric_distribution检查空分布与null均值。结果见tests/results/stage2-latest.json。
+验证：test_numeric_distribution_and_optional_skipped_answers检查0与8的均值及分桶次数合计，空答不计；test_empty_numeric_distribution检查空分布与null均值。结果见tests/results/stage2-latest.json。
 
 ## 文本返回量与分页
 
