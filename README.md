@@ -29,6 +29,35 @@
 
 接收者另一份问卷中的回答2单独统计，不混入右图结果。题目共享不授予读取对方答卷的权限。完整流程见[双账号验收记录](tests/results/stage2-acceptance.json)。
 
+<details>
+<summary>问卷编辑与条件跳转</summary>
+
+编辑题型、必答和选项，并为“未使用过”设置跳转到建议题。截图展示已保存的规则，填写时由后端重新计算有效路径。
+
+![实际问卷编辑页面与已配置的条件跳转](第二阶段/images/stage2-editor-preview.png)
+
+</details>
+
+<details>
+<summary>题目内容与共享设置</summary>
+
+作者管理题目内容、工作稿和版本，按已注册账号设置共享。图中账号为合成测试账号；“加入问卷”按钮需从草稿问卷选择目标后使用，当前入口下禁用属于正常状态。
+
+![题目内容编辑、版本操作和共享账号设置](第二阶段/images/stage2-sharing-preview.png)
+
+</details>
+
+<details>
+<summary>实际填写页面</summary>
+
+填写者逐题作答，点击下一题后保存进度。本次截图后继续点击下一题，确认“未使用过”直接进入建议题，跳过服务选择和评分。
+
+![填写者选择未使用过校园服务的实际页面](第二阶段/images/stage2-fill-preview.png)
+
+</details>
+
+三张补充预览通过实际浏览器生成，使用API准备独立样例数据，未修改页面内容。见[截图脚本](scripts/capture_readme_previews.cjs)和[本次记录](tests/results/readme-preview-capture.json)。这些页面检查单独记录，不增加52项自动测试的数量。
+
 ## 功能
 
 | 模块 | 功能 |

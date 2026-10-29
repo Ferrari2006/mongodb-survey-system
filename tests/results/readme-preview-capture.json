@@ -1,0 +1,17 @@
+{
+  "successful": true,
+  "captured_at_utc": "2026-10-29T14:55:38.693Z",
+  "scope": "isolated synthetic data; API fixtures and actual browser rendering",
+  "files": [
+    "stage2-editor-preview.png",
+    "stage2-sharing-preview.png",
+    "stage2-fill-preview.png"
+  ],
+  "checked": [
+    "saved jump rule rendered",
+    "sharing configuration rendered",
+    "fill answer selection rendered",
+    "no-use answer jumps to suggestion question"
+  ],
+  "pageErrors": []
+}
